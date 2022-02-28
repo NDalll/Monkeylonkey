@@ -23,8 +23,9 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //fuck hvor sejt
         Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
-
+        
         if (input.x < 0)
         {
             player.flipX = true;

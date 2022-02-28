@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Collections; 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
@@ -31,7 +31,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""86507116-ed34-4393-b9dd-9a3ca1010512"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Double"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
