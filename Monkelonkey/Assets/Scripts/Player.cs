@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     private float lastGroundedTime = 0;
     private float lastJumpedTime = 0;
 
+
     [SerializeField] private LayerMask platformLayerMask;
 
 
@@ -45,12 +46,12 @@ public class Player : MonoBehaviour
         RB.AddForce(movement * Vector2.right);
 
         //Friction:
-        /*if (IsGrounded() && input.x == 0)
+        if (IsGrounded() && input.x == 0)
         {
             float amount = Mathf.Min(Mathf.Abs(RB.velocity.x), Mathf.Abs(frictionAmount));
             amount *= Mathf.Sign(RB.velocity.x);
             RB.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
-        }*/
+        }
 
     }
 

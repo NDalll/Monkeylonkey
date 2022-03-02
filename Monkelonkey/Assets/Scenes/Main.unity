@@ -252,7 +252,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.3
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 5
@@ -325,15 +325,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 12
-  jumpHeight: 5
+  jumpHeight: 14
   player: {fileID: 1235603234}
   RB: {fileID: 1235603232}
-  runAccel: 7
-  runDeccel: 11
-  velPower: 0.57
-  frictionAmount: 0
+  runAccel: 13
+  runDeccel: 35
+  velPower: 0.9
+  frictionAmount: 2
   playerCollider: {fileID: 1235603236}
-  coyoteTime: 0.1
+  coyoteTime: 0.15
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
