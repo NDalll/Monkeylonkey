@@ -81,6 +81,7 @@ public class Player : MonoBehaviour
             {
                 Vector3 gPosition = collision.bounds.center;
                 Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
+                gameObject.transform.GetChild(0).LookAt(collision.transform);
                 Debug.Log(direction);
                 RB.AddForce(direction*Time.deltaTime*1000);
             }
