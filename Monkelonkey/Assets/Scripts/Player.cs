@@ -17,11 +17,10 @@ public class Player : MonoBehaviour
     public float coyoteTime;
     private float lastGroundedTime = 0;
     private float lastJumpedTime = 0;
-
+    public float grappleMultipier;
+    
 
     [SerializeField] private LayerMask platformLayerMask;
-
-
     private void FixedUpdate()
     {
         //fuck hvor sejt
@@ -73,6 +72,22 @@ public class Player : MonoBehaviour
             lastJumpedTime = 0;
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("grapple"))
+        {
+            if (playerControls.Default.Grapple.IsPressed())
+            {
+                Vector3 gPosition = collision.bounds.center;
+                Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
+                Debug.Log(direction);
+                RB.AddForce(direction*Time.deltaTime*1000);
+            }
+            
+        }
+    }
+
     private bool IsGrounded() //Check if player is on ground
     {
         
@@ -90,7 +105,6 @@ public class Player : MonoBehaviour
         Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraHeightRaycast), Vector2.right * (playerCollider.bounds.extents.x), rayColor);
-        Debug.Log(raycastHit.collider);
         return raycastHit.collider != null;
     }
 
