@@ -18,7 +18,8 @@ public class Player : MonoBehaviour
     private float lastGroundedTime = 0;
     private float lastJumpedTime = 0;
     public float grappleMultipier;
-    
+
+    private bool isGrappling = false;
 
     [SerializeField] private LayerMask platformLayerMask;
     private void FixedUpdate()
@@ -45,13 +46,12 @@ public class Player : MonoBehaviour
         RB.AddForce(movement * Vector2.right);
 
         //Friction:
-        if (IsGrounded() && input.x == 0)
+        if (IsGrounded() && input.x == 0 && isGrappling != true)
         {
             float amount = Mathf.Min(Mathf.Abs(RB.velocity.x), Mathf.Abs(frictionAmount));
             amount *= Mathf.Sign(RB.velocity.x);
             RB.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
         }
-
     }
 
     private void Update()
@@ -79,13 +79,17 @@ public class Player : MonoBehaviour
         {
             if (playerControls.Default.Grapple.IsPressed())
             {
+                isGrappling = true;
                 Vector3 gPosition = collision.bounds.center;
                 Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
                 gameObject.transform.GetChild(0).LookAt(collision.transform);
                 Debug.Log(direction);
                 RB.AddForce(direction*Time.deltaTime*1000);
             }
-            
+        }
+        if (playerControls.Default.Grapple.IsPressed())
+        {
+            isGrappling = false;
         }
     }
 
