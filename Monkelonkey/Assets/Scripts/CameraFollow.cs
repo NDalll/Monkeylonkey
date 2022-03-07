@@ -6,47 +6,80 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player;
     public Transform camera;
-
-    public float previousOffset;
     public Vector3 offset;
-    public Rigidbody2D body;
     public float maxOffset;
     public float cameraSpeed;
-    public float maxSpeed;
-
-    private bool lerping;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private PlayerControls playerControls;
+    public float cameraDeceleration;
 
     // Update is called once per frame
     void Update()
     {
-        
-        /*previousOffset = offset.x;
-        if (Mathf.Abs(body.velocity.x) / cameraSpeed > maxOffset)
+        Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
+        if (input.x > 0)
         {
-            if (body.velocity.x < 0)
+            if (Mathf.Abs(offset.x) < maxOffset)
             {
-                offset.x = maxOffset * -1;
+                if (offset.x < 0)
+                {
+                    offset.x += Time.deltaTime * cameraDeceleration;
+                }
+                else
+                {
+                    offset.x += Time.deltaTime * cameraSpeed;
+                }
             }
             else
             {
                 offset.x = maxOffset;
             }
-        }
-        if (Mathf.Abs(previousOffset) - Mathf.Abs(offset.x) < maxSpeed || Mathf.Abs(previousOffset) - Mathf.Abs(offset.x) > maxSpeed)
+        } 
+        else if (input.x < 0)
         {
-            lerping = true;
+            if (Mathf.Abs(offset.x) < maxOffset)
+            {
+                if (offset.x > 0)
+                {
+                    offset.x -= Time.deltaTime * cameraDeceleration;
+                }
+                else
+                {
+                    offset.x -= Time.deltaTime * cameraSpeed;
+                }
+                
+            }
+            else
+            {
+                offset.x = maxOffset * -1;
+            }
         }
         else
         {
-            offset.x = body.velocity.x / cameraSpeed;
+            if (offset.x > 0.05)
+            {
+                offset.x -= Time.deltaTime * cameraDeceleration;
+            }
+            else if (offset.x < -0.05)
+            {
+                offset.x += Time.deltaTime * cameraDeceleration;
+            }
+            else
+            {
+                offset.x = 0;
+            }
         }
-        camera.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, -10);*/
-
+        camera.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, -10);
+    }
+    private void Awake()
+    {
+        playerControls = new PlayerControls();
+    }
+    private void OnEnable()
+    {
+        playerControls.Enable();
+    }
+    private void OnDisable()
+    {
+        playerControls.Disable();
     }
 }
