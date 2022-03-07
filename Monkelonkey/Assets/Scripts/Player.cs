@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -18,13 +19,20 @@ public class Player : MonoBehaviour
     private float lastGroundedTime = 0;
     private float lastJumpedTime = 0;
     public float grappleMultipier;
-
     private bool isGrappling = false;
 
+    public float health;
+    public Slider healthBar;
+    private bool isDead;
+
+    
     [SerializeField] private LayerMask platformLayerMask;
+    private void Start()
+    {
+        healthBar.maxValue = health;
+    }
     private void FixedUpdate()
     {
-        //fuck hvor sejt
         Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
         
         if (input.x < 0)
@@ -71,6 +79,16 @@ public class Player : MonoBehaviour
             RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
             lastJumpedTime = 0;
         }
+
+        //healthbar
+        healthBar.value = health;
+        if (health <= 0)
+        {
+            isDead = true;
+            playerControls.Disable();
+        }
+
+        
     }
 
     private void OnTriggerStay2D(Collider2D collision)

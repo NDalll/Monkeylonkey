@@ -18,7 +18,7 @@ public class CameraFollow : MonoBehaviour
         Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
         if (input.x > 0)
         {
-            if (Mathf.Abs(offset.x) < maxOffset)
+            if (offset.x < maxOffset)
             {
                 if (offset.x < 0)
                 {
@@ -36,7 +36,7 @@ public class CameraFollow : MonoBehaviour
         } 
         else if (input.x < 0)
         {
-            if (Mathf.Abs(offset.x) < maxOffset)
+            if (offset.x < maxOffset * -1)
             {
                 if (offset.x > 0)
                 {
