@@ -24,12 +24,16 @@ public class Player : MonoBehaviour
     public float health;
     public Slider healthBar;
     private bool isDead;
+    GameObject go;
+    LineRenderer lr; 
 
-    
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
         healthBar.maxValue = health;
+
+         go = new GameObject();
+         lr = go.AddComponent<LineRenderer>();
     }
     private void FixedUpdate()
     {
@@ -90,7 +94,9 @@ public class Player : MonoBehaviour
 
         
     }
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+    }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))
@@ -100,9 +106,15 @@ public class Player : MonoBehaviour
                 isGrappling = true;
                 Vector3 gPosition = collision.bounds.center;
                 Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
-                gameObject.transform.GetChild(0).LookAt(collision.transform);
+
+                lr.enabled = true;
+                lr.SetPosition(0, gameObject.transform.position);
+                lr.SetPosition(1, collision.transform.position);
                 Debug.Log(direction);
                 RB.AddForce(direction*Time.deltaTime*1000);
+            }
+            else {
+                lr.enabled = false;
             }
         }
         if (playerControls.Default.Grapple.IsPressed())
