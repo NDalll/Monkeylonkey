@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     public Slider healthBar;
     private bool isDead;
     GameObject go;
-    LineRenderer lr; 
+    LineRenderer lr;
 
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
@@ -92,38 +92,41 @@ public class Player : MonoBehaviour
             playerControls.Disable();
         }
 
-        
+        if (playerControls.Default.Grapple.WasReleasedThisFrame())
+        {
+            isGrappling = false;
+        }
+
+
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-    }
+    
+    Vector3 gPosition;
+    GameObject grappleP;
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))
         {
             if (playerControls.Default.Grapple.IsPressed())
             {
-                isGrappling = true;
-                Vector3 gPosition = collision.bounds.center;
-                Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
-<<<<<<< Updated upstream
+                if(isGrappling == false)
+                {
+                    isGrappling = true;
+                    gPosition = collision.bounds.center;
+                    grappleP = collision.gameObject;
 
+                }
+
+
+                Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
                 lr.enabled = true;
                 lr.SetPosition(0, gameObject.transform.position);
-                lr.SetPosition(1, collision.transform.position);
-=======
+                lr.SetPosition(1, grappleP.transform.position);
                 gameObject.transform.GetChild(0).LookAt(collision.transform, Vector3.right);
->>>>>>> Stashed changes
-                Debug.Log(direction);
                 RB.AddForce(direction*Time.deltaTime*1000);
             }
             else {
                 lr.enabled = false;
             }
-        }
-        if (playerControls.Default.Grapple.IsPressed())
-        {
-            isGrappling = false;
         }
     }
 
