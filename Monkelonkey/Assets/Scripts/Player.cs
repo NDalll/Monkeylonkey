@@ -24,16 +24,19 @@ public class Player : MonoBehaviour
     public float health;
     public Slider healthBar;
     private bool isDead;
-    GameObject go;
-    LineRenderer lr;
+
+
+    private Vector3 gPosition;
+    private GameObject grappleP;
+    private GameObject[] grapplePoints;
+    private LineRenderer lr;
 
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
         healthBar.maxValue = health;
-
-         go = new GameObject();
-         lr = go.AddComponent<LineRenderer>();
+        grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
+        lr = gameObject.GetComponent<LineRenderer>();
     }
     private void FixedUpdate()
     {
@@ -100,16 +103,22 @@ public class Player : MonoBehaviour
 
     }
     
-    Vector3 gPosition;
-    GameObject grappleP;
     private void OnTriggerStay2D(Collider2D collision)
     {
+        Debug.Log(grapplePoints);
         if (collision.CompareTag("grapple"))
         {
+
+            foreach (GameObject x in grapplePoints)
+            {
+                x.transform.localScale = new Vector3(1, 1, 1);
+            }
+            collision.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             if (playerControls.Default.Grapple.IsPressed())
             {
                 if(isGrappling == false)
                 {
+                    RB.velocity = new Vector2(0, 0);
                     isGrappling = true;
                     gPosition = collision.bounds.center;
                     grappleP = collision.gameObject;
@@ -117,11 +126,12 @@ public class Player : MonoBehaviour
                 }
 
 
-                Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
+                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y ).normalized;
+                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
                 lr.enabled = true;
                 lr.SetPosition(0, gameObject.transform.position);
                 lr.SetPosition(1, grappleP.transform.position);
-                gameObject.transform.GetChild(0).LookAt(collision.transform, Vector3.right);
+                
                 RB.AddForce(direction*Time.deltaTime*1000);
             }
             else {
@@ -148,7 +158,6 @@ public class Player : MonoBehaviour
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraHeightRaycast), Vector2.right * (playerCollider.bounds.extents.x), rayColor);
         return raycastHit.collider != null;
-        
     }
 
     private void Awake()
