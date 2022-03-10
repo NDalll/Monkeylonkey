@@ -106,10 +106,14 @@ public class Player : MonoBehaviour
                 isGrappling = true;
                 Vector3 gPosition = collision.bounds.center;
                 Vector2 direction = new Vector2((gPosition.x - gameObject.transform.position.x) * grappleMultipier, (gPosition.y - gameObject.transform.position.y) * grappleMultipier);
+<<<<<<< Updated upstream
 
                 lr.enabled = true;
                 lr.SetPosition(0, gameObject.transform.position);
                 lr.SetPosition(1, collision.transform.position);
+=======
+                gameObject.transform.GetChild(0).LookAt(collision.transform, Vector3.right);
+>>>>>>> Stashed changes
                 Debug.Log(direction);
                 RB.AddForce(direction*Time.deltaTime*1000);
             }
