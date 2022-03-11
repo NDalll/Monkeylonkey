@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
     public Slider healthBar;
     private bool isDead;
 
-
     private Vector3 gPosition;
     private GameObject grappleP;
     private GameObject[] grapplePoints;
@@ -44,11 +43,11 @@ public class Player : MonoBehaviour
         
         if (input.x < 0)
         {
-            player.flipX = true;
+            gameObject.transform.localScale = new Vector3(-1, 1, 1);
         }
         if (input.x > 0)
         {
-            player.flipX = false;
+            gameObject.transform.localScale = new Vector3(1, 1, 1);
         }
 
         float targetSpeed = input.x * moveSpeed; //calculate the direction we want to move in and our desired velocity
@@ -105,7 +104,6 @@ public class Player : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log(grapplePoints);
         if (collision.CompareTag("grapple"))
         {
 
