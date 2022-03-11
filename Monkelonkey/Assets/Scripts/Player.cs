@@ -28,11 +28,14 @@ public class Player : MonoBehaviour
     private Vector3 gPosition;
     private GameObject grappleP;
     private GameObject[] grapplePoints;
+    private List<GameObject> nearGPoints;
     private LineRenderer lr;
+    private GameObject nearestGrapple;
 
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
+        nearGPoints = new List<GameObject>();
         healthBar.maxValue = health;
         grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
         lr = gameObject.GetComponent<LineRenderer>();
@@ -70,6 +73,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(nearGPoints.Count);
         //timer (for coyote time):
         lastGroundedTime += Time.deltaTime;
         lastJumpedTime += Time.deltaTime;
@@ -99,44 +103,82 @@ public class Player : MonoBehaviour
             isGrappling = false;
         }
 
-
+        nearestGrapple = GetNearstGrapple();
+        foreach(GameObject x in grapplePoints)
+        {
+            x.transform.localScale = new Vector3(1, 1, 1);
+        }
+        nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
     }
-    
-    private void OnTriggerStay2D(Collider2D collision)
+
+    private GameObject GetNearstGrapple()
+    {
+        GameObject nearstPoint = nearGPoints[0];
+        for(int i = 1; i > nearGPoints.Count; i++)
+        {
+            if(Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
+            {
+                nearstPoint = nearGPoints[i];
+            }
+        }
+        return nearstPoint;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))
         {
+            nearGPoints.Add(collision.gameObject);
+        }
+    }
 
-            foreach (GameObject x in grapplePoints)
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("grapple"))
+        {
+            foreach(GameObject x in nearGPoints)
             {
-                x.transform.localScale = new Vector3(1, 1, 1);
-            }
-            collision.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            if (playerControls.Default.Grapple.IsPressed())
-            {
-                if(isGrappling == false)
+                if(x.transform.position.x == collision.transform.position.x && x.transform.position.y == collision.transform.position.y)
                 {
-                    RB.velocity = new Vector2(0, 0);
-                    isGrappling = true;
-                    gPosition = collision.bounds.center;
-                    grappleP = collision.gameObject;
-
+                    nearGPoints.Remove(x);
                 }
-
-
-                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y ).normalized;
-                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-                lr.enabled = true;
-                lr.SetPosition(0, gameObject.transform.position);
-                lr.SetPosition(1, grappleP.transform.position);
-                
-                RB.AddForce(direction*Time.deltaTime*1000);
-            }
-            else {
-                lr.enabled = false;
             }
         }
     }
+    //private void OnTriggerStay2D(Collider2D collision)
+    //{
+    //    if (collision.CompareTag("grapple"))
+    //    {
+
+    //        foreach (GameObject x in grapplePoints)
+    //        {
+    //            x.transform.localScale = new Vector3(1, 1, 1);
+    //        }
+    //        collision.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+    //        if (playerControls.Default.Grapple.IsPressed())
+    //        {
+    //            if (isGrappling == false)
+    //            {
+    //                isGrappling = true;
+    //                gPosition = collision.bounds.center;
+    //                grappleP = collision.gameObject;
+
+    //            }
+
+    //            Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
+    //            direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
+    //            lr.enabled = true;
+    //            lr.SetPosition(0, gameObject.transform.position);
+    //            lr.SetPosition(1, grappleP.transform.position);
+
+    //            RB.AddForce(direction * Time.deltaTime * 1000);
+    //        }
+    //        else
+    //        {
+    //            lr.enabled = false;
+    //        }
+    //    }
+    //}
 
     private bool IsGrounded() //Check if player is on ground
     {
