@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform player;
-    public Transform camera;
+    public Transform cam;
     public Vector3 offset;
     public float maxOffset;
     public float cameraSpeed;
@@ -68,7 +68,7 @@ public class CameraFollow : MonoBehaviour
                 offset.x = 0;
             }
         }
-        camera.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, -10);
+        cam.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, -10);
     }
     private void Awake()
     {

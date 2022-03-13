@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public float moveSpeed;
+    public float maxFallSpeed;
     public float jumpHeight;
     public SpriteRenderer player;
     public Rigidbody2D RB;
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour
         accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAccel : runDeccel;
         float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
         
-        RB.AddForce(movement * Vector2.right);
+            RB.AddForce(movement * Vector2.right);
 
         //Friction:
         if (IsGrounded() && input.x == 0 && isGrappling != true)
@@ -74,6 +75,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Max fallspeed:
+        if (RB.velocity.y < maxFallSpeed * -1)
+        {
+            RB.velocity = new Vector2 (RB.velocity.x, maxFallSpeed * -1);
+        }
+
         Debug.Log(nearGPoints.Count);
         //timer (for coyote time):
         lastGroundedTime += Time.deltaTime;
