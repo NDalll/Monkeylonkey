@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     private List<GameObject> nearGPoints;
     private LineRenderer lr;
     private GameObject nearestGrapple;
+    private bool canGrapple;
 
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
@@ -108,20 +109,68 @@ public class Player : MonoBehaviour
         {
             x.transform.localScale = new Vector3(1, 1, 1);
         }
-        nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        if(nearestGrapple != null)
+        {
+            nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        }
+        Grapple();
+        
     }
 
-    private GameObject GetNearstGrapple()
+    private void Grapple()
     {
-        GameObject nearstPoint = nearGPoints[0];
-        for(int i = 1; i > nearGPoints.Count; i++)
+        if(canGrapple)
         {
-            if(Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
+            if (playerControls.Default.Grapple.IsPressed())
             {
-                nearstPoint = nearGPoints[i];
+                Debug.Log(isGrappling);
+                if (isGrappling == false)
+                {
+                    isGrappling = true;
+                    gPosition = nearestGrapple.transform.position;
+                    grappleP = nearestGrapple;
+
+                }
+
+                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
+                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
+                lr.enabled = true;
+                lr.SetPosition(0, gameObject.transform.position);
+                lr.SetPosition(1, grappleP.transform.position);
+
+                RB.AddForce(direction * Time.deltaTime * 1000);
+            }
+            else
+            {
+                lr.enabled = false;
             }
         }
-        return nearstPoint;
+        else
+        {
+            lr.enabled = false;
+        }
+        
+    }
+    private GameObject GetNearstGrapple()
+    {
+        if(nearGPoints.Count != 0)
+        {
+            canGrapple = true;
+            GameObject nearstPoint = nearGPoints[0];
+            for (int i = 1; i < nearGPoints.Count; i++)
+            {
+                if (Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
+                {
+                    nearstPoint = nearGPoints[i];
+                }
+            }
+            return nearstPoint;
+        }
+        if (playerControls.Default.Grapple.IsPressed() == false)
+        {
+            canGrapple = false;
+        }
+        return null;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -155,28 +204,7 @@ public class Player : MonoBehaviour
     //            x.transform.localScale = new Vector3(1, 1, 1);
     //        }
     //        collision.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-    //        if (playerControls.Default.Grapple.IsPressed())
-    //        {
-    //            if (isGrappling == false)
-    //            {
-    //                isGrappling = true;
-    //                gPosition = collision.bounds.center;
-    //                grappleP = collision.gameObject;
-
-    //            }
-
-    //            Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
-    //            direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-    //            lr.enabled = true;
-    //            lr.SetPosition(0, gameObject.transform.position);
-    //            lr.SetPosition(1, grappleP.transform.position);
-
-    //            RB.AddForce(direction * Time.deltaTime * 1000);
-    //        }
-    //        else
-    //        {
-    //            lr.enabled = false;
-    //        }
+    //       
     //    }
     //}
 
