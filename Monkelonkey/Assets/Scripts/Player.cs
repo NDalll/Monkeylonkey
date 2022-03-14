@@ -34,9 +34,12 @@ public class Player : MonoBehaviour
     private GameObject nearestGrapple;
     private bool canGrapple;
 
+    private Animator animator;
+
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
+        animator = gameObject.GetComponent<Animator>();
         nearGPoints = new List<GameObject>();
         healthBar.maxValue = health;
         grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
@@ -48,11 +51,17 @@ public class Player : MonoBehaviour
         
         if (input.x < 0)
         {
+            animator.SetBool("Running", true);
             gameObject.transform.localScale = new Vector3(-1, 1, 1);
         }
         if (input.x > 0)
         {
+            animator.SetBool("Running", true);
             gameObject.transform.localScale = new Vector3(1, 1, 1);
+        }
+        if(input.x == 0)
+        {
+            animator.SetBool("Running", false);
         }
 
         float targetSpeed = input.x * moveSpeed; //calculate the direction we want to move in and our desired velocity
@@ -62,7 +71,7 @@ public class Player : MonoBehaviour
         accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAccel : runDeccel;
         float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
         
-            RB.AddForce(movement * Vector2.right);
+        RB.AddForce(movement * Vector2.right);
 
         //Friction:
         if (IsGrounded() && input.x == 0 && isGrappling != true)
