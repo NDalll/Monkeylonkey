@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     private Vector3 gPosition;
     private GameObject grappleP;
     private GameObject[] grapplePoints;
-    private List<GameObject> nearGPoints;
+    public List<GameObject> nearGPoints;
     private LineRenderer lr;
     private GameObject nearestGrapple;
     private bool canGrapple;
@@ -192,7 +192,7 @@ public class Player : MonoBehaviour
         return null;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))
         {
@@ -212,7 +212,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
     //private void OnTriggerStay2D(Collider2D collision)
     //{
     //    if (collision.CompareTag("grapple"))
@@ -250,6 +250,7 @@ public class Player : MonoBehaviour
     public void JumpFinished()
     {
         animator.SetBool("Jumping", false);
+        Jump();
     }
 
     public void Jump()
