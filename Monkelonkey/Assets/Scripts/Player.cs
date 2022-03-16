@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed;
     public float maxFallSpeed;
+    public Sprite fallSprite; 
     public float jumpHeight;
     public SpriteRenderer player;
     public Rigidbody2D RB;
@@ -29,7 +30,7 @@ public class Player : MonoBehaviour
     private Vector3 gPosition;
     private GameObject grappleP;
     private GameObject[] grapplePoints;
-    private List<GameObject> nearGPoints;
+    public List<GameObject> nearGPoints;
     private LineRenderer lr;
     private GameObject nearestGrapple;
     private bool canGrapple;
@@ -98,13 +99,7 @@ public class Player : MonoBehaviour
         //jump
         if ((IsGrounded()||(lastGroundedTime < coyoteTime && lastJumpedTime > coyoteTime * 2)) && playerControls.Default.Jump.triggered)
         {
-            if (RB.velocity.y < 0) //Hvis spilleren falder vil hoppet stoppe dem
-            {
-                RB.velocity = new Vector2(RB.velocity.x, 0);
-            }
-            
-            RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
-            lastJumpedTime = 0;
+            animator.SetBool("Jumping", true);
         }
 
         //healthbar
@@ -130,6 +125,14 @@ public class Player : MonoBehaviour
             nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         }
         Grapple();
+
+        if(RB.velocity.y < 0)
+        {
+            player.sprite = fallSprite;
+        }
+
+
+        Debug.Log(IsGrounded());
         
     }
 
@@ -189,7 +192,7 @@ public class Player : MonoBehaviour
         return null;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    /*private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))
         {
@@ -209,7 +212,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
     //private void OnTriggerStay2D(Collider2D collision)
     //{
     //    if (collision.CompareTag("grapple"))
@@ -244,6 +247,22 @@ public class Player : MonoBehaviour
         return raycastHit.collider != null;
     }
 
+    public void JumpFinished()
+    {
+        animator.SetBool("Jumping", false);
+        Jump();
+    }
+
+    public void Jump()
+    {
+        if (RB.velocity.y < 0) //Hvis spilleren falder vil hoppet stoppe dem
+        {
+            RB.velocity = new Vector2(RB.velocity.x, 0);
+        }
+
+        RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
+        lastJumpedTime = 0;
+    }
     private void Awake()
     {
         playerControls = new PlayerControls();
