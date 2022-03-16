@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public float moveSpeed;
     public float maxFallSpeed;
-    public Sprite fallSprite; 
+    public Sprite fallSprite;
     public float jumpHeight;
     public SpriteRenderer player;
     public Rigidbody2D RB;
@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private Vector3 gPosition;
     private GameObject grappleP;
     private GameObject[] grapplePoints;
+    [System.NonSerialized]
     public List<GameObject> nearGPoints;
     private LineRenderer lr;
     private GameObject nearestGrapple;
@@ -250,7 +251,6 @@ public class Player : MonoBehaviour
     public void JumpFinished()
     {
         animator.SetBool("Jumping", false);
-        Jump();
     }
 
     public void Jump()
