@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
             RB.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
         }
     }
-
+    
     private void Update()
     {
         //Max fallspeed:
@@ -92,7 +92,6 @@ public class Player : MonoBehaviour
             RB.velocity = new Vector2 (RB.velocity.x, maxFallSpeed * -1);
         }
 
-        Debug.Log(nearGPoints.Count);
         //timer (for coyote time):
         lastGroundedTime += Time.deltaTime;
         lastJumpedTime += Time.deltaTime;
@@ -100,6 +99,7 @@ public class Player : MonoBehaviour
         //jump
         if ((IsGrounded()||(lastGroundedTime < coyoteTime && lastJumpedTime > coyoteTime * 2)) && playerControls.Default.Jump.triggered)
         {
+            Jump();
             animator.SetBool("Jumping", true);
         }
 
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
             isDead = true;
             playerControls.Disable();
         }
-
+        
         if (playerControls.Default.Grapple.WasReleasedThisFrame())
         {
             isGrappling = false;
@@ -126,14 +126,18 @@ public class Player : MonoBehaviour
             nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         }
         Grapple();
-
-        if(RB.velocity.y < 0)
+        if (IsGrounded())
         {
-            player.sprite = fallSprite;
+            animator.SetBool("Falling", false);
         }
+        if (RB.velocity.y < 0 && IsGrounded() == false)
+        {
+            animator.SetBool("Falling", true);
+            Debug.Log("falling:" + RB.velocity.y);
+        }
+        
 
 
-        Debug.Log(IsGrounded());
         
     }
 
@@ -143,7 +147,7 @@ public class Player : MonoBehaviour
         {
             if (playerControls.Default.Grapple.IsPressed())
             {
-                Debug.Log(isGrappling);
+
                 if (isGrappling == false)
                 {
                     isGrappling = true;
