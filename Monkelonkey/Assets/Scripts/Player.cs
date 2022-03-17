@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
-        animator = gameObject.GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         nearGPoints = new List<GameObject>();
         healthBar.maxValue = health;
         grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
@@ -130,10 +130,9 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("Falling", false);
         }
-        if (RB.velocity.y < 0 && IsGrounded() == false)
+        if (IsGrounded() == false)
         {
             animator.SetBool("Falling", true);
-            Debug.Log("falling:" + RB.velocity.y);
         }
         
 
