@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: flying
+  m_Name: ProjectileFly
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -21,11 +21,11 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 334113636394406682, guid: 56b66530ad5bb48c08ed609a979b42c1, type: 3}
-    - time: 0.13333334
+    - time: 0.083333336
       value: {fileID: 4728863856133775402, guid: 56b66530ad5bb48c08ed609a979b42c1, type: 3}
-    - time: 0.26666668
+    - time: 0.16666667
       value: {fileID: 724338075682712373, guid: 56b66530ad5bb48c08ed609a979b42c1, type: 3}
-    - time: 0.4
+    - time: 0.25
       value: {fileID: 334113636394406682, guid: 56b66530ad5bb48c08ed609a979b42c1, type: 3}
     attribute: m_Sprite
     path: 
@@ -55,7 +55,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.4166667
+    m_StopTime: 0.26666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

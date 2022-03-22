@@ -12,7 +12,7 @@ public class Obstacle : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             player = collision.GetComponent<Player>();
-            player.health -= damage;
+            player.dealDamage(damage);
         }
     }
 }

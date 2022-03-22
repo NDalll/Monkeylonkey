@@ -266,6 +266,12 @@ public class Player : MonoBehaviour
         RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
         lastJumpedTime = 0;
     }
+
+    public void dealDamage(float damage)
+    {
+        health -= damage;
+    }
+
     private void Awake()
     {
         playerControls = new PlayerControls();
