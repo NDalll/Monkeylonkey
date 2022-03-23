@@ -156,7 +156,6 @@ public class Enemy : MonoBehaviour
 
     public void StartFire()
     {
-        fireProjectile();
         fireTimer = Time.time;
         fireEnabled = true;
     }
