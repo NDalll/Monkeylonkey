@@ -36,6 +36,12 @@ public class Player : MonoBehaviour
     private GameObject nearestGrapple;
     private bool canGrapple;
 
+
+    public int iFrameBlinks;
+    private int iFrameBlinkCount = 0;
+    private float iFrameTimer;
+    public float iFrameInterval;
+    private bool invincible;
     private Animator animator;
 
     [SerializeField] private LayerMask platformLayerMask;
@@ -133,6 +139,31 @@ public class Player : MonoBehaviour
         if (IsGrounded() == false)
         {
             animator.SetBool("Falling", true);
+        }
+        if (invincible)
+        {
+            if(iFrameBlinkCount != iFrameBlinks)
+            {
+                if (Time.time - iFrameTimer >= iFrameInterval)
+                {
+                    if (player.enabled)
+                    {
+                        player.enabled = false;
+                    }
+                    else
+                    {
+                        player.enabled = true;
+                        iFrameBlinkCount++;
+                    }
+                    iFrameTimer = Time.time;
+                    
+                }
+            }
+            else
+            {
+                iFrameBlinkCount = 0;
+                invincible = false;
+            }   
         }
         
 
@@ -269,7 +300,14 @@ public class Player : MonoBehaviour
 
     public void dealDamage(float damage)
     {
-        health -= damage;
+        if(invincible == false)
+        {
+            health -= damage;
+            invincible = true;
+            iFrameTimer = Time.time;
+        }
+        
+
     }
 
     private void Awake()

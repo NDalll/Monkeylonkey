@@ -33,4 +33,9 @@ public class Projectile : MonoBehaviour
             collision.GetComponent<Player>().dealDamage(damage);
         }
     }
+
+    private void Death()
+    {
+        GameObject.Destroy(gameObject);
+    }
 }

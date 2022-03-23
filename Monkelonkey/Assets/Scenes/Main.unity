@@ -1434,6 +1434,8 @@ MonoBehaviour:
   grappleMultipier: 6
   health: 5
   healthBar: {fileID: 176913888}
+  iFrameBlinks: 4
+  iFrameInterval: 0.2
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256
