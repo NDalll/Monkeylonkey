@@ -15,14 +15,14 @@ public class SightTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            entity.StartFire();
+            entity.PlayerEntered();
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            entity.fireEnabled = false;
+            entity.PlayerExited();
         }
     }
 }

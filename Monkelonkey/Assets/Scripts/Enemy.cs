@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     public float health;
     public int bodyDamage;
     public int weaponDamage;
+    public bool isFollowing;
 
 
     [Header("Jumping Enemy")]
@@ -31,7 +32,11 @@ public class Enemy : MonoBehaviour
     public bool isWalking;
     public GameObject startPoint;
     public GameObject endPoint;
-
+    private Vector3 startPos;
+    private Vector3 endPos;
+    private Vector3 currTarget;
+    public float walkSpeed;
+    public float runSpeed;
 
     [Header("Ranged Enemy")]
     public bool isRanged;
@@ -41,7 +46,7 @@ public class Enemy : MonoBehaviour
     public bool isHoming;
     public float fireRate;
     [System.NonSerialized]
-    public bool fireEnabled;
+    public bool seeingPlayer;
     private float fireTimer;
 
     [Header("Melee Enemy")]
@@ -56,41 +61,79 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         RB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        if (isWalking)
+        {
+            startPos = startPoint.transform.position;
+            endPos = endPoint.transform.position;
+
+            transform.position = startPos;
+            currTarget = endPos;
+        }
     }
     private void Update()
     {
-        if (timing)
+        if (isJumping)
         {
-            if(Time.time - cooldownTimer >= jumpCooldown)
+            if (timing)
             {
-                timing = false;
-                animator.SetTrigger("doneCooldown");
+                if (Time.time - cooldownTimer >= jumpCooldown)
+                {
+                    timing = false;
+                    animator.SetTrigger("doneCooldown");
+                }
             }
         }
-        if (fireEnabled)
-        {
-            if(Time.time - fireTimer >= fireRate)
+
+        if (seeingPlayer) 
+        { 
+            if (isRanged)
             {
-                fireProjectile();
-                fireTimer = Time.time;
+                if (Time.time - fireTimer >= fireRate)
+                {
+                    fireProjectile();
+                    fireTimer = Time.time;
+                }
             }
+        }
+        
+        if (isWalking)
+        {
+            if (seeingPlayer)
+            {
+                Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized;
+                RB.velocity = dir * Time.deltaTime * runSpeed;
+            }
+            else
+            {
+                Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
+                RB.velocity = dir * Time.deltaTime * walkSpeed;
+                if (transform.position.x == currTarget.x)
+                {
+                    switchTarget();
+                }
+            }
+            
+            
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground"))
+        if (isJumping)
         {
-            if (RB.velocity.y <= 0 && firstSpawn != true)
+            if (collision.CompareTag("Ground"))
             {
-                Debug.Log("groundHit");
-                animator.SetTrigger("groundHit");
+                if (RB.velocity.y <= 0 && firstSpawn != true)
+                {
+                    Debug.Log("groundHit");
+                    animator.SetTrigger("groundHit");
+                }
+                else
+                {
+                    firstSpawn = false;
+                }
             }
-            else
-            {
-                firstSpawn = false;
-            }
-
         }
+        
         if (collision.CompareTag("Player"))
         {
             collision.GetComponent<Player>().dealDamage(bodyDamage);
@@ -102,14 +145,7 @@ public class Enemy : MonoBehaviour
         if (jumpCount == jumps)
         {
             jumpCount = 0;
-            if (forward)
-            {
-                forward = false;
-            } 
-            else
-            {
-                forward = true;
-            }
+            forward = switchBool(forward);
             gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x*-1, gameObject.transform.localScale.y, 1);
 
         }
@@ -154,10 +190,43 @@ public class Enemy : MonoBehaviour
         timing = true;
     }
 
-    public void StartFire()
+    public void PlayerEntered()
     {
-        fireTimer = Time.time;
-        fireEnabled = true;
+        if (isRanged)
+        {
+            fireTimer = Time.time;
+        }
+        
+        seeingPlayer = true;
+    }
+    public void PlayerExited()
+    {
+        seeingPlayer = false;
+        
+    }
+    private bool switchBool(bool oldBool)
+    {
+        bool newBool;
+        if (oldBool)
+        {
+            newBool = false;
+        }
+        else {
+            newBool = true;
+        }
+        return newBool;
+    }
+    private void switchTarget()
+    {
+        bool newTarget;
+        if (currTarget == startPos)
+        {
+            currTarget = endPos;
+        }
+        else
+        {
+            currTarget = startPos;
+        }
     }
     private void ResetTrigger(string triggerName)
     {

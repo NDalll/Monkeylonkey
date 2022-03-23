@@ -21,11 +21,11 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 4302570144594703757, guid: e58265be4b9454b048a48fd1b6bd3b3d, type: 3}
-    - time: 0.083333336
+    - time: 0.05
       value: {fileID: -2004532130459182969, guid: e58265be4b9454b048a48fd1b6bd3b3d, type: 3}
-    - time: 0.16666667
+    - time: 0.1
       value: {fileID: -3076082378848921901, guid: e58265be4b9454b048a48fd1b6bd3b3d, type: 3}
-    - time: 0.25
+    - time: 0.15
       value: {fileID: -5667637839231563580, guid: e58265be4b9454b048a48fd1b6bd3b3d, type: 3}
     attribute: m_Sprite
     path: 
@@ -55,7 +55,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.2
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,7 +75,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.33333334
+  - time: 0.2
     functionName: Death
     data: 
     objectReferenceParameter: {fileID: 0}
