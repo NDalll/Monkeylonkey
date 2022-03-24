@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         if (isWalking)
         {
-            startPos = startPoint.transform.position;
+            startPos = new Vector3(startPoint.transform.position.x, startPoint.transform.position.y, 0);
             endPos = endPoint.transform.position;
 
             transform.position = startPos;
