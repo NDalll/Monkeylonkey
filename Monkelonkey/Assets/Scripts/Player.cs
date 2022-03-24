@@ -123,6 +123,7 @@ public class Player : MonoBehaviour
         if (playerControls.Default.Grapple.WasReleasedThisFrame())
         {
             isGrappling = false;
+            animator.SetBool("Grappeling", false);
         }
 
         nearestGrapple = GetNearstGrapple();
@@ -201,7 +202,6 @@ public class Player : MonoBehaviour
             }
             else
             {
-                animator.SetBool("Grappeling", false);
                 lr.enabled = false;
             }
         }
