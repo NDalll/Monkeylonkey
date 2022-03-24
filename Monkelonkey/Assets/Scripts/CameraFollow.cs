@@ -11,8 +11,13 @@ public class CameraFollow : MonoBehaviour
     public float cameraSpeed;
     private PlayerControls playerControls;
     public float cameraDeceleration;
+    private Player playerscript;
 
     // Update is called once per frame
+    private void Start()
+    {
+        playerscript = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+    }
     void Update()
     {
         Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
@@ -69,6 +74,11 @@ public class CameraFollow : MonoBehaviour
             }
         }
         cam.position = new Vector3(player.position.x + offset.x, player.position.y + offset.y, -10);
+
+        if (playerscript.isDead)
+        {
+            playerControls.Disable();
+        }
     }
     private void Awake()
     {

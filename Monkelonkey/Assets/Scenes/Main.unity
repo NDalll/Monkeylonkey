@@ -1044,7 +1044,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982173581}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c1151c861d9293d40ba3f4de6e886ef9, type: 2}
   m_CullingMode: 0
@@ -1114,7 +1114,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982173581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.21, y: 3.05, z: 0}
+  m_LocalPosition: {x: 20.55, y: 3.25, z: 0}
   m_LocalScale: {x: 1.3, y: 1.4134898, z: 1}
   m_Children:
   - {fileID: 935025215}
@@ -1343,7 +1343,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235603230}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.733, y: 2.933, z: 0}
+  m_LocalPosition: {x: 35.99, y: 4.32, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1799606436}
@@ -21283,7 +21283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2716784368970361052, guid: 5e8235693c12669448c01965be9546eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -212.14488
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2716784368970361052, guid: 5e8235693c12669448c01965be9546eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -21340,7 +21340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2716784368970361052, guid: 5e8235693c12669448c01965be9546eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -212.14488
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2716784368970361052, guid: 5e8235693c12669448c01965be9546eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -21390,6 +21390,10 @@ PrefabInstance:
     - target: {fileID: 5043317518505643618, guid: 103dd7a24f7d010478ac1915e2d38ccb, type: 3}
       propertyPath: m_Name
       value: Spikes
+      objectReference: {fileID: 0}
+    - target: {fileID: 5043317518505643619, guid: 103dd7a24f7d010478ac1915e2d38ccb, type: 3}
+      propertyPath: damage
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5043317518505643622, guid: 103dd7a24f7d010478ac1915e2d38ccb, type: 3}
       propertyPath: m_RootOrder
