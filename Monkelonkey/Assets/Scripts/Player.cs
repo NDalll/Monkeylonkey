@@ -184,6 +184,7 @@ public class Player : MonoBehaviour
                 if (isGrappling == false)
                 {
                     isGrappling = true;
+                    animator.SetBool("Grappeling", true);
                     gPosition = nearestGrapple.transform.position;
                     grappleP = nearestGrapple;
 
@@ -200,6 +201,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                animator.SetBool("Grappeling", false);
                 lr.enabled = false;
             }
         }
