@@ -25,7 +25,8 @@ public class Player : MonoBehaviour
 
     public float health;
     public Slider healthBar;
-    private bool isDead;
+    [System.NonSerialized]
+    public bool isDead;
 
     private Vector3 gPosition;
     private GameObject grappleP;
@@ -42,8 +43,7 @@ public class Player : MonoBehaviour
     private float iFrameTimer;
     public float iFrameInterval;
     private bool invincible;
-    private Animator animator;
-
+    private Animator animator; 
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
         healthBar.maxValue = health;
         grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
         lr = gameObject.GetComponent<LineRenderer>();
+        
     }
     private void FixedUpdate()
     {
@@ -114,7 +115,9 @@ public class Player : MonoBehaviour
         if (health <= 0)
         {
             isDead = true;
+            invincible = false;
             playerControls.Disable();
+
         }
         
         if (playerControls.Default.Grapple.WasReleasedThisFrame())
@@ -181,6 +184,7 @@ public class Player : MonoBehaviour
                 if (isGrappling == false)
                 {
                     isGrappling = true;
+                    animator.SetBool("Grappeling", true);
                     gPosition = nearestGrapple.transform.position;
                     grappleP = nearestGrapple;
 
@@ -188,14 +192,16 @@ public class Player : MonoBehaviour
 
                 Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
                 direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
+                Vector3 tailPoint = transform.GetChild(0).position;
                 lr.enabled = true;
-                lr.SetPosition(0, gameObject.transform.position);
+                lr.SetPosition(0, tailPoint);
                 lr.SetPosition(1, grappleP.transform.position);
 
                 RB.AddForce(direction * Time.deltaTime * 1000);
             }
             else
             {
+                animator.SetBool("Grappeling", false);
                 lr.enabled = false;
             }
         }
@@ -227,40 +233,6 @@ public class Player : MonoBehaviour
         return null;
     }
 
-    /*private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("grapple"))
-        {
-            nearGPoints.Add(collision.gameObject);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("grapple"))
-        {
-            foreach(GameObject x in nearGPoints)
-            {
-                if(x.transform.position.x == collision.transform.position.x && x.transform.position.y == collision.transform.position.y)
-                {
-                    nearGPoints.Remove(x);
-                }
-            }
-        }
-    }*/
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("grapple"))
-    //    {
-
-    //        foreach (GameObject x in grapplePoints)
-    //        {
-    //            x.transform.localScale = new Vector3(1, 1, 1);
-    //        }
-    //        collision.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-    //       
-    //    }
-    //}
 
     private bool IsGrounded() //Check if player is on ground
     {
@@ -300,7 +272,7 @@ public class Player : MonoBehaviour
 
     public void dealDamage(float damage)
     {
-        if(invincible == false)
+        if(invincible == false && !isDead)
         {
             health -= damage;
             invincible = true;
