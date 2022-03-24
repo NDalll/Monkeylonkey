@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D RB;
     private Animator animator;
     private bool firstSpawn = true;
+    private PlayerTrigger playerTrigger;
 
     [Header("General")]
     public float health;
@@ -69,6 +70,8 @@ public class Enemy : MonoBehaviour
             transform.position = startPos;
             currTarget = endPos;
         }
+        playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>();
+        playerTrigger.damage = bodyDamage;
     }
     private void Update()
     {
@@ -134,10 +137,6 @@ public class Enemy : MonoBehaviour
             }
         }
         
-        if (collision.CompareTag("Player"))
-        {
-            collision.GetComponent<Player>().dealDamage(bodyDamage);
-        }
     }
     
     private void Jump() {
@@ -218,7 +217,6 @@ public class Enemy : MonoBehaviour
     }
     private void switchTarget()
     {
-        bool newTarget;
         if (currTarget == startPos)
         {
             currTarget = endPos;

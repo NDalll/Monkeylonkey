@@ -978,6 +978,8 @@ GameObject:
   m_Component:
   - component: {fileID: 935025215}
   - component: {fileID: 935025216}
+  - component: {fileID: 935025217}
+  - component: {fileID: 935025218}
   m_Layer: 0
   m_Name: PlayerTrigger
   m_TagString: Enemy
@@ -1015,6 +1017,39 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.40033185}
   serializedVersion: 2
   m_Radius: 0.42144603
+--- !u!114 &935025217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935025214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9fa83dd15224223996bc30e6af6d92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &935025218
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935025214}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &982173581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1064,7 @@ GameObject:
   - component: {fileID: 982173585}
   - component: {fileID: 982173586}
   - component: {fileID: 982173587}
+  - component: {fileID: 982173588}
   m_Layer: 7
   m_Name: Slime
   m_TagString: Enemy
@@ -1044,7 +1080,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 982173581}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c1151c861d9293d40ba3f4de6e886ef9, type: 2}
   m_CullingMode: 0
@@ -1104,7 +1140,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!4 &982173584
 Transform:
@@ -1138,17 +1174,17 @@ MonoBehaviour:
   bodyDamage: 1
   weaponDamage: 1
   isFollowing: 0
-  isJumping: 0
+  isJumping: 1
   jumps: 5
   jumpCooldown: 0.3
   jumpAngle: 20
   jumpMagnitude: 7
-  isWalking: 1
+  isWalking: 0
   startPoint: {fileID: 711809277}
   endPoint: {fileID: 135723779}
   walkSpeed: 37.75
   runSpeed: 5
-  isRanged: 0
+  isRanged: 1
   projectile: {fileID: 6795803923771095908, guid: 4ea56d29f0acf4d48bcd58048340b4c1, type: 3}
   initProjSpeed: 10
   projAccelation: 0
@@ -1193,6 +1229,28 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.40962207}
   serializedVersion: 2
   m_Radius: 0.39811847
+--- !u!68 &982173588
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982173581}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.13938195, y: 0.0074626207}
+  - {x: 0.14367352, y: 0.0074624554}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &1142040121
 GameObject:
   m_ObjectHideFlags: 0
