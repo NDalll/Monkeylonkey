@@ -9,6 +9,7 @@ TagManager:
   - sight
   - Enemy
   - WayPoint
+  - Tail
   layers:
   - Default
   - TransparentFX
