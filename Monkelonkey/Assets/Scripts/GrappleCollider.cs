@@ -10,6 +10,10 @@ public class GrappleCollider : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
+    void Update()
+    {
+        transform.position = player.transform.position;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("grapple"))

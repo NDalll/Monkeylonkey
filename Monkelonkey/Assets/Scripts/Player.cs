@@ -22,11 +22,13 @@ public class Player : MonoBehaviour
     private float lastJumpedTime = 0;
     public float grappleMultipier;
     private bool isGrappling = false;
+    private bool isFlipped;
 
     public float health;
     public Slider healthBar;
     [System.NonSerialized]
     public bool isDead;
+    public float grappleOffset;
 
     private Vector3 gPosition;
     private GameObject grappleP;
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour
     private GameObject nearestGrapple;
     private bool canGrapple;
 
-
+    private GameObject tail;
     public int iFrameBlinks;
     private int iFrameBlinkCount = 0;
     private float iFrameTimer;
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask platformLayerMask;
     private void Start()
     {
+        tail = GameObject.FindGameObjectWithTag("Tail");
         animator = GetComponent<Animator>();
         nearGPoints = new List<GameObject>();
         healthBar.maxValue = health;
@@ -58,20 +61,30 @@ public class Player : MonoBehaviour
     {
         Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
         
-        if (input.x < 0)
+        if (!isGrappling)
         {
-            animator.SetBool("Running", true);
-            gameObject.transform.localScale = new Vector3(-1, 1, 1);
+            if (input.x < 0)
+            {
+                animator.SetBool("Running", true);
+                gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                tail.transform.localScale = new Vector3(-1, 1, 1);
+                isFlipped = true;
+
+            }
+            if (input.x > 0)
+            {
+                animator.SetBool("Running", true);
+                gameObject.transform.localScale = new Vector3(1, 1, 1);
+                tail.transform.localScale = new Vector3(1, 1, 1);
+                isFlipped = false;
+            }
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        if (input.x > 0)
-        {
-            animator.SetBool("Running", true);
-            gameObject.transform.localScale = new Vector3(1, 1, 1);
-        }
-        if(input.x == 0)
+        if (input.x == 0)
         {
             animator.SetBool("Running", false);
         }
+
 
         float targetSpeed = input.x * moveSpeed; //calculate the direction we want to move in and our desired velocity
         float speedDif = targetSpeed - RB.velocity.x; //calculate difference between current velocity and desired velocity
@@ -169,10 +182,20 @@ public class Player : MonoBehaviour
                 invincible = false;
             }   
         }
-        
+    }
 
-
-        
+    private Vector3 GetOrientationGrapple(Vector2 direction)
+    {
+        if (!isFlipped)
+        {
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            return new Vector3(0, 0, angle + 180 + grappleOffset);
+        }
+        else
+        {
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            return new Vector3(0, 0, angle - grappleOffset);
+        }
     }
 
     private void Grapple()
@@ -193,11 +216,15 @@ public class Player : MonoBehaviour
 
                 Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
                 direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-                Vector3 tailPoint = transform.GetChild(0).position;
+                Vector3 tailPoint = tail.transform.position;
                 lr.enabled = true;
                 lr.SetPosition(0, tailPoint);
                 lr.SetPosition(1, grappleP.transform.position);
-
+                Vector3 angle = GetOrientationGrapple(direction);
+                
+                player.transform.eulerAngles = angle;
+                
+                
                 RB.AddForce(direction * Time.deltaTime * 1000);
             }
             else
