@@ -28,7 +28,7 @@ public class GrappleCollider : MonoBehaviour
         {
             foreach (GameObject x in player.nearGPoints)
             {
-                if (x.transform.position.x == collision.transform.position.x && x.transform.position.y == collision.transform.position.y)
+                if (x.transform.position.x == collision. transform.position.x && x.transform.position.y == collision.transform.position.y)
                 {
                     player.nearGPoints.Remove(x);
                 }

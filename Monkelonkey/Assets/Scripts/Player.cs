@@ -216,7 +216,7 @@ public class Player : MonoBehaviour
 
                 Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
                 direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-                Vector3 tailPoint = tail.transform.position;
+                Vector3 tailPoint = transform.GetChild(0).position;
                 lr.enabled = true;
                 lr.SetPosition(0, tailPoint);
                 lr.SetPosition(1, grappleP.transform.position);
