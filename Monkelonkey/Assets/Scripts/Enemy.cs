@@ -110,11 +110,22 @@ public class Enemy : MonoBehaviour
             {
                 Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
                 transform.Translate(dir * Time.deltaTime * runSpeed);
-                
+            }
+            float distance = CalcXDistance();
+            if (distance < 0.5f)
+            {
+                Debug.Log("Target Hit");
+                switchTarget();
             }
             
-            
         }
+    }
+
+    float CalcXDistance()
+    {
+        float distance;
+        distance = Mathf.Abs(transform.position.x - currTarget.x);
+        return distance;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -133,14 +144,14 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        if (isWalking)
-        {
-            if (collision.CompareTag("WayPoint"))
-            {
-                Debug.Log("at target");
-                switchTarget();
-            }
-        }
+        //if (isWalking)
+        //{
+        //    if (collision.CompareTag("WayPoint"))
+        //    {
+        //        Debug.Log("at target");
+        //        switchTarget();
+        //    }
+        //}
         
     }
     
