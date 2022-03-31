@@ -104,16 +104,13 @@ public class Enemy : MonoBehaviour
             if (seeingPlayer)
             {
                 Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized;
-                RB.velocity = dir * Time.deltaTime * runSpeed;
+                transform.Translate(dir * Time.deltaTime * runSpeed);
             }
             else
             {
                 Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
-                RB.velocity = dir * Time.deltaTime * walkSpeed;
-                if (transform.position.x == currTarget.x)
-                {
-                    switchTarget();
-                }
+                transform.Translate(dir * Time.deltaTime * runSpeed);
+                
             }
             
             
@@ -134,6 +131,14 @@ public class Enemy : MonoBehaviour
                 {
                     firstSpawn = false;
                 }
+            }
+        }
+        if (isWalking)
+        {
+            if (collision.CompareTag("WayPoint"))
+            {
+                Debug.Log("at target");
+                switchTarget();
             }
         }
         
