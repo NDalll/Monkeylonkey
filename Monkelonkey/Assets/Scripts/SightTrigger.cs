@@ -22,7 +22,7 @@ public class SightTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            entity.PlayerExited();
+            entity.StartAlertTimer();
         }
     }
 }

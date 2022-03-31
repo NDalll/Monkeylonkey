@@ -297,6 +297,10 @@ public class Player : MonoBehaviour
         lastJumpedTime = 0;
     }
 
+    public void LedgeJump()
+    {
+        RB.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+    }
     public void dealDamage(float damage)
     {
         if(invincible == false && !isDead)

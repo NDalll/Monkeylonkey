@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    
+
     private GameObject player;
     private Rigidbody2D RB;
     private Animator animator;
@@ -28,7 +28,7 @@ public class Enemy : MonoBehaviour
     private bool forward = true;
     private int jumpCount = 0;
     private float cooldownTimer;
-    private bool timing;
+    private bool colTiming;
 
     [Header("Walking Enemy")]
     public bool isWalking;
@@ -39,6 +39,10 @@ public class Enemy : MonoBehaviour
     private Vector3 currTarget;
     public float walkSpeed;
     public float runSpeed;
+    private float alertTimer;
+    public float alertTime;
+    private bool alert;
+
 
     [Header("Ranged Enemy")]
     public bool isRanged;
@@ -55,8 +59,8 @@ public class Enemy : MonoBehaviour
     public bool isMelee;
     public GameObject meleeWeapon;
 
-    
-    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,18 +83,18 @@ public class Enemy : MonoBehaviour
     {
         if (isJumping)
         {
-            if (timing)
+            if (colTiming)
             {
                 if (Time.time - cooldownTimer >= jumpCooldown)
                 {
-                    timing = false;
+                    colTiming = false;
                     animator.SetTrigger("doneCooldown");
                 }
             }
         }
 
-        if (seeingPlayer) 
-        { 
+        if (seeingPlayer)
+        {
             if (isRanged)
             {
                 if (Time.time - fireTimer >= fireRate)
@@ -100,7 +104,7 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        
+
         if (isWalking)
         {
             if (seeingPlayer)
@@ -112,17 +116,26 @@ public class Enemy : MonoBehaviour
             else
             {
                 Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
-                transform.Translate(dir * Time.deltaTime * runSpeed);
+                transform.Translate(dir * Time.deltaTime * walkSpeed);
                 SetLookDirection(dir);
             }
             float distance = CalcXDistance();
             if (distance < 0.5f)
             {
-                Debug.Log("Target Hit");
                 switchTarget();
             }
-            
+            if (alert)
+            {
+                if(Time.time-alertTimer >= alertTime)
+                {
+                    alert = false;
+                    seeingPlayer = false;
+                }
+            }
+
         }
+
+        
     }
 
     float CalcXDistance()
@@ -133,13 +146,13 @@ public class Enemy : MonoBehaviour
     }
     private void SetLookDirection(Vector2 dir)
     {
-        if(dir.x > 0)
+        if (dir.x > 0)
         {
             transform.localScale = new Vector3(scale.x, scale.y, scale.z);
         }
         else
         {
-            transform.localScale = new Vector3(scale.x*-1, scale.y, scale.y);
+            transform.localScale = new Vector3(scale.x * -1, scale.y, scale.y);
         }
     }
 
@@ -168,11 +181,11 @@ public class Enemy : MonoBehaviour
         //        switchTarget();
         //    }
         //}
-        
+
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if(isWalking && !seeingPlayer)
+        if (isWalking && !seeingPlayer)
         {
             if (collision.CompareTag("WayPoint"))
             {
@@ -186,12 +199,12 @@ public class Enemy : MonoBehaviour
         {
             jumpCount = 0;
             forward = switchBool(forward);
-            gameObject.transform.localScale = new Vector3(scale.x*-1, scale.y, 1);
+            gameObject.transform.localScale = new Vector3(scale.x * -1, scale.y, 1);
 
         }
         if (forward)
         {
-            RB.AddForce(new Vector2(Mathf.Cos(radAngle)*-1, Mathf.Sin(radAngle)) * jumpMagnitude, ForceMode2D.Impulse);
+            RB.AddForce(new Vector2(Mathf.Cos(radAngle) * -1, Mathf.Sin(radAngle)) * jumpMagnitude, ForceMode2D.Impulse);
             jumpCount++;
         }
         else
@@ -200,11 +213,15 @@ public class Enemy : MonoBehaviour
             jumpCount++;
         }
     }
+    public void LedgeJump()
+    {
+        RB.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+    }
 
     private void fireProjectile()
     {
         GameObject projectile = Instantiate(this.projectile);
-        projectile.transform.position = transform.position + new Vector3(0,.5f,0);
+        projectile.transform.position = transform.position + new Vector3(0, .5f, 0);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.initProjSpeed = initProjSpeed;
         projectileScript.projAccelation = projAccelation;
@@ -227,7 +244,11 @@ public class Enemy : MonoBehaviour
     private void StartJumpCooldown()
     {
         cooldownTimer = Time.time;
-        timing = true;
+        colTiming = true;
+    }
+    public void StartAlertTimer(){
+        alertTimer = Time.time;
+        alert = true;
     }
 
     public void PlayerEntered()
@@ -236,7 +257,7 @@ public class Enemy : MonoBehaviour
         {
             fireTimer = Time.time;
         }
-        
+        alert = false;
         seeingPlayer = true;
     }
     public void PlayerExited()
