@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Animator animator;
     private bool firstSpawn = true;
     private PlayerTrigger playerTrigger;
+    private Vector3 scale;
 
     [Header("General")]
     public float health;
@@ -54,11 +55,12 @@ public class Enemy : MonoBehaviour
     public bool isMelee;
     public GameObject meleeWeapon;
 
-
+    
     
     // Start is called before the first frame update
     void Start()
     {
+        scale = transform.localScale;
         player = GameObject.FindWithTag("Player");
         RB = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -105,17 +107,31 @@ public class Enemy : MonoBehaviour
             {
                 Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized;
                 transform.Translate(dir * Time.deltaTime * runSpeed);
+                SetLookDirection(dir);
             }
             else
             {
                 Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
                 transform.Translate(dir * Time.deltaTime * runSpeed);
+                SetLookDirection(dir);
                 
             }
-            
+
             
         }
     }
+    private void SetLookDirection(Vector2 dir)
+    {
+        if(dir.x > 0)
+        {
+            transform.localScale = new Vector3(scale.x, scale.y, scale.z);
+        }
+        else
+        {
+            transform.localScale = new Vector3(scale.x*-1, scale.y, scale.y);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isJumping)
@@ -133,24 +149,35 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        if (isWalking)
+        if (isWalking && !seeingPlayer)
         {
             if (collision.CompareTag("WayPoint"))
             {
+                
                 Debug.Log("at target");
                 switchTarget();
+                collision.GetComponent<CircleCollider2D>().enabled = false;
             }
         }
         
     }
-    
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(isWalking && !seeingPlayer)
+        {
+            if (collision.CompareTag("WayPoint"))
+            {
+                collision.GetComponent<CircleCollider2D>().enabled = true;
+            }
+        }
+    }
     private void Jump() {
         float radAngle = jumpAngle * Mathf.Rad2Deg;
         if (jumpCount == jumps)
         {
             jumpCount = 0;
             forward = switchBool(forward);
-            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x*-1, gameObject.transform.localScale.y, 1);
+            gameObject.transform.localScale = new Vector3(scale.x*-1, scale.y, 1);
 
         }
         if (forward)
