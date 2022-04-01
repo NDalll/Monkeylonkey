@@ -6,13 +6,13 @@ public class Projectile : MonoBehaviour
 {
     // Start is called before the first frame update
     [System.NonSerialized]
-    public float initProjSpeed;
+    public float turnforce;
     [System.NonSerialized]
-    public float projAccelation;
+    public float initProjSpeed;
     [System.NonSerialized]
     public bool isHoming;
     [System.NonSerialized]
-    public int damage;
+    public float damage;
     private GameObject player;
 
 
@@ -32,12 +32,21 @@ public class Projectile : MonoBehaviour
         if (isHoming)
         {
             rb.AddForce(GetVectorToPlayer());
+            rb.velocity = rb.velocity.normalized * initProjSpeed;
+            transform.eulerAngles = GetOrientation();
         }
     }
+
+    private Vector3 GetOrientation()
+    {
+        float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
+        return new Vector3(0, 0, angle);
+    }
+
     private Vector3 GetVectorToPlayer()
     {
         Vector3 vector = player.transform.position - transform.position;
-        return vector.normalized * projAccelation;
+        return vector.normalized * turnforce;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

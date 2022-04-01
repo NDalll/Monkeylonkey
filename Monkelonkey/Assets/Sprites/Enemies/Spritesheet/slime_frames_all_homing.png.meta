@@ -1,0 +1,636 @@
+fileFormatVersion: 2
+guid: 11a5dff9cff6cac49bd5ca82a7d0ed1e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 983016064594438808
+    second: slime_frames_all_homing_0
+  - first:
+      213: 2800096696890922926
+    second: slime_frames_all_homing_1
+  - first:
+      213: -9094548175067291162
+    second: slime_frames_all_homing_2
+  - first:
+      213: 7931516061676658740
+    second: slime_frames_all_homing_3
+  - first:
+      213: 3661787351744612880
+    second: slime_frames_all_homing_4
+  - first:
+      213: -98191452328535546
+    second: slime_frames_all_homing_5
+  - first:
+      213: -5694796970804076809
+    second: slime_frames_all_homing_6
+  - first:
+      213: 1172011633432376539
+    second: slime_frames_all_homing_7
+  - first:
+      213: 638528572028151991
+    second: slime_frames_all_homing_8
+  - first:
+      213: 4842540083942612125
+    second: slime_frames_all_homing_9
+  - first:
+      213: 3459220575921135921
+    second: slime_frames_all_homing_10
+  - first:
+      213: -1171809511347418998
+    second: slime_frames_all_homing_11
+  - first:
+      213: 2502540677391037193
+    second: slime_frames_all_homing_12
+  - first:
+      213: 476808537598407296
+    second: slime_frames_all_homing_13
+  - first:
+      213: -6245532663441173549
+    second: slime_frames_all_homing_14
+  - first:
+      213: 8462005753542668815
+    second: slime_frames_all_homing_15
+  - first:
+      213: 6496130854734658272
+    second: slime_frames_all_homing_16
+  - first:
+      213: -4272593353917810541
+    second: slime_frames_all_homing_17
+  - first:
+      213: 7633763238619276567
+    second: slime_frames_all_homing_18
+  - first:
+      213: -7227578446782657545
+    second: slime_frames_all_homing_19
+  - first:
+      213: 7341288641187229018
+    second: slime_frames_all_homing_20
+  - first:
+      213: -3852668211068347629
+    second: slime_frames_all_homing_21
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: slime_frames_all_homing_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 176
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89a67aa07ef54ad00800000000000000
+      internalID: 983016064594438808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 144
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea79dea3c11fbd620800000000000000
+      internalID: 2800096696890922926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_2
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 144
+        width: 18
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e1ef68ae9ca9c180800000000000000
+      internalID: -9094548175067291162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_3
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 144
+        width: 22
+        height: 9
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 430ea8ac5d7621e60800000000000000
+      internalID: 7931516061676658740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_4
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 144
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01a81c7023841d230800000000000000
+      internalID: 3661787351744612880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_5
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 144
+        width: 14
+        height: 15
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60a5af3f46723aef0800000000000000
+      internalID: -98191452328535546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_6
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 112
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fe904fc35408f0b0800000000000000
+      internalID: -5694796970804076809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_7
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 112
+        width: 18
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd4bc5bfe52d34010800000000000000
+      internalID: 1172011633432376539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_8
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 111
+        width: 14
+        height: 15
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b8ecaa6a528cd800800000000000000
+      internalID: 638528572028151991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_9
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 110
+        width: 12
+        height: 17
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9c5df9ac88243340800000000000000
+      internalID: 4842540083942612125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_10
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 80
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 131608b39ce910030800000000000000
+      internalID: 3459220575921135921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_11
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 80
+        width: 22
+        height: 9
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8886bb3575ecbfe0800000000000000
+      internalID: -1171809511347418998
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_12
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 80
+        width: 18
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 903bbdfac7fcab220800000000000000
+      internalID: 2502540677391037193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_13
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 80
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0823d65b6d6fd9600800000000000000
+      internalID: 476808537598407296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_14
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 48
+        width: 18
+        height: 12
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d35d7202296359a0800000000000000
+      internalID: -6245532663441173549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_15
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 48
+        width: 20
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f02f83336651f6570800000000000000
+      internalID: 8462005753542668815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_16
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 48
+        width: 23
+        height: 10
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0eaf9ea2894e62a50800000000000000
+      internalID: 6496130854734658272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_17
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 48
+        width: 23
+        height: 7
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 398b8065bf2b4b4c0800000000000000
+      internalID: -4272593353917810541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_18
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 48
+        width: 23
+        height: 5
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7156659583390f960800000000000000
+      internalID: 7633763238619276567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_19
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 48
+        width: 23
+        height: 4
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fb004d22bb72bb90800000000000000
+      internalID: -7227578446782657545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_20
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 16
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5d23939f1f71e560800000000000000
+      internalID: 7341288641187229018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slime_frames_all_homing_21
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 16
+        width: 16
+        height: 13
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31bd4d1aca2988ac0800000000000000
+      internalID: -3852668211068347629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

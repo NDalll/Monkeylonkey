@@ -11,12 +11,15 @@ public class Enemy : MonoBehaviour
     private bool firstSpawn = true;
     private PlayerTrigger playerTrigger;
     private Vector3 scale;
+    private string lookDirection;
 
     [Header("General")]
     public float health;
     public int bodyDamage;
-    public int weaponDamage;
-    public bool isFollowing;
+    public float alertTime;
+    private float alertTimer;
+    private bool alert;
+
 
 
     [Header("Jumping Enemy")]
@@ -39,16 +42,15 @@ public class Enemy : MonoBehaviour
     private Vector3 currTarget;
     public float walkSpeed;
     public float runSpeed;
-    private float alertTimer;
-    public float alertTime;
-    private bool alert;
+    public bool isFollowing;
 
 
     [Header("Ranged Enemy")]
     public bool isRanged;
+    public float rangedDamage;
     public GameObject projectile;
     public float initProjSpeed;
-    public float projAccelation;
+    public float turnForce;
     public bool isHoming;
     public float fireRate;
     [System.NonSerialized]
@@ -57,13 +59,23 @@ public class Enemy : MonoBehaviour
 
     [Header("Melee Enemy")]
     public bool isMelee;
-    public GameObject meleeWeapon;
+    public GameObject meleeWeaponPrefab;
+    private GameObject meleeWeapon;
+    public float meleeDamage;
+    private bool melee;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        if (isMelee)
+        {
+            meleeWeapon = Instantiate(meleeWeaponPrefab, gameObject.transform);
+            meleeWeapon.GetComponent<MeleeWeapon>().damage = meleeDamage;
+            meleeWeapon.SetActive(false);
+        }
+        
         scale = transform.localScale;
         player = GameObject.FindWithTag("Player");
         RB = GetComponent<Rigidbody2D>();
@@ -107,7 +119,7 @@ public class Enemy : MonoBehaviour
 
         if (isWalking)
         {
-            if (seeingPlayer)
+            if (seeingPlayer && isFollowing)
             {
                 Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized;
                 transform.Translate(dir * Time.deltaTime * runSpeed);
@@ -124,18 +136,27 @@ public class Enemy : MonoBehaviour
             {
                 switchTarget();
             }
-            if (alert)
+        }
+        if (isMelee)
+        {
+            if (melee)
             {
-                if(Time.time-alertTimer >= alertTime)
-                {
-                    alert = false;
-                    seeingPlayer = false;
-                }
+                MeleeAttack();
             }
-
+            
+        }
+        if (alert)
+        {
+            if (Time.time - alertTimer >= alertTime)
+            {
+                alert = false;
+                seeingPlayer = false;
+            }
         }
 
-        
+
+
+
     }
 
     float CalcXDistance()
@@ -149,10 +170,12 @@ public class Enemy : MonoBehaviour
         if (dir.x > 0)
         {
             transform.localScale = new Vector3(scale.x, scale.y, scale.z);
+            lookDirection = "right";
         }
         else
         {
             transform.localScale = new Vector3(scale.x * -1, scale.y, scale.y);
+            lookDirection = "left";
         }
     }
 
@@ -199,7 +222,7 @@ public class Enemy : MonoBehaviour
         {
             jumpCount = 0;
             forward = switchBool(forward);
-            gameObject.transform.localScale = new Vector3(scale.x * -1, scale.y, 1);
+            gameObject.transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, 1);
 
         }
         if (forward)
@@ -224,9 +247,9 @@ public class Enemy : MonoBehaviour
         projectile.transform.position = transform.position + new Vector3(0, .5f, 0);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.initProjSpeed = initProjSpeed;
-        projectileScript.projAccelation = projAccelation;
+        projectileScript.turnforce = turnForce;
         projectileScript.isHoming = isHoming;
-        projectileScript.damage = weaponDamage;
+        projectileScript.damage = rangedDamage;
         projectile.GetComponent<Rigidbody2D>().AddForce(new Vector2(GetVectorToPlayer().x, GetVectorToPlayer().y), ForceMode2D.Impulse);
         projectile.transform.eulerAngles = GetOrientation();
     }
@@ -257,13 +280,20 @@ public class Enemy : MonoBehaviour
         {
             fireTimer = Time.time;
         }
+        if (isMelee)
+        {
+            StartMelee();
+        }
         alert = false;
         seeingPlayer = true;
     }
     public void PlayerExited()
     {
-        seeingPlayer = false;
-        
+        if (isMelee)
+        {
+            StopMelee();
+        }
+        StartAlertTimer();
     }
     private bool switchBool(bool oldBool)
     {
@@ -292,5 +322,23 @@ public class Enemy : MonoBehaviour
     {
         animator.ResetTrigger(triggerName);
     }
-
+    private void MeleeAttack()
+    {
+        meleeWeapon.transform.Rotate(new Vector3(0, 0, -500) * Time.deltaTime);
+        Debug.Log(meleeWeapon.transform.localEulerAngles.z);
+        if (Mathf.Abs(meleeWeapon.transform.localEulerAngles.z - 190) < 5)
+        {
+            meleeWeapon.transform.localEulerAngles = new Vector3(0, 0, 63);
+        }
+    }
+    public void StartMelee()
+    {
+        meleeWeapon.SetActive(true);
+        melee = true;
+    }
+    public void StopMelee()
+    {
+        melee = false;
+        meleeWeapon.SetActive(false);
+    }
 }
