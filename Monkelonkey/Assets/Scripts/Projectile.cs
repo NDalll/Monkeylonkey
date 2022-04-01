@@ -13,12 +13,15 @@ public class Projectile : MonoBehaviour
     public bool isHoming;
     [System.NonSerialized]
     public int damage;
+    private GameObject player;
+
 
     private Animator animator;
     private Rigidbody2D rb;
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").gameObject;
         animator = GetComponent<Animator>();   
         rb = GetComponent<Rigidbody2D>(); 
     }
@@ -26,8 +29,16 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isHoming)
+        {
+            rb.AddForce(GetVectorToPlayer());
+        }
     }
-
+    private Vector3 GetVectorToPlayer()
+    {
+        Vector3 vector = player.transform.position - transform.position;
+        return vector.normalized * projAccelation;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -45,6 +56,5 @@ public class Projectile : MonoBehaviour
     private void Death()
     {
         GameObject.Destroy(gameObject);
-        
     }
 }
