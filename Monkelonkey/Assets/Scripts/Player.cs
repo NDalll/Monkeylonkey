@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
+    private Gamecontroller gamecontroller;
     public float moveSpeed;
     public float maxFallSpeed;
     public Sprite fallSprite;
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
     public float coyoteTime;
     private float lastGroundedTime = 0;
     private float lastJumpedTime = 0;
+    private float timePlayed = 0;
     public float grappleMultipier;
     private bool isGrappling = false;
     private bool isFlipped;
@@ -47,8 +50,10 @@ public class Player : MonoBehaviour
     private bool invincible;
     private Animator animator; 
     [SerializeField] private LayerMask platformLayerMask;
+
     private void Start()
     {
+        gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
         tail = GameObject.FindGameObjectWithTag("Tail");
         animator = GetComponent<Animator>();
         nearGPoints = new List<GameObject>();
@@ -116,6 +121,12 @@ public class Player : MonoBehaviour
         lastGroundedTime += Time.deltaTime;
         lastJumpedTime += Time.deltaTime;
 
+        //playtime:
+        if (!isDead)
+        {
+            timePlayed =+ timePlayed + Time.deltaTime;
+        }
+
         //jump
         if ((IsGrounded()||(lastGroundedTime < coyoteTime && lastJumpedTime > coyoteTime * 2)) && playerControls.Default.Jump.triggered)
         {
@@ -130,7 +141,8 @@ public class Player : MonoBehaviour
             isDead = true;
             invincible = false;
             playerControls.Disable();
-
+            gamecontroller.timePlayed = timePlayed;
+            Invoke("LoadGameOverScene", 1f);
         }
         
         if (playerControls.Default.Grapple.WasReleasedThisFrame())
@@ -211,7 +223,6 @@ public class Player : MonoBehaviour
                     animator.SetBool("Grappeling", true);
                     gPosition = nearestGrapple.transform.position;
                     grappleP = nearestGrapple;
-
                 }
 
                 Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
@@ -221,10 +232,7 @@ public class Player : MonoBehaviour
                 lr.SetPosition(0, tailPoint);
                 lr.SetPosition(1, grappleP.transform.position);
                 Vector3 angle = GetOrientationGrapple(direction);
-                
                 player.transform.eulerAngles = angle;
-                
-                
                 RB.AddForce(direction * Time.deltaTime * 1000);
             }
             else
@@ -309,8 +317,10 @@ public class Player : MonoBehaviour
             invincible = true;
             iFrameTimer = Time.time;
         }
-        
-
+    }
+    public void LoadGameOverScene()
+    {
+        SceneManager.LoadScene("Gameover");
     }
 
     private void Awake()
