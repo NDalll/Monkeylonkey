@@ -51,6 +51,10 @@ public class Player : MonoBehaviour
     private Animator animator; 
     [SerializeField] private LayerMask platformLayerMask;
 
+    public GameObject banana;
+    public float fireAngle;
+    public float fireMagnetuide;
+
     private void Start()
     {
         gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
@@ -193,6 +197,12 @@ public class Player : MonoBehaviour
                 iFrameBlinkCount = 0;
                 invincible = false;
             }   
+        }
+        if (playerControls.Default.Attack.WasPressedThisFrame())
+        {
+            Instantiate(banana);
+            Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
+            brb.AddForce(new Vector2(9)
         }
     }
 
