@@ -10,35 +10,52 @@ public class BananaPickUp : MonoBehaviour
     private float fraction = 0;
     public float floatingDis;
     public float speed;
-    void Start()
+    [System.NonSerialized]
+    public bool isFire;
+    public float rotateSpeed;
+
+    void Awake()
     {
         startPostion = transform.position;
         endPostion = transform.position + Vector3.up*floatingDis;
+        isFire = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(fraction < 1)
+        if (!isFire)
         {
-            fraction += Time.deltaTime * speed;
-            transform.position = Vector3.Lerp(startPostion, endPostion, fraction);
+            if (fraction < 1)
+            {
+                fraction += Time.deltaTime * speed;
+                transform.position = Vector3.Lerp(startPostion, endPostion, fraction);
+            }
+            if (fraction >= 1)
+            {
+                Vector3 mPos = startPostion;
+                startPostion = endPostion;
+                endPostion = mPos;
+                fraction = 0;
+            }
         }
-        if(fraction >= 1)
+        else
         {
-            Vector3 mPos = startPostion;
-            startPostion = endPostion;
-            endPostion = mPos;
-            fraction = 0;
+            gameObject.transform.Rotate(new Vector3(0, 0, Time.deltaTime*rotateSpeed));
         }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (!isFire)
         {
-            ScoreManager.bananaScore++;
-            Destroy(gameObject);
+            if (collision.CompareTag("Player"))
+            {
+                ScoreManager.bananaScore++;
+                Destroy(gameObject);
+            }
         }
+        
     }
 }

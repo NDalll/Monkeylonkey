@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     [System.NonSerialized]
     public float damage;
     private GameObject player;
-
+    
 
     private Animator animator;
     private Rigidbody2D rb;

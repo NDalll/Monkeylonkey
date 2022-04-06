@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     public GameObject banana;
     public float fireAngle;
     public float fireMagnetuide;
+    public float rotateSpeed;
 
     private void Start()
     {
@@ -200,9 +201,20 @@ public class Player : MonoBehaviour
         }
         if (playerControls.Default.Attack.WasPressedThisFrame())
         {
-            Instantiate(banana);
+            float radAngle = fireAngle * Mathf.Deg2Rad;
+            Debug.Log(radAngle);
+            GameObject banana = Instantiate(this.banana);
+
+            BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>();
+            bananaScript.isPickUp = false;
+            bananaScript.rotateSpeed = rotateSpeed;
+            banana.transform.position = transform.position;
             Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
-            brb.AddForce(new Vector2(9)
+            brb.AddForce(new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle)) * fireMagnetuide, ForceMode2D.Impulse);
+            brb.gravityScale = 1;
+            
+            
+
         }
     }
 
