@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - WayPoint
   - Tail
+  - Gamecontroller
   layers:
   - Default
   - TransparentFX
