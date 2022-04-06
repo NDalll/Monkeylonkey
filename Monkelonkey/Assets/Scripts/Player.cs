@@ -201,17 +201,31 @@ public class Player : MonoBehaviour
         }
         if (playerControls.Default.Attack.WasPressedThisFrame())
         {
-            float radAngle = fireAngle * Mathf.Deg2Rad;
-            Debug.Log(radAngle);
-            GameObject banana = Instantiate(this.banana);
+            if (ScoreManager.bananaScore != 0)
+            {
+                float radAngle = fireAngle * Mathf.Deg2Rad;
+                Debug.Log(radAngle);
+                GameObject banana = Instantiate(this.banana);
 
-            BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>();
-            bananaScript.isPickUp = false;
-            bananaScript.rotateSpeed = rotateSpeed;
-            banana.transform.position = transform.position;
-            Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
-            brb.AddForce(new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle)) * fireMagnetuide, ForceMode2D.Impulse);
-            brb.gravityScale = 1;
+                BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>();
+                bananaScript.isPickUp = false;
+                bananaScript.rotateSpeed = rotateSpeed * Random.Range(0.4f, 1);
+                banana.transform.position = transform.position;
+                Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
+                Vector2 bananaForce = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle)) * fireMagnetuide;
+                if (isFlipped)
+                {
+                    brb.AddForce(new Vector2(bananaForce.x*-1 + RB.velocity.x, bananaForce.y), ForceMode2D.Impulse);
+                }
+                else
+                {
+                    brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x, bananaForce.y), ForceMode2D.Impulse);
+                }
+                
+                brb.gravityScale = 1;
+                ScoreManager.bananaScore--;
+            }
+            
             
             
 

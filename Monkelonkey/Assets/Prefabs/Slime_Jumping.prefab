@@ -202,10 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ded3b03c5c1816447b5c47d9042b70f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  health: 3
   bodyDamage: 10
-  weaponDamage: 10
-  isFollowing: 0
+  alertTime: 0
   isJumping: 1
   jumps: 5
   jumpCooldown: 0.3
@@ -216,14 +215,17 @@ MonoBehaviour:
   endPoint: {fileID: 0}
   walkSpeed: 37.75
   runSpeed: 5
+  isFollowing: 0
   isRanged: 1
+  rangedDamage: 0
   projectile: {fileID: 6795803923771095908, guid: 4ea56d29f0acf4d48bcd58048340b4c1, type: 3}
   initProjSpeed: 10
-  projAccelation: 0
+  turnForce: 0
   isHoming: 0
   fireRate: 0.8
   isMelee: 0
-  meleeWeapon: {fileID: 0}
+  meleeWeaponPrefab: {fileID: 0}
+  meleeDamage: 0
 --- !u!50 &6999459571687594927
 Rigidbody2D:
   serializedVersion: 4

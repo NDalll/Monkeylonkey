@@ -11,20 +11,20 @@ public class BananaPickUp : MonoBehaviour
     public float floatingDis;
     public float speed;
     [System.NonSerialized]
-    public bool isFire;
+    public bool isPickUp;
     public float rotateSpeed;
 
     void Awake()
     {
         startPostion = transform.position;
         endPostion = transform.position + Vector3.up*floatingDis;
-        isFire = false;
+        isPickUp = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isFire)
+        if (isPickUp)
         {
             if (fraction < 1)
             {
@@ -48,11 +48,19 @@ public class BananaPickUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!isFire)
+        if (isPickUp)
         {
             if (collision.CompareTag("Player"))
             {
                 ScoreManager.bananaScore++;
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            if (collision.CompareTag("Enemy"))
+            {
+                collision.GetComponent<Enemy>().dealDamage(1);
                 Destroy(gameObject);
             }
         }

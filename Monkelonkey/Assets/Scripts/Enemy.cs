@@ -341,4 +341,20 @@ public class Enemy : MonoBehaviour
         melee = false;
         meleeWeapon.SetActive(false);
     }
+    public void dealDamage(float damage)
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        health -= damage;
+        if(health == 0)
+        {
+            GameObject.Destroy(gameObject);
+        }
+        spriteRenderer.color = Color.red;
+        Invoke("turnWhite", 0.1f);
+    }
+    private void turnWhite()
+    {
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.white;
+    }
 }
