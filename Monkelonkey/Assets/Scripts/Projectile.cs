@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
     private Vector3 GetVectorToPlayer()
     {
         Vector3 vector = player.transform.position - transform.position;
-        return vector.normalized * turnforce;
+        return vector.normalized * turnforce * Time.deltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
