@@ -2,18 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class GameoverUI : MonoBehaviour
 {
     [Header("Generel")]
-    public Text header;
-    public Text time;
-    public Text scoreText;
+    public TextMeshProUGUI header;
+    public TextMeshProUGUI time;
+    public TextMeshProUGUI scoreText;
     [Header("Variables")]
-    public Text floorText;
-    public Text enemyDefText;
-    public Text bananaColText;
-    public Text unusedBanText;
+    public TextMeshProUGUI floorText;
+    public TextMeshProUGUI enemyDefText;
+    public TextMeshProUGUI bananaColText;
+    public TextMeshProUGUI unusedBanText;
     private Gamecontroller gamecontroller;
     private float score;
     
