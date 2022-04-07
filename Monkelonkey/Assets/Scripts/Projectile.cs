@@ -27,7 +27,7 @@ public class Projectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (isHoming)
         {
@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
     private Vector3 GetVectorToPlayer()
     {
         Vector3 vector = player.transform.position - transform.position;
-        return vector.normalized * turnforce * Time.deltaTime;
+        return vector.normalized * turnforce;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
