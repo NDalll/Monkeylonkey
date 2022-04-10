@@ -10,7 +10,16 @@ public class Scenemanager : MonoBehaviour
     {
         gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
     }
-    public void StartOver()
+    public void StartGame()
+    {
+        gamecontroller.timePlayed = 0;
+        gamecontroller.enemiesDefeated = 0;
+        gamecontroller.bananas = 0;
+        gamecontroller.bananasCollected = 0;
+        gamecontroller.floorsBeaten = 0;
+        SceneManager.LoadScene("Gameplay");
+    } 
+    public void LoadTestStage()
     {
         gamecontroller.timePlayed = 0;
         gamecontroller.enemiesDefeated = 0;
@@ -18,5 +27,9 @@ public class Scenemanager : MonoBehaviour
         gamecontroller.bananasCollected = 0;
         gamecontroller.floorsBeaten = 0;
         SceneManager.LoadScene("Main");
+    } 
+    public void ToGameOverScene()
+    {
+        SceneManager.LoadScene("Gameover");
     }
 }
