@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StageBuilder : MonoBehaviour
 {
-    private char[] directions = new char[] { 'L', 'L', 'R', 'R', 'T' };
+    private char[] directions = new char[] { 'L', 'L', 'L', 'L', 'L','R', 'R', 'R', 'R', 'R', 'T', 'T', };
 
     public List<GameObject> rooms;
     public int sizeX;
@@ -23,17 +23,17 @@ public class StageBuilder : MonoBehaviour
     private int roomSizeY = 30;
 
     private char? formerDir = null;
-    // Start is called before the first frame update
+
     void Start()
     {
-        startX = Random.Range(0, sizeX + 1);
+        startX = Random.Range(1, sizeX + 1);
         startY = 0;
         curX = startX;
         curY = startY;
         mainPath = GenerateMainPath();
         Debug.Log("startPos: " + startX + ", " + startY + ": " + mainPath);
         roomTemplate = CreateTemplate();
-        //Debug.Log(roomTemplate);
+        Debug.Log(roomTemplate);
         
     }
 
@@ -47,12 +47,11 @@ public class StageBuilder : MonoBehaviour
             switch (nexDir)
             {
                 case 'L':
-                    if (curX != 0 && formerDir != 'L')
+                    if (curX != 1 && formerDir != 'L')
                     {
                         curX--;
                         formerDir = 'R';
                         path += "L";
-                        Debug.Log(curX + ", " + curY);
                     }
                     break;
                 case 'R':
@@ -61,7 +60,6 @@ public class StageBuilder : MonoBehaviour
                         curX++;
                         formerDir = 'L';
                         path += "R";
-                        Debug.Log(curX + ", " + curY);
                     }
                     break;
                 case 'T':
@@ -70,12 +68,10 @@ public class StageBuilder : MonoBehaviour
                         curY++;
                         formerDir = 'T';
                         path += "T";
-                        Debug.Log(curX + ", " + curY);
                     }
                     else
                     {
                         end = true;
-                        Debug.Log(curX + ", " + curY);
                     }
                     break;
             }
@@ -94,10 +90,9 @@ public class StageBuilder : MonoBehaviour
             template += "0";
         }
         
-        replaceCharInString(template, '1', xpos);
+        template = replaceCharInString(template, '1', xpos);
         foreach (char x in mainPath)
         {
-            //Debug.Log(layer);
             switch (x)
             {
                 case 'L':
@@ -118,9 +113,8 @@ public class StageBuilder : MonoBehaviour
     }
     private string replaceCharInString(string str, char ch, int pos)
     {
-        //Debug.Log(pos);
         char[] charTemp = str.ToCharArray();
-        charTemp[pos] = ch;
+        charTemp[pos-1] = ch;
         return new string(charTemp);
     }
 
