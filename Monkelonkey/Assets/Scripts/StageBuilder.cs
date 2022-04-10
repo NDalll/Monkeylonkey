@@ -11,6 +11,7 @@ public class StageBuilder : MonoBehaviour
     public int sizeY;
 
     private string mainPath;
+    private string roomTemplate;
 
     private int startX;
     private int startY;
@@ -30,7 +31,9 @@ public class StageBuilder : MonoBehaviour
         curX = startX;
         curY = startY;
         mainPath = GenerateMainPath();
-        Debug.Log(mainPath);
+        roomTemplate = CreateTemplate();
+        Debug.Log(roomTemplate);
+        
     }
 
     private string GenerateMainPath()
@@ -43,10 +46,10 @@ public class StageBuilder : MonoBehaviour
             switch (nexDir)
             {
                 case 'L':
-                    if (curX != sizeX && formerDir != 'L')
+                    if (curX != 0 && formerDir != 'L')
                     {
                         curX--;
-                        formerDir = 'L';
+                        formerDir = 'R';
                         path += "L";
                     }
                     break;
@@ -54,12 +57,12 @@ public class StageBuilder : MonoBehaviour
                     if (curX != sizeX && formerDir != 'R')
                     {
                         curX++;
-                        formerDir = 'R';
+                        formerDir = 'L';
                         path += "R";
                     }
                     break;
                 case 'T':
-                    if(curY != sizeY)
+                    if(curY != sizeY-1)
                     {
                         curY++;
                         formerDir = 'T';
@@ -72,11 +75,49 @@ public class StageBuilder : MonoBehaviour
                     break;
             }
         }
-        Debug.Log(path);
         return path;
-
     }
-    // Update is called once per frame
+
+    private string CreateTemplate()
+    {
+        string template = "";
+        int layer = 0;
+        int xpos = startX;
+        for(int i = 0; i < sizeY*sizeX; i++)
+        {
+            template += "0";
+        }
+        
+        replaceCharInString(template, '1', xpos);
+        foreach (char x in mainPath)
+        {
+            Debug.Log(layer);
+            switch (x)
+            {
+                case 'L':
+                    xpos--;
+                    template = replaceCharInString(template, '1', (xpos + sizeX * layer));
+                    break;
+                case 'R':
+                    xpos++;
+                    template = replaceCharInString(template, '1', (xpos + sizeX * layer));
+                    break;
+                case 'T':
+                    layer++;
+                    template = replaceCharInString(template, '1', (xpos + sizeX * layer));
+                    break;
+            }
+        }
+        return template;
+    }
+    private string replaceCharInString(string str, char ch, int pos)
+    {
+        Debug.Log(pos);
+        char[] charTemp = str.ToCharArray();
+        charTemp[pos] = ch;
+        return new string(charTemp);
+    }
+
     void Update()
     {
         
