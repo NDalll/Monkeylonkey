@@ -31,8 +31,9 @@ public class StageBuilder : MonoBehaviour
         curX = startX;
         curY = startY;
         mainPath = GenerateMainPath();
+        Debug.Log("startPos: " + startX + ", " + startY + ": " + mainPath);
         roomTemplate = CreateTemplate();
-        Debug.Log(roomTemplate);
+        //Debug.Log(roomTemplate);
         
     }
 
@@ -51,6 +52,7 @@ public class StageBuilder : MonoBehaviour
                         curX--;
                         formerDir = 'R';
                         path += "L";
+                        Debug.Log(curX + ", " + curY);
                     }
                     break;
                 case 'R':
@@ -59,6 +61,7 @@ public class StageBuilder : MonoBehaviour
                         curX++;
                         formerDir = 'L';
                         path += "R";
+                        Debug.Log(curX + ", " + curY);
                     }
                     break;
                 case 'T':
@@ -67,13 +70,16 @@ public class StageBuilder : MonoBehaviour
                         curY++;
                         formerDir = 'T';
                         path += "T";
+                        Debug.Log(curX + ", " + curY);
                     }
                     else
                     {
                         end = true;
+                        Debug.Log(curX + ", " + curY);
                     }
                     break;
             }
+            
         }
         return path;
     }
@@ -91,7 +97,7 @@ public class StageBuilder : MonoBehaviour
         replaceCharInString(template, '1', xpos);
         foreach (char x in mainPath)
         {
-            Debug.Log(layer);
+            //Debug.Log(layer);
             switch (x)
             {
                 case 'L':
@@ -112,7 +118,7 @@ public class StageBuilder : MonoBehaviour
     }
     private string replaceCharInString(string str, char ch, int pos)
     {
-        Debug.Log(pos);
+        //Debug.Log(pos);
         char[] charTemp = str.ToCharArray();
         charTemp[pos] = ch;
         return new string(charTemp);
