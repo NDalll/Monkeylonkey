@@ -9,6 +9,7 @@ public class StageBuilder : MonoBehaviour
     public List<GameObject> rooms;
     public int sizeX;
     public int sizeY;
+    public int yOffset;
 
     private string mainPath;
     private string roomTemplate;
@@ -19,7 +20,7 @@ public class StageBuilder : MonoBehaviour
     private int curX;
     private int curY;
 
-    private int roomSizeX = 10;
+    private int roomSizeX = 20;
     private int roomSizeY = 30;
 
     private char? formerDir = null;
@@ -34,6 +35,7 @@ public class StageBuilder : MonoBehaviour
         Debug.Log("startPos: " + startX + ", " + startY + ": " + mainPath);
         roomTemplate = CreateTemplate();
         Debug.Log(roomTemplate);
+        BuildRooms();
         
     }
 
@@ -79,7 +81,6 @@ public class StageBuilder : MonoBehaviour
         }
         return path;
     }
-
     private string CreateTemplate()
     {
         string template = "";
@@ -110,6 +111,68 @@ public class StageBuilder : MonoBehaviour
             }
         }
         return template;
+    }
+
+    private void BuildRooms()
+    {
+        int currRoom = 0;
+        char[] charRoomTemplate = roomTemplate.ToCharArray();
+        
+        
+        for(int i = 0; i < roomTemplate.Length; i++)
+        {
+            if(charRoomTemplate[i] == '1')
+            {
+                List<char> conditions = new List<char>();
+                bool first = false;
+                if (currRoom == 0)
+                {
+                    first = true;
+                }
+                if (first)
+                {
+                    conditions.Add('B');
+                    conditions.Add(mainPath[currRoom]);
+                }
+                else
+                {
+                    conditions.Add(GetCondition(mainPath[currRoom - 1]));
+                    conditions.Add(mainPath[currRoom]);
+                }
+                List<GameObject> goodRooms = GetGoodRooms(conditions);
+                int roomIndex = Random.Range(0, goodRooms.Count);
+                GameObject room = Instantiate(goodRooms[roomIndex]);
+                room.transform.position = new Vector3((i % sizeX)*roomSizeX + 10, (Mathf.Floor(i / sizeX))*roomSizeY + 17, 0);
+                currRoom++;
+
+            }
+        }
+    }
+    private List<GameObject> GetGoodRooms(List<char> con)
+    {
+        List<GameObject> gRooms = new List<GameObject>();
+        foreach(GameObject x in rooms)
+        {
+            if (x.name.Contains(con[0].ToString()) && x.name.Contains(con[1].ToString()))
+            {
+                gRooms.Add(x);
+            }
+            
+        }
+        return gRooms;
+    }
+    private char GetCondition(char conRoom)
+    {
+        switch (conRoom)
+        {
+            case 'R':
+                return 'L';
+            case 'L':
+                return 'R';
+            case 'T':
+                return 'B';
+            default:return ' ';
+        }
     }
     private string replaceCharInString(string str, char ch, int pos)
     {
