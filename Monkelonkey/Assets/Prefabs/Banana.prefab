@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 89111722468967212}
   - component: {fileID: 89111722468967211}
   - component: {fileID: 89111722468967213}
-  - component: {fileID: 89111722468967215}
   - component: {fileID: 89111722468967214}
+  - component: {fileID: 8173382701634249099}
   m_Layer: 0
   m_Name: Banana
   m_TagString: Untagged
@@ -99,7 +99,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingDis: 0.3
   speed: 1.5
---- !u!68 &89111722468967215
+  rotateSpeed: 0
+--- !u!50 &89111722468967214
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 89111722468967210}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!68 &8173382701634249099
 EdgeCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,50 +137,14 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 0.15669584, y: -0.049375057}
-  - {x: 0.1939485, y: -0.06427634}
-  - {x: 0.22618651, y: -0.041834474}
-  - {x: 0.22402477, y: -0.014666557}
-  - {x: 0.19794774, y: -0.010941267}
-  - {x: 0.22433329, y: 0.021405935}
-  - {x: 0.2319057, y: 0.046306014}
-  - {x: 0.24424577, y: 0.1408025}
-  - {x: 0.2707181, y: 0.25845206}
-  - {x: 0.22271538, y: 0.34337223}
-  - {x: 0.19408774, y: 0.4015218}
-  - {x: 0.2828343, y: 0.41961014}
-  - {x: 0.4335978, y: 0.22506618}
-  - {x: 0.40461206, y: -0.2102462}
-  - {x: 0.036731243, y: -0.5055629}
-  - {x: -0.20111322, y: -0.5533297}
-  - {x: -0.44093013, y: -0.49892533}
-  - {x: -0.51031184, y: -0.40644836}
-  - {x: -0.3751161, y: -0.34236073}
-  - {x: -0.25051045, y: -0.30066586}
-  - {x: -0.07748747, y: -0.2193743}
-  - {x: 0.16407704, y: -0.06778276}
+  - {x: -0.458498, y: -0.4495573}
+  - {x: 0.15880775, y: -0.06997156}
+  - {x: 0.26293373, y: 0.44242167}
+  - {x: 0.44200325, y: 0.07846594}
+  - {x: 0.29302025, y: -0.299618}
+  - {x: -0.0420475, y: -0.5191934}
+  - {x: -0.47867584, y: -0.4566934}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!50 &89111722468967214
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 89111722468967210}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0

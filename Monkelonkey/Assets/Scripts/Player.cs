@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     private Gamecontroller gamecontroller;
+    private Camera Cam;
     public float moveSpeed;
     public float maxFallSpeed;
     public Sprite fallSprite;
@@ -55,9 +57,11 @@ public class Player : MonoBehaviour
     public float fireAngle;
     public float fireMagnetuide;
     public float rotateSpeed;
+    
 
     private void Start()
     {
+        Cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
         tail = GameObject.FindGameObjectWithTag("Tail");
         animator = GetComponent<Animator>();
@@ -203,8 +207,6 @@ public class Player : MonoBehaviour
         {
             if (ScoreManager.bananaScore != 0)
             {
-                float radAngle = fireAngle * Mathf.Deg2Rad;
-                Debug.Log(radAngle);
                 GameObject banana = Instantiate(this.banana);
 
                 BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>();
@@ -212,17 +214,16 @@ public class Player : MonoBehaviour
                 bananaScript.rotateSpeed = rotateSpeed * Random.Range(0.4f, 1);
                 banana.transform.position = transform.position;
                 Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
-                Vector2 bananaForce = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle)) * fireMagnetuide;
-                if (isFlipped)
-                {
-                    brb.AddForce(new Vector2(bananaForce.x*-1 + RB.velocity.x, bananaForce.y), ForceMode2D.Impulse);
-                }
-                else
-                {
-                    brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x, bananaForce.y), ForceMode2D.Impulse);
-                }
+                Vector3 mousePos = Mouse.current.position.ReadValue();
+                Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
+                aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
+                Debug.Log(aimDirection);
+                Vector2 bananaForce = new Vector2(aimDirection.x, aimDirection.y+0.39f) * fireMagnetuide;
+                brb.bodyType = RigidbodyType2D.Dynamic;
+                brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x, bananaForce.y + RB.velocity.y/2), ForceMode2D.Impulse);
+
+
                 
-                brb.gravityScale = 1;
                 ScoreManager.bananaScore--;
             }
             
