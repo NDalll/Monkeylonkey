@@ -97,7 +97,7 @@ public class StageBuilder : MonoBehaviour
         replaceCharInString(template, '1', xpos);
         foreach (char x in mainPath)
         {
-            //Debug.Log(layer);
+            
             switch (x)
             {
                 case 'L':
@@ -118,9 +118,8 @@ public class StageBuilder : MonoBehaviour
     }
     private string replaceCharInString(string str, char ch, int pos)
     {
-        //Debug.Log(pos);
         char[] charTemp = str.ToCharArray();
-        charTemp[pos] = ch;
+        charTemp[pos-1] = ch;
         return new string(charTemp);
     }
 
