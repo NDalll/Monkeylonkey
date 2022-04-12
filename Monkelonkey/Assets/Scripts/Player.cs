@@ -53,10 +53,13 @@ public class Player : MonoBehaviour
     private Animator animator; 
     [SerializeField] private LayerMask platformLayerMask;
 
+    public GameObject throwingGrapple;
     public GameObject banana;
     public float fireAngle;
     public float fireMagnetuide;
+    public float grappleFireMagnetuide;
     public float rotateSpeed;
+
     
 
     private void Start()
@@ -218,18 +221,22 @@ public class Player : MonoBehaviour
                 Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
                 aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
                 Debug.Log(aimDirection);
-                Vector2 bananaForce = new Vector2(aimDirection.x, aimDirection.y+0.39f) * fireMagnetuide;
+                Vector2 Force = new Vector2(aimDirection.x, aimDirection.y+0.35f) * fireMagnetuide;
                 brb.bodyType = RigidbodyType2D.Dynamic;
-                brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x, bananaForce.y + RB.velocity.y/2), ForceMode2D.Impulse);
-
-
-                
+                brb.AddForce(new Vector2(Force.x + RB.velocity.x/10, Force.y), ForceMode2D.Impulse);
                 ScoreManager.bananaScore--;
             }
-            
-            
-            
-
+        }
+        if (playerControls.Default.Throw.WasPressedThisFrame())
+        {
+            GameObject thrownPoint = Instantiate(this.throwingGrapple);
+            thrownPoint.transform.position = transform.position;
+            Rigidbody2D grb = thrownPoint.GetComponent<Rigidbody2D>();
+            Vector3 mousePos = Mouse.current.position.ReadValue();
+            Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
+            aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
+            Vector2 Force = new Vector2(aimDirection.x, aimDirection.y) * grappleFireMagnetuide;
+            grb.AddForce(new Vector2(Force.x, Force.y), ForceMode2D.Impulse);
         }
     }
 

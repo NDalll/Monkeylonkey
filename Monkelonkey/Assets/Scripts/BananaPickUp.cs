@@ -63,6 +63,10 @@ public class BananaPickUp : MonoBehaviour
                 collision.GetComponent<Enemy>().dealDamage(1);
                 Destroy(gameObject);
             }
+            else if (collision.CompareTag("Ground"))
+            {
+                Destroy(gameObject);
+            }
         }
         
     }

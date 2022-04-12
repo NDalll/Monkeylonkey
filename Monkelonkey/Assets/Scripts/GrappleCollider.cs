@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GrappleCollider : MonoBehaviour
 {
+    private bool isStopped;
     private Player player;
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,14 @@ public class GrappleCollider : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("grapple"))
+        if (collision.CompareTag("ThrownGrapple")){
+            if (collision.GetComponent<Grapplepoint>().isThrown == false)
+            {
+                isStopped = true;
+            }
+        }
+
+        if (collision.CompareTag("grapple") || (collision.CompareTag("ThrownGrapple")||isStopped))
         {
             player.nearGPoints.Add(collision.gameObject);
         }
@@ -24,7 +32,7 @@ public class GrappleCollider : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("grapple"))
+        if (collision.CompareTag("grapple") || (collision.CompareTag("ThrownGrapple") || isStopped))
         {
             foreach (GameObject x in player.nearGPoints)
             {
