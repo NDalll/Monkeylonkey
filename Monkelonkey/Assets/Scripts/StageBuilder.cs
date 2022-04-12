@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//room.transform.position = new Vector3((i % sizeX) * roomSizeX + 10, (Mathf.Floor(i / sizeX)) * roomSizeY + 17, 0);
 public class StageBuilder : MonoBehaviour
 {
     private char[] directions = new char[] { 'L', 'L', 'L', 'L', 'L','R', 'R', 'R', 'R', 'R', 'T', 'T', };
@@ -27,6 +27,7 @@ public class StageBuilder : MonoBehaviour
 
     void Start()
     {
+        
         startX = Random.Range(1, sizeX + 1);
         startY = 0;
         curX = startX;
@@ -36,12 +37,15 @@ public class StageBuilder : MonoBehaviour
         roomTemplate = CreateTemplate();
         Debug.Log(roomTemplate);
         BuildRooms();
+        FillVoid();
+        
+        ;
         
     }
 
     private string GenerateMainPath()
     {
-        string path = "";
+        string path = "F";
         bool end = false;
         while (!end)
         {
@@ -115,37 +119,41 @@ public class StageBuilder : MonoBehaviour
 
     private void BuildRooms()
     {
-        int currRoom = 0;
-        char[] charRoomTemplate = roomTemplate.ToCharArray();
-        
-        
-        for(int i = 0; i < roomTemplate.Length; i++)
+        List<GameObject> goodRooms;
+        int currX = startX-1;
+        int currY = startY;
+        for (int i = 0; i < mainPath.Length; i++)
         {
-            if(charRoomTemplate[i] == '1')
+            List<char> roomCon = new List<char>();
+            if (mainPath[i] == 'F')
             {
-                List<char> conditions = new List<char>();
-                bool first = false;
-                if (currRoom == 0)
-                {
-                    first = true;
-                }
-                if (first)
-                {
-                    conditions.Add('B');
-                    conditions.Add(mainPath[currRoom]);
-                }
-                else
-                {
-                    conditions.Add(GetCondition(mainPath[currRoom - 1]));
-                    conditions.Add(mainPath[currRoom]);
-                }
-                List<GameObject> goodRooms = GetGoodRooms(conditions);
-                int roomIndex = Random.Range(0, goodRooms.Count);
-                GameObject room = Instantiate(goodRooms[roomIndex]);
-                room.transform.position = new Vector3((i % sizeX)*roomSizeX + 10, (Mathf.Floor(i / sizeX))*roomSizeY + 17, 0);
-                currRoom++;
-
+                roomCon.Add('B');
+                roomCon.Add(mainPath[i + 1]);
             }
+            else
+            {
+                roomCon.Add(GetCondition(mainPath[i]));
+                if(i + 1 != mainPath.Length)
+                {
+                    roomCon.Add(mainPath[i + 1]);
+                }   
+                switch (mainPath[i])
+                {
+                    case 'L':
+                        currX--;
+                        break;
+                    case 'R':
+                        currX++;
+                        break;
+                    case 'T':
+                        currY++;
+                        break;
+                }
+            }
+            goodRooms = GetGoodRooms(roomCon);
+            int roomIndex = Random.Range(0, goodRooms.Count-1);
+            GameObject room = Instantiate(goodRooms[roomIndex]);
+            room.transform.position = new Vector3((currX * roomSizeX) + 10, (currY * roomSizeY) + 17, 0);
         }
     }
     private List<GameObject> GetGoodRooms(List<char> con)
@@ -153,10 +161,21 @@ public class StageBuilder : MonoBehaviour
         List<GameObject> gRooms = new List<GameObject>();
         foreach(GameObject x in rooms)
         {
-            if (x.name.Contains(con[0].ToString()) && x.name.Contains(con[1].ToString()))
+            if(con.Count == 2)
             {
-                gRooms.Add(x);
+                if (x.name.Contains(con[0].ToString()) && x.name.Contains(con[1].ToString()))
+                {
+                    gRooms.Add(x);
+                }
             }
+            else
+            {
+                if (x.name.Contains(con[0].ToString()))
+                {
+                    gRooms.Add(x);
+                }
+            }
+            
             
         }
         return gRooms;
@@ -181,6 +200,17 @@ public class StageBuilder : MonoBehaviour
         return new string(charTemp);
     }
 
+    private void FillVoid()
+    {
+        for(int i = 0; i < roomTemplate.Length; i++)
+        {
+            if(roomTemplate[i] == '0')
+            {
+                GameObject room = Instantiate(rooms[Random.Range(0,rooms.Count)]);
+                room.transform.position = new Vector3((i % sizeX) * roomSizeX + 10, (Mathf.Floor(i / sizeX)) * roomSizeY + 17, 0);
+            }
+        }
+    }
     void Update()
     {
         
