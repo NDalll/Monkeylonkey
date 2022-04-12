@@ -218,9 +218,9 @@ public class Player : MonoBehaviour
                 Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
                 aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
                 Debug.Log(aimDirection);
-                Vector2 bananaForce = new Vector2(aimDirection.x, aimDirection.y+0.39f) * fireMagnetuide;
+                Vector2 bananaForce = new Vector2(aimDirection.x, aimDirection.y+0.35f) * fireMagnetuide;
                 brb.bodyType = RigidbodyType2D.Dynamic;
-                brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x, bananaForce.y + RB.velocity.y/2), ForceMode2D.Impulse);
+                brb.AddForce(new Vector2(bananaForce.x + RB.velocity.x/10, bananaForce.y), ForceMode2D.Impulse);
 
 
                 
