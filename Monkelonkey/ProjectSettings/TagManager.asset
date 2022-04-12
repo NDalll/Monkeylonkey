@@ -11,6 +11,7 @@ TagManager:
   - WayPoint
   - Tail
   - Gamecontroller
+  - ThrownGrapple
   layers:
   - Default
   - TransparentFX

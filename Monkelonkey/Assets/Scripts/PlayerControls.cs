@@ -62,6 +62,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Throw"",
+                    ""type"": ""Button"",
+                    ""id"": ""8af2e564-a9cd-45da-b8cd-e1e420c28406"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -251,6 +260,17 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""Grapple"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8fa83d8b-46a7-45d8-b050-d9351883f64d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Throw"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -263,6 +283,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Default_Jump = m_Default.FindAction("Jump", throwIfNotFound: true);
         m_Default_Attack = m_Default.FindAction("Attack", throwIfNotFound: true);
         m_Default_Grapple = m_Default.FindAction("Grapple", throwIfNotFound: true);
+        m_Default_Throw = m_Default.FindAction("Throw", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -326,6 +347,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Jump;
     private readonly InputAction m_Default_Attack;
     private readonly InputAction m_Default_Grapple;
+    private readonly InputAction m_Default_Throw;
     public struct DefaultActions
     {
         private @PlayerControls m_Wrapper;
@@ -334,6 +356,7 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Default_Jump;
         public InputAction @Attack => m_Wrapper.m_Default_Attack;
         public InputAction @Grapple => m_Wrapper.m_Default_Grapple;
+        public InputAction @Throw => m_Wrapper.m_Default_Throw;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -355,6 +378,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Grapple.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnGrapple;
                 @Grapple.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnGrapple;
                 @Grapple.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnGrapple;
+                @Throw.started -= m_Wrapper.m_DefaultActionsCallbackInterface.OnThrow;
+                @Throw.performed -= m_Wrapper.m_DefaultActionsCallbackInterface.OnThrow;
+                @Throw.canceled -= m_Wrapper.m_DefaultActionsCallbackInterface.OnThrow;
             }
             m_Wrapper.m_DefaultActionsCallbackInterface = instance;
             if (instance != null)
@@ -371,6 +397,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @Grapple.started += instance.OnGrapple;
                 @Grapple.performed += instance.OnGrapple;
                 @Grapple.canceled += instance.OnGrapple;
+                @Throw.started += instance.OnThrow;
+                @Throw.performed += instance.OnThrow;
+                @Throw.canceled += instance.OnThrow;
             }
         }
     }
@@ -381,5 +410,6 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnGrapple(InputAction.CallbackContext context);
+        void OnThrow(InputAction.CallbackContext context);
     }
 }
