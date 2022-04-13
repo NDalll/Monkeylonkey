@@ -61,6 +61,7 @@ public class BananaPickUp : MonoBehaviour
             if (collision.CompareTag("Player"))
             {
                 ScoreManager.bananaScore++;
+                ScoreManager.totalBananas++;
                 Destroy(gameObject);
             }
         }

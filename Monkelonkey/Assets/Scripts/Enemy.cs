@@ -349,6 +349,7 @@ public class Enemy : MonoBehaviour
         if(health == 0)
         {
             ScoreManager.grappleScore += worth;
+            ScoreManager.enemiesDefeated++;
             GameObject.Destroy(gameObject);
         }
         spriteRenderer.color = Color.red;

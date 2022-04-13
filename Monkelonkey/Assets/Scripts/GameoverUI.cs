@@ -22,7 +22,7 @@ public class GameoverUI : MonoBehaviour
     void Start()
     {
         gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
-        score = gamecontroller.bananasCollected * 55 + gamecontroller.bananas * 250 + gamecontroller.enemiesDefeated * 800 + gamecontroller.floorsBeaten * 10000;
+        score = gamecontroller.bananasCollected * 51 + gamecontroller.bananas * 250 + gamecontroller.enemiesDefeated * 1000 + gamecontroller.floorsBeaten * 10000;
         scoreText.text = score.ToString();
         float minutes = Mathf.FloorToInt(gamecontroller.timePlayed / 60);
         float seconds = Mathf.FloorToInt(gamecontroller.timePlayed % 60); 

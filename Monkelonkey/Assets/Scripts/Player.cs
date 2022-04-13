@@ -59,7 +59,7 @@ public class Player : MonoBehaviour
     public float fireMagnetuide;
     public float grappleFireMagnetuide;
     public float rotateSpeed;
-
+    
     
 
     private void Start()
@@ -154,7 +154,6 @@ public class Player : MonoBehaviour
             isDead = true;
             invincible = false;
             playerControls.Disable();
-            gamecontroller.timePlayed = timePlayed;
             Invoke("LoadGameOverScene", 1f);
         }
         
@@ -378,6 +377,10 @@ public class Player : MonoBehaviour
     }
     public void LoadGameOverScene()
     {
+        gamecontroller.timePlayed = timePlayed;
+        gamecontroller.enemiesDefeated = ScoreManager.enemiesDefeated;
+        gamecontroller.bananas = ScoreManager.bananaScore;
+        gamecontroller.bananasCollected = ScoreManager.totalBananas;
         SceneManager.LoadScene("Gameover");
     }
 

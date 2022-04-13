@@ -24,7 +24,6 @@ public class Gamecontroller : MonoBehaviour
     }
     void Awake()
     {
-        DontDestroyOnLoad(transform.gameObject);
-
+        DontDestroyOnLoad(this.gameObject);
     }
 }

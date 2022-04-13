@@ -10,10 +10,14 @@ public class ScoreManager : MonoBehaviour
     public static int bananaScore;
     public TextMeshProUGUI grappleScoreUI;
     public static int grappleScore;
+    public static int totalBananas;
+    public static int enemiesDefeated;
     void Start()
     {
         bananaScore = 0;
         grappleScore = 0;
+        totalBananas = 0;
+        enemiesDefeated = 0;
     }
 
     // Update is called once per frame

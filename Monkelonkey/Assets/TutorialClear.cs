@@ -6,9 +6,11 @@ using UnityEngine.SceneManagement;
 public class TutorialClear : MonoBehaviour
 {
     private Gamecontroller gamecontroller;
+    private Player player;
     public bool isTutorial;
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -27,7 +29,7 @@ public class TutorialClear : MonoBehaviour
             }
             else
             {
-                SceneManager.LoadScene("Gameover");
+                player.LoadGameOverScene();
             } 
         }
         
