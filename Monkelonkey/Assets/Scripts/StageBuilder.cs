@@ -20,16 +20,13 @@ public class StageBuilder : MonoBehaviour
     private int curX;
     private int curY;
 
-    private int roomSizeX = 20;
-    private int roomSizeY = 30;
+    public int roomSizeX;
+    public int roomSizeY;
 
     private char? formerDir = null;
 
     void Start()
     {
-        
-        startX = Random.Range(1, sizeX + 1);
-        startY = 0;
         curX = startX;
         curY = startY;
         mainPath = GenerateMainPath();
@@ -120,7 +117,7 @@ public class StageBuilder : MonoBehaviour
     private void BuildRooms()
     {
         List<GameObject> goodRooms;
-        int currX = startX-1;
+        int currX = startX;
         int currY = startY;
         for (int i = 0; i < mainPath.Length; i++)
         {
@@ -153,7 +150,7 @@ public class StageBuilder : MonoBehaviour
             goodRooms = GetGoodRooms(roomCon);
             int roomIndex = Random.Range(0, goodRooms.Count-1);
             GameObject room = Instantiate(goodRooms[roomIndex]);
-            room.transform.position = new Vector3((currX * roomSizeX) + 10, (currY * roomSizeY) + 17, 0);
+            room.transform.position = new Vector3((currX * roomSizeX) + (roomSizeX/2), (currY * roomSizeY) + (roomSizeY/2)+yOffset, 0);
         }
     }
     private List<GameObject> GetGoodRooms(List<char> con)
@@ -207,7 +204,7 @@ public class StageBuilder : MonoBehaviour
             if(roomTemplate[i] == '0')
             {
                 GameObject room = Instantiate(rooms[Random.Range(0,rooms.Count)]);
-                room.transform.position = new Vector3((i % sizeX) * roomSizeX + 10, (Mathf.Floor(i / sizeX)) * roomSizeY + 17, 0);
+                room.transform.position = new Vector3((i % sizeX) * roomSizeX + (roomSizeX / 2), (Mathf.Floor(i / sizeX)) * roomSizeY + (roomSizeY / 2) + yOffset, 0);
             }
         }
     }

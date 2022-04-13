@@ -4780,9 +4780,11 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  throwingGrapple: {fileID: 3031863213985183070, guid: 9c64c9e3544988647ab1db2a48ab9a79, type: 3}
   banana: {fileID: 89111722468967210, guid: 3248bc601fdce4097b09b1ba942d7003, type: 3}
   fireAngle: 20
   fireMagnetuide: 14
+  grappleFireMagnetuide: 20
   rotateSpeed: 320.54
 --- !u!70 &1235603236
 CapsuleCollider2D:

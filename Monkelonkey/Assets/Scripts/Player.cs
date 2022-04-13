@@ -229,7 +229,7 @@ public class Player : MonoBehaviour
         }
         if (playerControls.Default.Throw.WasPressedThisFrame())
         {
-            GameObject thrownPoint = Instantiate(this.throwingGrapple);
+            GameObject thrownPoint = Instantiate(throwingGrapple);
             thrownPoint.transform.position = transform.position;
             Rigidbody2D grb = thrownPoint.GetComponent<Rigidbody2D>();
             Vector3 mousePos = Mouse.current.position.ReadValue();
@@ -300,7 +300,10 @@ public class Player : MonoBehaviour
             {
                 if (Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
                 {
-                    nearstPoint = nearGPoints[i];
+                    if(nearGPoints[i].GetComponent<Grapplepoint>().isThrown == false)
+                    {
+                        nearstPoint = nearGPoints[i];
+                    }     
                 }
             }
             return nearstPoint;

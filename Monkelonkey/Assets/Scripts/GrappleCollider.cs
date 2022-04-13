@@ -17,13 +17,7 @@ public class GrappleCollider : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("ThrownGrapple")){
-            if (collision.GetComponent<Grapplepoint>().isThrown == false)
-            {
-                    player.nearGPoints.Add(collision.gameObject);
-            }
-        }
-        if (collision.CompareTag("grapple"))
+        if (collision.CompareTag("grapple") || collision.CompareTag("ThrownGrapple"))
         {
             player.nearGPoints.Add(collision.gameObject);
         }
@@ -31,26 +25,13 @@ public class GrappleCollider : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("grapple"))
+        if (collision.CompareTag("grapple") || collision.CompareTag("ThrownGrapple"))
         {
             foreach (GameObject x in player.nearGPoints)
             {
                 if (x.transform.position.x == collision. transform.position.x && x.transform.position.y == collision.transform.position.y)
                 {
                     player.nearGPoints.Remove(x);
-                }
-            }
-        }
-        if (collision.CompareTag("ThrownGrapple"))
-        {
-            if (collision.GetComponent<Grapplepoint>().isThrown == false)
-            {
-                foreach (GameObject x in player.nearGPoints)
-                {
-                    if (x.transform.position.x == collision.transform.position.x && x.transform.position.y == collision.transform.position.y)
-                    {
-                        player.nearGPoints.Remove(x);
-                    }
                 }
             }
         }
