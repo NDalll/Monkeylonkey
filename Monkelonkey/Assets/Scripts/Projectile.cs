@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     [System.NonSerialized]
     public float damage;
     private GameObject player;
-    private bool isCollided;
+    private bool isCollided = false;
     
 
     private Animator animator;
@@ -51,18 +51,18 @@ public class Projectile : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") == false && collision.isTrigger == false)
-        {
-            rb.velocity = Vector3.zero;
-            animator.SetTrigger("ColliderHit");
-        }
         if (collision.CompareTag("Player") && !isCollided)
         {
             collision.GetComponent<Player>().dealDamage(damage);
         }
-        else
+        if (collision.CompareTag("Ground"))
         {
             isCollided = true;
+        }
+        if (collision.gameObject.CompareTag("Enemy") == false && collision.isTrigger == false)
+        {
+            rb.velocity = Vector3.zero;
+            animator.SetTrigger("ColliderHit");
         }
     }
 
