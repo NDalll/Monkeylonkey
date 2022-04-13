@@ -14,6 +14,7 @@ public class Projectile : MonoBehaviour
     [System.NonSerialized]
     public float damage;
     private GameObject player;
+    private bool isCollided;
     
 
     private Animator animator;
@@ -50,14 +51,15 @@ public class Projectile : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
-        {
-            collision.GetComponent<Player>().dealDamage(damage);
-        }
-        if (collision.gameObject.CompareTag("Enemy") == false && collision.isTrigger == false )
+        if (collision.gameObject.CompareTag("Enemy") == false && collision.isTrigger == false)
         {
             rb.velocity = Vector3.zero;
             animator.SetTrigger("ColliderHit");
+            isCollided = true;
+        }
+        if (collision.CompareTag("Player")&&isCollided)
+        {
+            collision.GetComponent<Player>().dealDamage(damage);
         }
 
     }
