@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "144779293975",
+    "project_id": "monkelonkey",
+    "storage_bucket": "monkelonkey.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144779293975:android:68ef20f35187f8e4887352",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.MonkeLonkey"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144779293975-q1dckdknrm2unj5p0fv7dd25okujvn6h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaamMrPam8eCLubJbz6BybVY6tqul63YA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144779293975-q1dckdknrm2unj5p0fv7dd25okujvn6h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
