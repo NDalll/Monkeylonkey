@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
     [Header("General")]
     public float health;
     public int bodyDamage;
+    public int worth;
     public float alertTime;
     private float alertTimer;
     private bool alert;
@@ -347,6 +348,7 @@ public class Enemy : MonoBehaviour
         health -= damage;
         if(health == 0)
         {
+            ScoreManager.grappleScore += worth;
             GameObject.Destroy(gameObject);
         }
         spriteRenderer.color = Color.red;

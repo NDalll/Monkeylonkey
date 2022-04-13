@@ -204,6 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 3
   bodyDamage: 10
+  worth: 1
   alertTime: 0
   isJumping: 1
   jumps: 5

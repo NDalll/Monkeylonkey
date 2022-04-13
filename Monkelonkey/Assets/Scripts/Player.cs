@@ -215,7 +215,7 @@ public class Player : MonoBehaviour
         }
         if (playerControls.Default.Attack.WasPressedThisFrame())
         {
-            if (ScoreManager.bananaScore != 0)
+            if (ScoreManager.bananaScore > 0)
             {
                 GameObject banana = Instantiate(this.banana);
 
@@ -236,14 +236,18 @@ public class Player : MonoBehaviour
         }
         if (playerControls.Default.Throw.WasPressedThisFrame())
         {
-            GameObject thrownPoint = Instantiate(throwingGrapple);
-            thrownPoint.transform.position = transform.position;
-            Rigidbody2D grb = thrownPoint.GetComponent<Rigidbody2D>();
-            Vector3 mousePos = Mouse.current.position.ReadValue();
-            Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
-            aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
-            Vector2 Force = new Vector2(aimDirection.x, aimDirection.y) * grappleFireMagnetuide;
-            grb.AddForce(new Vector2(Force.x, Force.y), ForceMode2D.Impulse);
+            if (ScoreManager.grappleScore > 0)
+            {
+                GameObject thrownPoint = Instantiate(throwingGrapple);
+                thrownPoint.transform.position = transform.position;
+                Rigidbody2D grb = thrownPoint.GetComponent<Rigidbody2D>();
+                Vector3 mousePos = Mouse.current.position.ReadValue();
+                Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
+                aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
+                Vector2 Force = new Vector2(aimDirection.x, aimDirection.y) * grappleFireMagnetuide;
+                grb.AddForce(new Vector2(Force.x, Force.y), ForceMode2D.Impulse);
+                ScoreManager.grappleScore--;
+            }
         }
     }
 
