@@ -7,6 +7,9 @@ public class StageBuilder : MonoBehaviour
     private char[] directions = new char[] { 'L', 'L', 'L', 'L', 'L','R', 'R', 'R', 'R', 'R', 'T', 'T', };
 
     public List<GameObject> rooms;
+    public List<GameObject> LootRooms;
+    public int lootChance;
+    public int MaxLoot;
     public int sizeX;
     public int sizeY;
     public int yOffset;
@@ -27,6 +30,8 @@ public class StageBuilder : MonoBehaviour
 
     void Start()
     {
+        startX = Random.Range(1, sizeX + 1);
+        startY = 0;
         curX = startX;
         curY = startY;
         mainPath = GenerateMainPath();
@@ -34,6 +39,7 @@ public class StageBuilder : MonoBehaviour
         roomTemplate = CreateTemplate();
         Debug.Log(roomTemplate);
         BuildRooms();
+        SetLootRooms();
         FillVoid();
         
         ;
@@ -117,7 +123,7 @@ public class StageBuilder : MonoBehaviour
     private void BuildRooms()
     {
         List<GameObject> goodRooms;
-        int currX = startX;
+        int currX = startX-1;
         int currY = startY;
         for (int i = 0; i < mainPath.Length; i++)
         {
@@ -133,6 +139,10 @@ public class StageBuilder : MonoBehaviour
                 if(i + 1 != mainPath.Length)
                 {
                     roomCon.Add(mainPath[i + 1]);
+                }
+                else
+                {
+                    roomCon.Add('T');
                 }   
                 switch (mainPath[i])
                 {
@@ -197,6 +207,24 @@ public class StageBuilder : MonoBehaviour
         return new string(charTemp);
     }
 
+    private void SetLootRooms()
+    {
+        int LootCount = 0;
+        for(int i = 0; i < roomTemplate.Length; i++)
+        {
+            if(roomTemplate[i] == '0')
+            {
+                int rand = Random.Range(1, 101);
+                if(rand <= lootChance && LootCount < MaxLoot)
+                {
+                    roomTemplate =  replaceCharInString(roomTemplate, '2', i+1);
+                    LootCount++;
+                }
+
+            }
+        }
+    }
+
     private void FillVoid()
     {
         for(int i = 0; i < roomTemplate.Length; i++)
@@ -204,6 +232,11 @@ public class StageBuilder : MonoBehaviour
             if(roomTemplate[i] == '0')
             {
                 GameObject room = Instantiate(rooms[Random.Range(0,rooms.Count)]);
+                room.transform.position = new Vector3((i % sizeX) * roomSizeX + (roomSizeX / 2), (Mathf.Floor(i / sizeX)) * roomSizeY + (roomSizeY / 2) + yOffset, 0);
+            }
+            if(roomTemplate[i] == '2')
+            {
+                GameObject room = Instantiate(LootRooms[Random.Range(0, LootRooms.Count)]);
                 room.transform.position = new Vector3((i % sizeX) * roomSizeX + (roomSizeX / 2), (Mathf.Floor(i / sizeX)) * roomSizeY + (roomSizeY / 2) + yOffset, 0);
             }
         }

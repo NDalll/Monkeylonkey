@@ -115,6 +115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isThrown: 1
   body: {fileID: -7519991700053780342}
+  trowable: 1
 --- !u!50 &-7519991700053780342
 Rigidbody2D:
   serializedVersion: 4

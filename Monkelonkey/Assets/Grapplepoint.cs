@@ -6,6 +6,7 @@ public class Grapplepoint : MonoBehaviour
 {
     public bool isThrown;
     public Rigidbody2D body;
+    public bool trowable;
     private void OnTriggerEnter2D(Collider2D collision)
     {
        if (collision.CompareTag("Ground"))

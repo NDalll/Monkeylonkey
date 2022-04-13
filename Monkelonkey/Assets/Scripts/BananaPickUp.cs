@@ -13,12 +13,17 @@ public class BananaPickUp : MonoBehaviour
     [System.NonSerialized]
     public bool isPickUp;
     public float rotateSpeed;
+    public bool iFrames = true;
 
     void Awake()
     {
-        startPostion = transform.position;
-        endPostion = transform.position + Vector3.up*floatingDis;
         isPickUp = true;
+    }
+    private void Start()
+    {
+        startPostion = transform.position;
+        endPostion = transform.position + Vector3.up * floatingDis;
+        Invoke("DisableIFrames", 0.05f);
     }
 
     // Update is called once per frame
@@ -45,7 +50,10 @@ public class BananaPickUp : MonoBehaviour
         }
         
     }
-
+    private void DisableIFrames()
+    {
+        iFrames = false;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (isPickUp)
@@ -63,7 +71,7 @@ public class BananaPickUp : MonoBehaviour
                 collision.GetComponent<Enemy>().dealDamage(1);
                 Destroy(gameObject);
             }
-            else if (collision.CompareTag("Ground"))
+            else if (collision.CompareTag("Ground") && !iFrames)
             {
                 Destroy(gameObject);
             }

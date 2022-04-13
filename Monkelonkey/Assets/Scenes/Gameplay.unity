@@ -3907,6 +3907,10 @@ MonoBehaviour:
   - {fileID: 7151241628724450970, guid: 2bb935ccfcf92114ab4592c2fd53b158, type: 3}
   - {fileID: 725343774232007856, guid: b5d59397e35038b45b71779cccc00ea5, type: 3}
   - {fileID: 8626129941266621721, guid: 8eaa69cd937028f46aba0587e4dc1d1c, type: 3}
+  LootRooms:
+  - {fileID: 7159682250503751005, guid: ad3b77d1ac2802a4a9df48b7bc40c048, type: 3}
+  lootChance: 5
+  MaxLoot: 2
   sizeX: 10
   sizeY: 10
   yOffset: 2

@@ -123,6 +123,7 @@ public class Player : MonoBehaviour
     
     private void Update()
     {
+        grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
         //Max fallspeed:
         if (RB.velocity.y < maxFallSpeed * -1)
         {
@@ -163,7 +164,7 @@ public class Player : MonoBehaviour
             animator.SetBool("Grappeling", false);
             if (grappleP != null)
             {
-                if (grappleP.CompareTag("ThrownGrapple")){
+                if (grappleP.GetComponent<Grapplepoint>().trowable){
                     Destroy(grappleP);
                 }
             }
@@ -298,7 +299,7 @@ public class Player : MonoBehaviour
     }
     private GameObject GetNearstGrapple()
     {
-        if(nearGPoints.Count != 0)
+        if (nearGPoints.Count != 0 && nearGPoints[0].GetComponent<Grapplepoint>().isThrown == false)
         {
             canGrapple = true;
             GameObject nearstPoint = nearGPoints[0];
