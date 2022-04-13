@@ -161,6 +161,12 @@ public class Player : MonoBehaviour
         {
             isGrappling = false;
             animator.SetBool("Grappeling", false);
+            if (grappleP != null)
+            {
+                if (grappleP.CompareTag("ThrownGrapple")){
+                    Destroy(grappleP);
+                }
+            }
         }
 
         nearestGrapple = GetNearstGrapple();
