@@ -14,6 +14,7 @@ public class AuthManager : MonoBehaviour
 
     //Login variables
     [Header("Login")]
+    public GameObject loginScreen;
     public TMP_InputField emailLoginField;
     public TMP_InputField passwordLoginField;
     public TMP_Text warningLoginText;
@@ -21,6 +22,7 @@ public class AuthManager : MonoBehaviour
 
     //Register variables
     [Header("Register")]
+    public GameObject registerScreen;
     public TMP_InputField usernameRegisterField;
     public TMP_InputField emailRegisterField;
     public TMP_InputField passwordRegisterField;
@@ -45,7 +47,16 @@ public class AuthManager : MonoBehaviour
             }
         });
     }
-
+    public void RegisterScreen()
+    {
+        loginScreen.SetActive(false);
+        registerScreen.SetActive(true);
+    }
+    public void LoginScreen()
+    {
+        loginScreen.SetActive(true);
+        registerScreen.SetActive(false);
+    }
     private void InitializeFirebase()
     {
         Debug.Log("Setting up Firebase Auth");
@@ -184,7 +195,8 @@ public class AuthManager : MonoBehaviour
                     {
                         //Username is now set
                         //Now return to login screen
-                        //UIManager.instance.LoginScreen();
+                        registerScreen.SetActive(false);
+                        loginScreen.SetActive(true);
                         warningRegisterText.text = "";
                     }
                 }
