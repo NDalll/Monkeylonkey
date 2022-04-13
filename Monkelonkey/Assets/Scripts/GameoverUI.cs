@@ -33,5 +33,6 @@ public class GameoverUI : MonoBehaviour
         enemyDefText.text = gamecontroller.enemiesDefeated.ToString();
         bananaColText.text = gamecontroller.bananasCollected.ToString();
         unusedBanText.text = gamecontroller.bananas.ToString();
+
     }
 }
