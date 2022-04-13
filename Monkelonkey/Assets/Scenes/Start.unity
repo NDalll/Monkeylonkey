@@ -2393,7 +2393,7 @@ GameObject:
   - component: {fileID: 825540591}
   - component: {fileID: 825540590}
   m_Layer: 0
-  m_Name: AuthManager
+  m_Name: FirebaseManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2423,6 +2423,12 @@ MonoBehaviour:
   passwordRegisterField: {fileID: 858819613}
   passwordRegisterVerifyField: {fileID: 1588741003}
   warningRegisterText: {fileID: 463497915}
+  usernameField: {fileID: 0}
+  xpField: {fileID: 0}
+  killsField: {fileID: 0}
+  deathsField: {fileID: 0}
+  scoreElement: {fileID: 0}
+  scoreboardContent: {fileID: 0}
 --- !u!4 &825540591
 Transform:
   m_ObjectHideFlags: 0
