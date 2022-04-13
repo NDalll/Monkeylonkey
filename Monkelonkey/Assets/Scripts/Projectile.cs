@@ -55,13 +55,15 @@ public class Projectile : MonoBehaviour
         {
             rb.velocity = Vector3.zero;
             animator.SetTrigger("ColliderHit");
-            isCollided = true;
         }
-        if (collision.CompareTag("Player")&&isCollided)
+        if (collision.CompareTag("Player") && !isCollided)
         {
             collision.GetComponent<Player>().dealDamage(damage);
         }
-
+        else
+        {
+            isCollided = true;
+        }
     }
 
     private void Death()
