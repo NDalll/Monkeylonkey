@@ -124,7 +124,7 @@ MonoBehaviour:
   health: 3
   bodyDamage: 10
   worth: 1
-  alertTime: 1.5
+  alertTime: 3
   isJumping: 0
   jumps: 5
   jumpCooldown: 0.3
@@ -133,8 +133,8 @@ MonoBehaviour:
   isWalking: 1
   startPoint: {fileID: 0}
   endPoint: {fileID: 0}
-  walkSpeed: 5
-  runSpeed: 7
+  walkSpeed: 3.5
+  runSpeed: 5.5
   isFollowing: 0
   isRanged: 0
   rangedDamage: 0
@@ -336,6 +336,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5340409021441911089}
     m_Modifications:
+    - target: {fileID: 2334088344528391603, guid: e4a251d113cd3ec4ea08c277f085dc6f, type: 3}
+      propertyPath: m_Size.x
+      value: 4.3199425
+      objectReference: {fileID: 0}
+    - target: {fileID: 2334088344528391603, guid: e4a251d113cd3ec4ea08c277f085dc6f, type: 3}
+      propertyPath: m_Size.y
+      value: 3.4121978
+      objectReference: {fileID: 0}
+    - target: {fileID: 2334088344528391603, guid: e4a251d113cd3ec4ea08c277f085dc6f, type: 3}
+      propertyPath: m_Offset.x
+      value: 1.6614671
+      objectReference: {fileID: 0}
+    - target: {fileID: 2334088344528391603, guid: e4a251d113cd3ec4ea08c277f085dc6f, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.6719841
+      objectReference: {fileID: 0}
     - target: {fileID: 2334088344528391606, guid: e4a251d113cd3ec4ea08c277f085dc6f, type: 3}
       propertyPath: m_RootOrder
       value: 1

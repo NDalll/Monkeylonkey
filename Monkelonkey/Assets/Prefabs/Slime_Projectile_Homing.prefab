@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 942298490508509007}
   - component: {fileID: 4897209091718943971}
   m_Layer: 0
-  m_Name: Homing_Slime_Projectile
+  m_Name: Slime_Projectile_Homing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
