@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gamecontroller : MonoBehaviour
 {
-
     [System.NonSerialized] public float timePlayed;
     [System.NonSerialized] public int enemiesDefeated;
     [System.NonSerialized] public int bananasCollected;
