@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
 
     private GameObject player;
-    private Rigidbody2D RB;
+    [System.NonSerialized] public Rigidbody2D RB;
     private Animator animator;
     private bool firstSpawn = true;
     private PlayerTrigger playerTrigger;
@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     public float alertTime;
     private float alertTimer;
     private bool alert;
+    private bool ledgeJumpCooldown;
+    [System.NonSerialized] public float ogRunSpeed; 
+    [System.NonSerialized] public float ogWalkSpeed;
 
 
 
@@ -91,6 +94,8 @@ public class Enemy : MonoBehaviour
         }
         playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>();
         playerTrigger.damage = bodyDamage;
+        ogRunSpeed = runSpeed;
+        ogWalkSpeed = walkSpeed;
     }
     private void Update()
     {
@@ -239,9 +244,21 @@ public class Enemy : MonoBehaviour
     }
     public void LedgeJump()
     {
-        RB.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+        if (!ledgeJumpCooldown)
+        {
+            RB.AddForce(Vector2.up * 9, ForceMode2D.Impulse);
+            ledgeJumpCooldown = true;
+            runSpeed = 0;
+            walkSpeed = 0;
+            Invoke("LegdeJumpCooldown", 1f);
+        }
     }
-
+    public void LegdeJumpCooldown()
+    {
+        ledgeJumpCooldown = false;
+        runSpeed = ogRunSpeed;
+        walkSpeed = ogWalkSpeed;
+    }
     private void fireProjectile()
     {
         GameObject projectile = Instantiate(this.projectile);

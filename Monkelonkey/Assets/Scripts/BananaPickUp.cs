@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BananaPickUp : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class BananaPickUp : MonoBehaviour
     public bool isPickUp;
     public float rotateSpeed;
     public bool iFrames = true;
-
+    public bool isFinalBanana;
+    private Gamecontroller gamecontroller;
+    public Player player;
     void Awake()
     {
         isPickUp = true;
@@ -60,9 +63,22 @@ public class BananaPickUp : MonoBehaviour
         {
             if (collision.CompareTag("Player"))
             {
-                ScoreManager.bananaScore++;
-                ScoreManager.totalBananas++;
-                Destroy(gameObject);
+                if (isFinalBanana)
+                {
+                    gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
+                    player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+                    ScoreManager.bananaScore++;
+                    ScoreManager.totalBananas++;
+                    ScoreManager.stagesCleared++;
+                    gamecontroller.gameWon = true;
+                    player.LoadGameOverScene();
+                }
+                else
+                {
+                    ScoreManager.bananaScore++;
+                    ScoreManager.totalBananas++;
+                    Destroy(gameObject);
+                }
             }
         }
         else

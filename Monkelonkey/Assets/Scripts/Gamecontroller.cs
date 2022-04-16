@@ -9,18 +9,8 @@ public class Gamecontroller : MonoBehaviour
     [System.NonSerialized] public int bananasCollected;
     [System.NonSerialized] public int bananas;
     [System.NonSerialized] public int floorsBeaten;
+    [System.NonSerialized] public bool gameWon;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);

@@ -144,7 +144,7 @@ MonoBehaviour:
   isHoming: 1
   fireRate: 0.8
   isMelee: 1
-  meleeWeaponPrefab: {fileID: 0}
+  meleeWeaponPrefab: {fileID: 461003465854792663, guid: 1aa20eb7454a22a468cd6cf54b70a4c2, type: 3}
   meleeDamage: 20
 --- !u!50 &5340409021441911101
 Rigidbody2D:

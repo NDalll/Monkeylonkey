@@ -12,6 +12,7 @@ public class ScoreManager : MonoBehaviour
     public static int grappleScore;
     public static int totalBananas;
     public static int enemiesDefeated;
+    public static int stagesCleared;
     void Start()
     {
         bananaScore = 0;
