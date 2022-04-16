@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Firebase;
+using Firebase.Auth;
+using Firebase.Database;
 
 public class DataManager : MonoBehaviour
 {
@@ -9,24 +12,30 @@ public class DataManager : MonoBehaviour
 
     public float bestTime;
     public int highScore;
-    void Start()
+    public FirebaseUser User;
+    public DatabaseReference DBreference;
+    private void Awake()
     {
-        if(instance == null)
+        DontDestroyOnLoad(this);
+        if (instance == null)
         {
-            instance = gameObject.AddComponent<DataManager>();
+            instance = this;
+        }
+        else if(instance != null)
+        {
+            Destroy(this);
         }
     }
 
-    public void CheckScores(float time, int Score)
+    public void CheckScores(float time, int score)
     {
-        if(time - bestTime <= 0)
+        if(time > bestTime)
         {
             bestTime = time;
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
+        if(score > highScore)
+        {
+            highScore = score;
+        }
     }
 }

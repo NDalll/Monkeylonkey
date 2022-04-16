@@ -12,6 +12,7 @@ TagManager:
   - Tail
   - Gamecontroller
   - ThrownGrapple
+  - FirebaseManager
   layers:
   - Default
   - TransparentFX

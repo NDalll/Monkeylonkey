@@ -5,8 +5,8 @@ using Firebase.Auth;
 using Firebase.Database;
 using TMPro;
 using System.Linq;
-
-public class AuthManager : MonoBehaviour
+using System;
+public class FirebaseManager : MonoBehaviour
 {
     //Firebase variables
     [Header("Firebase")]
@@ -14,8 +14,6 @@ public class AuthManager : MonoBehaviour
     public FirebaseAuth auth;    
     public FirebaseUser User;
     public DatabaseReference DBreference;
-
-    //Login variables
     [Header("Login")]
     public GameObject loginScreen;
     public TMP_InputField emailLoginField;
@@ -34,17 +32,48 @@ public class AuthManager : MonoBehaviour
 
     //User Data variables
     [Header("UserData")]
-    public TMP_InputField usernameField;
+    public TMP_Text usernameField;
     public TMP_InputField xpField;
     public TMP_InputField killsField;
     public TMP_InputField deathsField;
+    public GameObject scoreScreen;
     public GameObject scoreElement;
     public Transform scoreboardContent;
-
-
+    // Start is called before the first frame update
+    public void RegisterScreen()
+    {
+        loginScreen.SetActive(false);
+        registerScreen.SetActive(true);
+        scoreScreen.SetActive(false);
+    }
+    public void LoginScreen()
+    {
+        loginScreen.SetActive(true);
+        registerScreen.SetActive(false);
+        scoreScreen.SetActive(false);
+    }
+    public void ScoreBoardScreen()
+    {
+        scoreScreen.SetActive(true);
+    }
+    public void CloseButton(GameObject window)
+    {
+        window.SetActive(false);
+    }
+    public void ClearLoginFeilds()
+    {
+        emailLoginField.text = "";
+        passwordLoginField.text = "";
+    }
+    public void ClearRegisterFeilds()
+    {
+        usernameRegisterField.text = "";
+        emailRegisterField.text = "";
+        passwordRegisterField.text = "";
+        passwordRegisterVerifyField.text = "";
+    }
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
         //Check that all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
@@ -60,35 +89,25 @@ public class AuthManager : MonoBehaviour
             }
         });
     }
-    public void RegisterScreen()
+    private void Start()
     {
-        loginScreen.SetActive(false);
-        registerScreen.SetActive(true);
-    }
-    public void LoginScreen()
-    {
-        loginScreen.SetActive(true);
-        registerScreen.SetActive(false);
+        if(DataManager.instance.User != null)
+        {
+            User = DataManager.instance.User;
+            usernameField.text = User.DisplayName;
+        }
+        else
+        {
+            LoginScreen();
+        }
     }
     private void InitializeFirebase()
     {
         Debug.Log("Setting up Firebase Auth");
         //Set the authentication instance object
         auth = FirebaseAuth.DefaultInstance;
+        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-    public void ClearLoginFeilds()
-    {
-        emailLoginField.text = "";
-        passwordLoginField.text = "";
-    }
-    public void ClearRegisterFeilds()
-    {
-        usernameRegisterField.text = "";
-        emailRegisterField.text = "";
-        passwordRegisterField.text = "";
-        passwordRegisterVerifyField.text = "";
-    }
-
 
     //Function for the login button
     public void LoginButton()
@@ -102,6 +121,7 @@ public class AuthManager : MonoBehaviour
         //Call the register coroutine passing the email, password, and username
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
+    //Function for the sign out button
     public void SignOutButton()
     {
         auth.SignOut();
@@ -109,15 +129,16 @@ public class AuthManager : MonoBehaviour
         ClearRegisterFeilds();
         ClearLoginFeilds();
     }
+
+    
     //Function for the save button
     public void SaveDataButton()
     {
         StartCoroutine(UpdateUsernameAuth(usernameField.text));
         StartCoroutine(UpdateUsernameDatabase(usernameField.text));
 
-        StartCoroutine(UpdateXp(int.Parse(xpField.text)));
-        StartCoroutine(UpdateKills(int.Parse(killsField.text)));
-        StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
+        StartCoroutine(UpdateBestTime(DataManager.instance.bestTime));
+        StartCoroutine(UpdateHighscore(DataManager.instance.highScore));
     }
     //Function for the scoreboard button
     public void ScoreboardButton()
@@ -168,11 +189,15 @@ public class AuthManager : MonoBehaviour
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
+            StartCoroutine(LoadUserData());
 
             yield return new WaitForSeconds(2);
 
-            //UI
+            usernameField.text = User.DisplayName;
+            CloseButton(loginScreen); // Change to user data UI
             confirmLoginText.text = "";
+            ClearLoginFeilds();
+            ClearRegisterFeilds();
         }
     }
 
@@ -183,12 +208,12 @@ public class AuthManager : MonoBehaviour
             //If the username field is blank show a warning
             warningRegisterText.text = "Missing Username";
         }
-        else if(passwordRegisterField.text != passwordRegisterVerifyField.text)
+        else if (passwordRegisterField.text != passwordRegisterVerifyField.text)
         {
             //If the password does not match show a warning
             warningRegisterText.text = "Password Does Not Match!";
         }
-        else 
+        else
         {
             //Call the Firebase auth signin function passing the email and password
             var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
@@ -229,7 +254,7 @@ public class AuthManager : MonoBehaviour
                 if (User != null)
                 {
                     //Create a user profile and set the username
-                    UserProfile profile = new UserProfile{DisplayName = _username};
+                    UserProfile profile = new UserProfile { DisplayName = _username };
 
                     //Call the Firebase auth update user profile function passing the profile with the username
                     var ProfileTask = User.UpdateUserProfileAsync(profile);
@@ -240,24 +265,23 @@ public class AuthManager : MonoBehaviour
                     {
                         //If there are errors handle them
                         Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
-                        FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
-                        AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
                         warningRegisterText.text = "Username Set Failed!";
                     }
                     else
                     {
                         //Username is now set
                         //Now return to login screen
-                        registerScreen.SetActive(false);
-                        loginScreen.SetActive(true);
+                        LoginScreen();
                         warningRegisterText.text = "";
+                        ClearRegisterFeilds();
+                        ClearLoginFeilds();
                     }
                 }
             }
         }
-
-
     }
+
+
     private IEnumerator UpdateUsernameAuth(string _username)
     {
         //Create a user profile and set the username
@@ -295,10 +319,10 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateXp(int _xp)
+    private IEnumerator UpdateHighscore(int _highscore)
     {
         //Set the currently logged in user xp
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_highscore);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -312,10 +336,10 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateKills(int _kills)
+    private IEnumerator UpdateBestTime(float _bestTime)
     {
         //Set the currently logged in user kills
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_kills);
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_bestTime);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -326,23 +350,6 @@ public class AuthManager : MonoBehaviour
         else
         {
             //Kills are now updated
-        }
-    }
-
-    private IEnumerator UpdateDeaths(int _deaths)
-    {
-        //Set the currently logged in user deaths
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("deaths").SetValueAsync(_deaths);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Deaths are now updated
         }
     }
 
@@ -360,9 +367,9 @@ public class AuthManager : MonoBehaviour
         else if (DBTask.Result.Value == null)
         {
             //No data exists yet
-            xpField.text = "0";
-            killsField.text = "0";
-            deathsField.text = "0";
+            DataManager.instance.User = User;
+            DataManager.instance.highScore = 0;
+            DataManager.instance.bestTime = 0;
         }
         else
         {
@@ -411,8 +418,7 @@ public class AuthManager : MonoBehaviour
             }
 
             //Go to scoareboard screen
-                        //UIManager.instance.ScoreboardScreen();
+            ScoreBoardScreen();
         }
     }
 }
-
