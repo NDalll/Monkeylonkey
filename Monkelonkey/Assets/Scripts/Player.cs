@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
+using UnityEngine.UI; //vigtigt da scriptet skal ændre ui-elementerne
+using UnityEngine.SceneManagement; //vigtigt da scriptet skal skifte scene
+using UnityEngine.InputSystem; //vigtigt da scriptet bruger unity's nye input-system
 
 public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægelse af spilleren
 {
@@ -347,55 +347,53 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         return raycastHit.collider != null; //retunerer om der var en colision
     }
 
-    public void JumpFinished()
+    public void JumpFinished() //slutter hop animationen
     {
         animator.SetBool("Jumping", false);
     }
 
-    public void Jump()
+    public void Jump() //Funktionen for hoppet
     {
-        if (RB.velocity.y < 0) //Hvis spilleren falder vil hoppet stoppe dem
+        if (RB.velocity.y < 0) //Hvis spilleren falder vil hoppet stoppe dem inden de tilføres en kraft
         {
             RB.velocity = new Vector2(RB.velocity.x, 0);
         }
 
-        RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse);
-        lastJumpedTime = 0;
+        RB.AddForce(Vector2.up * jumpHeight, ForceMode2D.Impulse); //tilføjer kraften af jumpheight til spilleren
+        lastJumpedTime = 0; //genstarter last jumped timeren
     }
 
-    public void LedgeJump()
+   
+    public void dealDamage(float damage) //funktionen der bliver kaldt når spilleren tager skade
     {
-        RB.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-    }
-    public void dealDamage(float damage)
-    {
-        if(invincible == false && !isDead)
+        if(invincible == false && !isDead) //tjekker om spilleren er udødelig
         {
-            health -= damage;
-            invincible = true;
-            iFrameTimer = Time.time;
+            health -= damage; //fjerner den mængde liv der bliver sendt når funktionen kaldes
+            invincible = true; //gør spilleren udødelig
+            iFrameTimer = Time.time; //genstarter iFrametimeren
         }
     }
-    public void LoadGameOverScene()
+    public void LoadGameOverScene() //loader gameoverscenen
     {
-        gamecontroller.timePlayed = timePlayed;
+        //definerer variblerne i gamecontrolleren så de kan sendes over når scenen skifter og spilleren forsvinder:
+        gamecontroller.timePlayed = timePlayed; 
         gamecontroller.enemiesDefeated = ScoreManager.enemiesDefeated;
         gamecontroller.bananas = ScoreManager.bananaScore;
         gamecontroller.bananasCollected = ScoreManager.totalBananas;
         gamecontroller.floorsBeaten = ScoreManager.stagesCleared;
-        SceneManager.LoadScene("Gameover");
+        SceneManager.LoadScene("Gameover"); //skifter scenen
     }
 
-    private void Awake()
+    private void Awake() //bliver kaldt før den første frame hvor objectet er aktiv
     {
-        playerControls = new PlayerControls();
+        playerControls = new PlayerControls(); //definere inputcontrolleren
     }
-    private void OnEnable()
+    private void OnEnable() //bliver kaldt når den bliver enablelet
     {
-        playerControls.Enable();
+        playerControls.Enable(); //enabler inputcontrolleren
     }
-    private void OnDisable()
+    private void OnDisable() //bliver kaldt når den bliver disablelet
     {
-        playerControls.Disable();
+        playerControls.Disable(); //disabler inputcontrolleren
     }
 }
