@@ -29,12 +29,19 @@ public class Scenemanager : MonoBehaviour
     } 
     public void LoadTestStage()
     {
-        gamecontroller.timePlayed = 0;
-        gamecontroller.enemiesDefeated = 0;
-        gamecontroller.bananas = 0;
-        gamecontroller.bananasCollected = 0;
-        gamecontroller.floorsBeaten = 0;
-        SceneManager.LoadScene("Main");
+        if (DataManager.instance.User != null)
+        {
+            gamecontroller.timePlayed = 0;
+            gamecontroller.enemiesDefeated = 0;
+            gamecontroller.bananas = 0;
+            gamecontroller.bananasCollected = 0;
+            gamecontroller.floorsBeaten = 0;
+            SceneManager.LoadScene("Main");
+        }
+        else
+        {
+            GameObject.FindGameObjectWithTag("FirebaseManager").GetComponent<FirebaseManager>().LoginScreen();
+        }
     }
     public void RestartGame()
     {

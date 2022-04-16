@@ -335,7 +335,7 @@ public class FirebaseManager : MonoBehaviour
             DataManager.instance.User = User;
             DataManager.instance.DBreference = DBreference;
             DataManager.instance.highScore = 0;
-            DataManager.instance.bestTime = 0;
+            DataManager.instance.bestTime = null;
         }
         else
         {
@@ -345,7 +345,15 @@ public class FirebaseManager : MonoBehaviour
             DataManager.instance.User = User;
             DataManager.instance.DBreference = DBreference;
             DataManager.instance.highScore = int.Parse(snapshot.Child("highScore").Value.ToString());
-            DataManager.instance.bestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
+            if(float.Parse(snapshot.Child("bestTime").Value.ToString()) == 0)
+            {
+                DataManager.instance.bestTime = null;
+            }
+            else
+            {
+                DataManager.instance.bestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
+            }
+            
         }
     }
 
