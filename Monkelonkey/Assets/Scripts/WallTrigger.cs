@@ -23,4 +23,13 @@ public class WallTrigger : MonoBehaviour
             entity.LedgeJump();
         }
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ground"))
+        {
+            entity.runSpeed = entity.ogRunSpeed;
+            entity.walkSpeed = entity.ogWalkSpeed;
+            entity.RB.velocity = new Vector2 (entity.RB.velocity.x, 0.2f);
+        }
+    }
 }
