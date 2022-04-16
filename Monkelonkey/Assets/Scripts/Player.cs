@@ -154,6 +154,7 @@ public class Player : MonoBehaviour
             isDead = true;
             invincible = false;
             playerControls.Disable();
+            gamecontroller.gameWon = false;
             Invoke("LoadGameOverScene", 1f);
         }
         
