@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægelse af spilleren
 {
     private Gamecontroller gamecontroller;
     private Camera Cam;
@@ -62,55 +62,55 @@ public class Player : MonoBehaviour
     
     
 
-    private void Start()
+    private void Start() //bliver kaldt på den første frame
     {
-        Cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-        gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
-        tail = GameObject.FindGameObjectWithTag("Tail");
-        animator = GetComponent<Animator>();
-        nearGPoints = new List<GameObject>();
-        healthBar.maxValue = health;
-        grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
-        lr = gameObject.GetComponent<LineRenderer>();
+        Cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>(); //finder cameraet så vi kan bruge den senere
+        gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>(); //finder GameControlleren så vi kan bruge den til at sende varibler til andre scener
+        tail = GameObject.FindGameObjectWithTag("Tail"); //finder halen
+        animator = GetComponent<Animator>(); //finder animatoren defineret i inspektoren
+        nearGPoints = new List<GameObject>(); //listen af potentielle grapplepoints
+        healthBar.maxValue = health; //sikre at healthbaren starter fyldt ud
+        grapplePoints = GameObject.FindGameObjectsWithTag("grapple"); //sætter alle grapplepunkterne i listen
+        lr = gameObject.GetComponent<LineRenderer>(); //finder linerenderen til halen i inspektoren
         
     }
-    private void FixedUpdate()
+    private void FixedUpdate() //bliver kaldt i en sat framerate, så programmet ikke bliver langsommere hvis ens computer er langsommere
     {
-        Vector2 input = playerControls.Default.Move.ReadValue<Vector2>();
+        Vector2 input = playerControls.Default.Move.ReadValue<Vector2>(); //læser inputtet fra vores inputcontroller (Unity's nye input system)
         
-        if (!isGrappling)
+        if (!isGrappling) //sikre at dette ikke køre mens man grappler
         {
-            if (input.x < 0)
+            if (input.x < 0) //flipper spilleren så man vender den vej der passer til inputtet
             {
                 animator.SetBool("Running", true);
-                gameObject.transform.localScale = new Vector3(-1, 1, 1);
-                tail.transform.localScale = new Vector3(-1, 1, 1);
+                gameObject.transform.localScale = new Vector3(-1, 1, 1); //vi flipper var at ændre i gameobjectets scale for også at flippe dets children
+                tail.transform.localScale = new Vector3(-1, 1, 1); //vi flipper var at ændre i gameobjectets scale for også at flippe dets children
                 isFlipped = true;
 
             }
-            if (input.x > 0)
+            if (input.x > 0) //flipper spilleren så man vender den vej der passer til inputtet
             {
                 animator.SetBool("Running", true);
-                gameObject.transform.localScale = new Vector3(1, 1, 1);
-                tail.transform.localScale = new Vector3(1, 1, 1);
+                gameObject.transform.localScale = new Vector3(1, 1, 1); //vi flipper var at ændre i gameobjectets scale for også at flippe dets children
+                tail.transform.localScale = new Vector3(1, 1, 1); //vi flipper var at ændre i gameobjectets scale for også at flippe dets children
                 isFlipped = false;
             }
             transform.eulerAngles = new Vector3(0, 0, 0);
         }
-        if (input.x == 0)
+        if (input.x == 0) //stopper løbeanimationen
         {
             animator.SetBool("Running", false);
         }
 
 
-        float targetSpeed = input.x * moveSpeed; //calculate the direction we want to move in and our desired velocity
-        float speedDif = targetSpeed - RB.velocity.x; //calculate difference between current velocity and desired velocity
+        float targetSpeed = input.x * moveSpeed; //Beregner den hastighed vi gerne vil opnå
+        float speedDif = targetSpeed - RB.velocity.x; //Finder forskellen mellem den nuværende hastighed og den ønskede hastighed
         float accelRate;
         
-        accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAccel : runDeccel;
-        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+        accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? runAccel : runDeccel; //ændre accelerationen baseret på om vi forsøge at stoppe op eller løbe hurtigere.
+        float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif); //tilføjer accelerationen til hastigheden. Dette er opløftet i velPower for at accelerationen øges ved højere hastigheder. Til sidst ganges det med Sign for at få retningen tilbage efter vi normaliserede hastigeden
         
-        RB.AddForce(movement * Vector2.right);
+        RB.AddForce(movement * Vector2.right); //tilføjer hastigheden i x-aksen
 
         //Friction:
         if (IsGrounded() && input.x == 0 && isGrappling != true)
