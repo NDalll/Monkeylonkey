@@ -101,7 +101,7 @@ public class FirebaseManager : MonoBehaviour
             DataManager.instance.DBreference = DBreference;
             LoginScreen();
         }
-        currentOrderItem = "highScore";
+        currentOrderItem = "bestTime";
     }
     private void InitializeFirebase()
     {
@@ -359,7 +359,18 @@ public class FirebaseManager : MonoBehaviour
             
         }
     }
-
+    public void SwitchSort()
+    {
+        if(currentOrderItem == "highScore")
+        {
+            currentOrderItem = "bestTime";
+        }
+        else
+        {
+            currentOrderItem = "highScore";
+        }
+        StartCoroutine(LoadScoreboardData(currentOrderItem));
+    }
     private IEnumerator LoadScoreboardData(string orderItem)
     {
         //Get all the users data ordered by kills amount
@@ -378,17 +389,9 @@ public class FirebaseManager : MonoBehaviour
             List<DataSnapshot> childData = snapshot.Children.ToList();
             if(orderItem == "bestTime")
             {
-                List<DataSnapshot> mData = new List<DataSnapshot>();
-                foreach (DataSnapshot childSnapshot in childData)
-                {
-                    if(childSnapshot.Child("bestTime").Value.ToString() == "0")
-                    {
-                        mData.Add(childSnapshot);
-                        childData.Remove(childSnapshot);
-                    }
-                }
-                childData = childData.Reverse<DataSnapshot>().ToList();
-                childData.AddRange(mData);
+                List<DataSnapshot> bData = childData.Where(i => i.Child("bestTime").Value.ToString() == "0").ToList();
+                childData.RemoveAll(i => i.Child("bestTime").Value.ToString() == "0");
+                childData.AddRange(bData);
             }
             else
             {
