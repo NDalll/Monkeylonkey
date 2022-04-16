@@ -13,11 +13,13 @@ public class ScoreManager : MonoBehaviour
     public static int totalBananas;
     public static int enemiesDefeated;
     public static int stagesCleared;
+    public int startingBananas;
+    public int startingGrapples;
     void Start()
     {
-        bananaScore = 5;
-        grappleScore = 1;
-        totalBananas = 5;
+        bananaScore = startingBananas;
+        grappleScore = startingGrapples;
+        totalBananas = startingBananas;
         enemiesDefeated = 0;
     }
 

@@ -202,7 +202,7 @@ MonoBehaviour:
   rangedDamage: 15
   projectile: {fileID: 5869237810468357429, guid: dc34eed1eb7456845bf9e9113cf0ad5c, type: 3}
   initProjSpeed: 12
-  turnForce: 100
+  turnForce: 92
   isHoming: 1
   fireRate: 1.4
   isMelee: 0
