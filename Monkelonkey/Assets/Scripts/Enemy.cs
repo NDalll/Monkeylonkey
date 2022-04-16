@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
+    [Header("General")] //de genrelle variabler:
     private GameObject player;
     [System.NonSerialized] public Rigidbody2D RB;
     private Animator animator;
@@ -12,8 +12,6 @@ public class Enemy : MonoBehaviour
     private PlayerTrigger playerTrigger;
     private Vector3 scale;
     private string lookDirection;
-
-    [Header("General")]
     public float health;
     public int bodyDamage;
     public int worth;
@@ -21,12 +19,10 @@ public class Enemy : MonoBehaviour
     private float alertTimer;
     private bool alert;
     private bool ledgeJumpCooldown;
-    [System.NonSerialized] public float ogRunSpeed; 
-    [System.NonSerialized] public float ogWalkSpeed;
 
 
 
-    [Header("Jumping Enemy")]
+    [Header("Jumping Enemy")] //variablerne for de hoppende fjender:
     public bool isJumping;
     public int jumps;
     public float jumpCooldown;
@@ -37,7 +33,7 @@ public class Enemy : MonoBehaviour
     private float cooldownTimer;
     private bool colTiming;
 
-    [Header("Walking Enemy")]
+    [Header("Walking Enemy")] //variablerne for de gående fjender:
     public bool isWalking;
     public GameObject startPoint;
     public GameObject endPoint;
@@ -47,9 +43,11 @@ public class Enemy : MonoBehaviour
     public float walkSpeed;
     public float runSpeed;
     public bool isFollowing;
+    [System.NonSerialized] public float ogRunSpeed;
+    [System.NonSerialized] public float ogWalkSpeed;
 
 
-    [Header("Ranged Enemy")]
+    [Header("Ranged Enemy")] //variablerne for de ranged fjender
     public bool isRanged;
     public float rangedDamage;
     public GameObject projectile;
@@ -61,36 +59,34 @@ public class Enemy : MonoBehaviour
     public bool seeingPlayer;
     private float fireTimer;
 
-    [Header("Melee Enemy")]
+    [Header("Melee Enemy")] //variablerne for melee fjenderne
     public bool isMelee;
     public GameObject meleeWeaponPrefab;
     private GameObject meleeWeapon;
     public float meleeDamage;
     private bool melee;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
-        if (isMelee)
+        if (isMelee) //tjekker om det er en melee fjende
         {
-            meleeWeapon = Instantiate(meleeWeaponPrefab, gameObject.transform);
-            meleeWeapon.GetComponent<MeleeWeapon>().damage = meleeDamage;
-            meleeWeapon.SetActive(false);
+            meleeWeapon = Instantiate(meleeWeaponPrefab, gameObject.transform); //laver våbenet på spillerens position 
+            meleeWeapon.GetComponent<MeleeWeapon>().damage = meleeDamage; //definerer skaden af våbnet
+            meleeWeapon.SetActive(false); //disabler våbenet
         }
         
-        scale = transform.localScale;
-        player = GameObject.FindWithTag("Player");
-        RB = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        if (isWalking)
+        scale = transform.localScale; //definere scalen til enemiens localscale
+        player = GameObject.FindWithTag("Player"); //finder playeren
+        RB = GetComponent<Rigidbody2D>(); //definerer rigdidbodien på fjenden
+        animator = GetComponent<Animator>(); //definerer animatoren på fjenden
+        if (isWalking) //tjekker om det er en gående fjende
         {
-            startPos = new Vector3(startPoint.transform.position.x, startPoint.transform.position.y, 0);
-            endPos = endPoint.transform.position;
+            startPos = new Vector3(startPoint.transform.position.x, startPoint.transform.position.y, 0); //sætter startpositionen til positionen af startpunket defineret i inspektoren
+            endPos = endPoint.transform.position; //sætter slutpositionen til positionen af startpunket defineret i inspektoren
 
-            transform.position = startPos;
-            currTarget = endPos;
+            transform.position = startPos; //flytter fjenden til startpunktet
+            currTarget = endPos; //sætter dens mål til slutpositionen
         }
         playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>();
         playerTrigger.damage = bodyDamage;
@@ -149,7 +145,6 @@ public class Enemy : MonoBehaviour
             {
                 MeleeAttack();
             }
-            
         }
         if (alert)
         {
@@ -159,10 +154,6 @@ public class Enemy : MonoBehaviour
                 seeingPlayer = false;
             }
         }
-
-
-
-
     }
 
     float CalcXDistance()
@@ -202,15 +193,6 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        //if (isWalking)
-        //{
-        //    if (collision.CompareTag("WayPoint"))
-        //    {
-        //        Debug.Log("at target");
-        //        switchTarget();
-        //    }
-        //}
-
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
