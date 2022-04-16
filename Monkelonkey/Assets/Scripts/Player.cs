@@ -264,14 +264,14 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         }
     }
 
-    private void Grapple()
+    private void Grapple() //Funktionen ansvarlig for grapple
     {
-        if(canGrapple)
+        if(canGrapple) //tjekker om der er nogen punkter i nærheden
         {
-            if (playerControls.Default.Grapple.IsPressed())
+            if (playerControls.Default.Grapple.IsPressed()) //tjekker om grapple er blevet inputtet
             {
 
-                if (isGrappling == false)
+                if (isGrappling == false) //låser spilleren fast til det grapple point de grappler til
                 {
                     isGrappling = true;
                     animator.SetBool("Grappeling", true);
@@ -279,34 +279,34 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
                     grappleP = nearestGrapple;
                 }
 
-                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
-                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-                Vector3 tailPoint = transform.GetChild(0).position;
-                lr.enabled = true;
-                lr.SetPosition(0, tailPoint);
+                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized; //finder vektoren mellem spilleren og punktet
+                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier); //lægger grapple multiplieren til denne retning
+                Vector3 tailPoint = transform.GetChild(0).position; // finder halepunktet på spilleren (child af spilleren)
+                lr.enabled = true; //Enabler linerendereren
+                lr.SetPosition(0, tailPoint); //sætter dens position til at være imellem halepunktet og grapplepunktet
                 lr.SetPosition(1, grappleP.transform.position);
-                Vector3 angle = GetOrientationGrapple(direction);
-                player.transform.eulerAngles = angle;
-                RB.AddForce(direction * Time.deltaTime * 1000);
+                Vector3 angle = GetOrientationGrapple(direction); //finder rotationen spilleren skal vende ved at kalde GetOrientationGrapple
+                player.transform.eulerAngles = angle; //sætter rotationen
+                RB.AddForce(direction * Time.deltaTime * 1000); //skubber spilleren mod punktet
             }
             else
             {
-                lr.enabled = false;
+                lr.enabled = false; //disabler linerenderen
             }
         }
         else
         {
-            lr.enabled = false;
+            lr.enabled = false; //disabler linerenderen
         }
         
     }
-    private GameObject GetNearstGrapple()
+    private GameObject GetNearstGrapple() //funktionen til at finde det nærmeste grapple punkt
     {
-        if (nearGPoints.Count != 0 && nearGPoints[0].GetComponent<Grapplepoint>().isThrown == false)
+        if (nearGPoints.Count != 0 && nearGPoints[0].GetComponent<Grapplepoint>().isThrown == false)//tjekker om der er punkter i listen og at det punkt der er tættest på ikke er i gang med at flyve
         {
             canGrapple = true;
-            GameObject nearstPoint = nearGPoints[0];
-            for (int i = 1; i < nearGPoints.Count; i++)
+            GameObject nearstPoint = nearGPoints[0]; //sætter det nærmeste punkt til det første punkt i listen
+            for (int i = 1; i < nearGPoints.Count; i++) //for loop der går igennem hvert punkt i listen og finder det nærmeste punkt
             {
                 if (Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
                 {
@@ -316,34 +316,35 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
                     }     
                 }
             }
-            return nearstPoint;
+            return nearstPoint; //returnere det fundne punkt
         }
-        if (playerControls.Default.Grapple.IsPressed() == false)
+        if (playerControls.Default.Grapple.IsPressed() == false) //hvis spilleren giver slip bliver cangrapple false
         {
             canGrapple = false;
         }
-        return null;
+        return null; //hvis ikke den overstående if-sætning er sand returneres NULL
     }
 
 
-    private bool IsGrounded() //Check if player is on ground
+    private bool IsGrounded() //Checker om spiller er grounded
     {
         
-        float extraHeightRaycast = 0.4f;
-        RaycastHit2D raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, extraHeightRaycast, platformLayerMask);
+        float extraHeightRaycast = 0.4f; //den ekstra dybde der skal tjekkes under spilleren
+        RaycastHit2D raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, extraHeightRaycast, platformLayerMask); //Raycaster en kasse under spilleren
         Color rayColor;
-        if (raycastHit.collider != null)
+        if (raycastHit.collider != null) //hvis den er i kontakt med noget der er inde for den layermask defineret i kassen
         {
-            rayColor = Color.green;
-            lastGroundedTime = 0;
+            rayColor = Color.green; //sætter farven af kassen til grøn (Kan ikke ses i spillet, til debugging)
+            lastGroundedTime = 0; //genstarter last grounded timeren
 
         } else {
-            rayColor = Color.red;
+            rayColor = Color.red; //sætter farven af kassen til rød (Kan ikke ses i spillet, til debugging)
         }
+        //Tegner de 3 linje i debuggeren der udgør hvor kassen er:
         Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraHeightRaycast), Vector2.right * (playerCollider.bounds.extents.x), rayColor);
-        return raycastHit.collider != null;
+        return raycastHit.collider != null; //retunerer om der var en colision
     }
 
     public void JumpFinished()
