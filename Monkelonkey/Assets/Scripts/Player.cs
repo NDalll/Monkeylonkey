@@ -381,6 +381,7 @@ public class Player : MonoBehaviour
         gamecontroller.enemiesDefeated = ScoreManager.enemiesDefeated;
         gamecontroller.bananas = ScoreManager.bananaScore;
         gamecontroller.bananasCollected = ScoreManager.totalBananas;
+        gamecontroller.floorsBeaten = ScoreManager.stagesCleared;
         SceneManager.LoadScene("Gameover");
     }
 
