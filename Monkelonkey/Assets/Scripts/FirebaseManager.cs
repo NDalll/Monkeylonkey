@@ -9,12 +9,14 @@ using System.Linq;
 using System;
 public class FirebaseManager : MonoBehaviour
 {
-    //Firebase variables
+    //Firebase variabler
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;    
     public FirebaseUser User;
     public DatabaseReference DBreference;
+    
+    //Login Variabler
     [Header("Login")]
     public GameObject loginScreen;
     public TMP_InputField emailLoginField;
@@ -22,7 +24,7 @@ public class FirebaseManager : MonoBehaviour
     public TMP_Text warningLoginText;
     public TMP_Text confirmLoginText;
 
-    //Register variables
+    //Register variabler
     [Header("Register")]
     public GameObject registerScreen;
     public TMP_InputField usernameRegisterField;
@@ -31,35 +33,35 @@ public class FirebaseManager : MonoBehaviour
     public TMP_InputField passwordRegisterVerifyField;
     public TMP_Text warningRegisterText;
 
-    //User Data variables
+    //Brugerdata Varibler
     [Header("UserData")]
     public TMP_Text usernameField;
     public GameObject scoreScreen;
     public GameObject scoreElement;
     public Transform scoreboardContent;
     private string currentOrderItem;
-    // Start is called before the first frame update
-    public void RegisterScreen()
+
+    public void RegisterScreen()//skifter til register UI
     {
         loginScreen.SetActive(false);
         registerScreen.SetActive(true);
         scoreScreen.SetActive(false);
     }
-    public void LoginScreen()
+    public void LoginScreen()//skifter til login UI
     {
         loginScreen.SetActive(true);
         registerScreen.SetActive(false);
         scoreScreen.SetActive(false);
     }
-    public void ScoreBoardScreen()
+    public void ScoreBoardScreen()//skifter til register UI
     {
         scoreScreen.SetActive(true);
     }
-    public void CloseButton(GameObject window)
+    public void CloseButton(GameObject window)//lukker specifiveret UI
     {
         window.SetActive(false);
     }
-    public void ClearLoginFeilds()
+    public void ClearLoginFeilds()//skifter til
     {
         emailLoginField.text = "";
         passwordLoginField.text = "";
