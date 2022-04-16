@@ -40,7 +40,7 @@ public class GameoverUI : MonoBehaviour
         {
             string displayTime = "-- :--";
             time.text = "Time: " + displayTime;
-            DataManager.instance.CheckScores(0, score);
+            DataManager.instance.CheckScores(null, score);
         }
         
         string displayVaribles = gamecontroller.floorsBeaten.ToString();

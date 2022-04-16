@@ -21,6 +21,7 @@ public class ScoreManager : MonoBehaviour
         grappleScore = startingGrapples;
         totalBananas = startingBananas;
         enemiesDefeated = 0;
+        stagesCleared = 0;
     }
 
     // Update is called once per frame

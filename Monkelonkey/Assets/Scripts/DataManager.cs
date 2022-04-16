@@ -10,7 +10,7 @@ public class DataManager : MonoBehaviour
     // Start is called before the first frame update
     public static DataManager instance;
 
-    public float bestTime;
+    public float? bestTime;
     public int highScore;
     public FirebaseUser User;
     public DatabaseReference DBreference;
@@ -27,9 +27,13 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void CheckScores(float time, int score)
+    public void CheckScores(float? time, int score)
     {
-        if(bestTime != 0 && time <= bestTime && time != 0)
+        if(bestTime != null && time < bestTime)
+        {
+            bestTime = time;
+            StartCoroutine(UpdateBestTime(time));
+        }else if(bestTime == null)
         {
             bestTime = time;
             StartCoroutine(UpdateBestTime(time));
@@ -57,10 +61,18 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public IEnumerator UpdateBestTime(float _bestTime)
+    public IEnumerator UpdateBestTime(float? _bestTime)
     {
+        float? time;
+        if (_bestTime == null)
+        {
+            time = 0;
+        }
+        else
+            time = _bestTime;
+
         //Set the currently logged in user kills
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("bestTime").SetValueAsync(_bestTime);
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("bestTime").SetValueAsync(time);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
