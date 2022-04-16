@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Auth;
@@ -36,6 +37,7 @@ public class FirebaseManager : MonoBehaviour
     public GameObject scoreScreen;
     public GameObject scoreElement;
     public Transform scoreboardContent;
+    private string currentOrderItem;
     // Start is called before the first frame update
     public void RegisterScreen()
     {
@@ -99,6 +101,7 @@ public class FirebaseManager : MonoBehaviour
             DataManager.instance.DBreference = DBreference;
             LoginScreen();
         }
+        currentOrderItem = "highScore";
     }
     private void InitializeFirebase()
     {
@@ -133,7 +136,7 @@ public class FirebaseManager : MonoBehaviour
     }
     public void ScoreboardButton()
     {
-        StartCoroutine(LoadScoreboardData("highScore"));
+        StartCoroutine(LoadScoreboardData(currentOrderItem));
     }
 
     private IEnumerator Login(string _email, string _password)
@@ -372,7 +375,26 @@ public class FirebaseManager : MonoBehaviour
         {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
-
+            List<DataSnapshot> childData = snapshot.Children.ToList();
+            if(orderItem == "bestTime")
+            {
+                List<DataSnapshot> mData = new List<DataSnapshot>();
+                foreach (DataSnapshot childSnapshot in childData)
+                {
+                    if(childSnapshot.Child("bestTime").Value.ToString() == "0")
+                    {
+                        mData.Add(childSnapshot);
+                        childData.Remove(childSnapshot);
+                    }
+                }
+                childData = childData.Reverse<DataSnapshot>().ToList();
+                childData.AddRange(mData);
+            }
+            else
+            {
+                childData = childData.Reverse<DataSnapshot>().ToList();
+            }
+            
             //Destroy any existing scoreboard elements
             foreach (Transform child in scoreboardContent.transform)
             {
@@ -380,7 +402,7 @@ public class FirebaseManager : MonoBehaviour
             }
             int rank = 0;
             //Loop through every users UID
-            foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+            foreach (DataSnapshot childSnapshot in childData)
             {
                 string username = childSnapshot.Child("username").Value.ToString();
                 float bestTime = float.Parse(childSnapshot.Child("bestTime").Value.ToString());
