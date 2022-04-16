@@ -113,15 +113,15 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         RB.AddForce(movement * Vector2.right); //tilføjer hastigheden i x-aksen
 
         //Friction:
-        if (IsGrounded() && input.x == 0 && isGrappling != true)
+        if (IsGrounded() && input.x == 0 && isGrappling != true) //sikre at spilleren kun bliver tilført friktion når de er på jorden og ikke inputter en retning, samt at de ikke grappler.
         {
-            float amount = Mathf.Min(Mathf.Abs(RB.velocity.x), Mathf.Abs(frictionAmount));
-            amount *= Mathf.Sign(RB.velocity.x);
-            RB.AddForce(Vector2.right * -amount, ForceMode2D.Impulse);
+            float amount = Mathf.Min(Mathf.Abs(RB.velocity.x), Mathf.Abs(frictionAmount)); //finder den mindste værdi mellem hastigheden og spillerens friktion
+            amount *= Mathf.Sign(RB.velocity.x); //sikre at retningen friktionen bliver tilføjet i er korrekt
+            RB.AddForce(Vector2.right * -amount, ForceMode2D.Impulse); //tilfører spilleren friktionen
         }
     }
     
-    private void Update()
+    private void Update() //bliver kaldt hver frame
     {
         grapplePoints = GameObject.FindGameObjectsWithTag("grapple");
         //Max fallspeed:
@@ -131,74 +131,74 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         }
 
         //timer (for coyote time):
-        lastGroundedTime += Time.deltaTime;
+        lastGroundedTime += Time.deltaTime; 
         lastJumpedTime += Time.deltaTime;
 
         //playtime:
-        if (!isDead)
+        if (!isDead) //tæller hvor lang tid spilleren har været i live
         {
             timePlayed =+ timePlayed + Time.deltaTime;
         }
 
         //jump
-        if ((IsGrounded()||(lastGroundedTime < coyoteTime && lastJumpedTime > coyoteTime * 2)) && playerControls.Default.Jump.triggered)
+        if ((IsGrounded()||(lastGroundedTime < coyoteTime && lastJumpedTime > coyoteTime * 2)) && playerControls.Default.Jump.triggered) //sikre at spilleren kun kan hoppe når de enten er på jorden eller når tiden siden spilleren sidst forlod jorden er lavere end coyotetimen
         {
-            Jump();
-            animator.SetBool("Jumping", true);
+            Jump(); //kalder hop funktionen
+            animator.SetBool("Jumping", true); //starter hop animationen
         }
 
         //healthbar
-        healthBar.value = health;
-        if (health <= 0)
+        healthBar.value = health; //opdatere healthbaren så den passer til spillerens liv
+        if (health <= 0) //Tjekker om spilleren bør være død
         {
-            isDead = true;
-            invincible = false;
-            playerControls.Disable();
-            gamecontroller.gameWon = false;
-            Invoke("LoadGameOverScene", 1f);
+            isDead = true; //fortæller de andre scripts at spillen er død
+            invincible = false; //stopper spillerens IFrames
+            playerControls.Disable(); //gør så spilleren ikke kan bevæge sig
+            gamecontroller.gameWon = false; //fortæller gamecontrolleren at spilleren tabte
+            Invoke("LoadGameOverScene", 1f); //kalder LoadGameOverScene efter 1 sekund, så spilleren kan nå at registrer at de døde inden spillet skifter scene.
         }
         
-        if (playerControls.Default.Grapple.WasReleasedThisFrame())
+        if (playerControls.Default.Grapple.WasReleasedThisFrame()) //tjekker om spilleren gav slip på grapple knappen og stopper spilleren fra at graple hvis det er sandt
         {
             isGrappling = false;
-            animator.SetBool("Grappeling", false);
+            animator.SetBool("Grappeling", false); 
             if (grappleP != null)
             {
-                if (grappleP.GetComponent<Grapplepoint>().trowable){
+                if (grappleP.GetComponent<Grapplepoint>().trowable){ //hvis spilleren graplede til et midlertidigt grapplepoint bliver det slettet
                     Destroy(grappleP);
                 }
             }
         }
 
-        nearestGrapple = GetNearstGrapple();
-        foreach(GameObject x in grapplePoints)
+        nearestGrapple = GetNearstGrapple(); //GetNearestGrapple for at finde hvilket grapplepoint der er tættest på spilleren
+        foreach(GameObject x in grapplePoints) //går igennem alle grapplepunkterne og sætter deres størrelse til det normale
         {
             x.transform.localScale = new Vector3(1, 1, 1);
         }
-        if(nearestGrapple != null)
+        if(nearestGrapple != null) //sikre at der ikke sker errors
         {
-            nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            nearestGrapple.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f); //gør det nærmeste grapplepunkt stort
         }
-        Grapple();
-        if (IsGrounded())
+        Grapple();//kalder Grapple funktionen
+        if (IsGrounded()) //Kalder IsGrounded funktionen til at tjekke om spilleren står på jorden, hvis de gør stoppes fall animationen
         {
             animator.SetBool("Falling", false);
         }
-        if (IsGrounded() == false)
+        if (IsGrounded() == false) //hvis de ikke er på jorden startes fall animationen
         {
             animator.SetBool("Falling", true);
         }
-        if (invincible)
+        if (invincible) //hvis spilleren er udødelig
         {
-            if(iFrameBlinkCount != iFrameBlinks)
+            if(iFrameBlinkCount != iFrameBlinks) //hvis spilleren ikke har blinket det antal gange de skal:
             {
-                if (Time.time - iFrameTimer >= iFrameInterval)
+                if (Time.time - iFrameTimer >= iFrameInterval) //hvis der er gået lang nok tid siden sidste blink blinker spilleren igen
                 {
-                    if (player.enabled)
+                    if (player.enabled) //hvis spilleren er enabled bliver han disabled
                     {
                         player.enabled = false;
                     }
-                    else
+                    else //hvis spilleren er disabled bliver han enabled og blink counteren tælles op
                     {
                         player.enabled = true;
                         iFrameBlinkCount++;
@@ -207,36 +207,35 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
                     
                 }
             }
-            else
+            else //stopper IFramesne
             {
                 iFrameBlinkCount = 0;
                 invincible = false;
             }   
         }
-        if (playerControls.Default.Attack.WasPressedThisFrame())
+        if (playerControls.Default.Attack.WasPressedThisFrame()) //hvis spilleren har inputtet et angreb
         {
-            if (ScoreManager.bananaScore > 0)
+            if (ScoreManager.bananaScore > 0) //tjekker om spilleren har nok bananer
             {
-                GameObject banana = Instantiate(this.banana);
+                GameObject banana = Instantiate(this.banana); //laver en banan
 
-                BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>();
-                bananaScript.isPickUp = false;
-                bananaScript.rotateSpeed = rotateSpeed * Random.Range(0.4f, 1);
-                banana.transform.position = transform.position;
-                Rigidbody2D brb = banana.GetComponent<Rigidbody2D>();
-                Vector3 mousePos = Mouse.current.position.ReadValue();
-                Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos);
-                aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized;
-                Debug.Log(aimDirection);
-                Vector2 Force = new Vector2(aimDirection.x, aimDirection.y+0.35f) * fireMagnetuide;
-                brb.bodyType = RigidbodyType2D.Dynamic;
-                brb.AddForce(new Vector2(Force.x + RB.velocity.x/10, Force.y), ForceMode2D.Impulse);
-                ScoreManager.bananaScore--;
+                BananaPickUp bananaScript = banana.GetComponent<BananaPickUp>(); //finder scriptet på bananen
+                bananaScript.isPickUp = false; //ændre den til et projektil
+                bananaScript.rotateSpeed = rotateSpeed * Random.Range(0.4f, 1); //giver bananen en tilfældig rotation
+                banana.transform.position = transform.position; //sikre at bananen er ovenpå spilleren
+                Rigidbody2D brb = banana.GetComponent<Rigidbody2D>(); //finder bananens rigidbody2d
+                Vector3 mousePos = Mouse.current.position.ReadValue(); //finder musens position
+                Vector3 aimDirection = Cam.ScreenToWorldPoint(mousePos); //omdanner mousepos som er et screenspace til et worldspace
+                aimDirection = new Vector3(aimDirection.x - RB.position.x, aimDirection.y - RB.position.y, 0f).normalized; //finder vektoren mellem spilleren og musen
+                Vector2 Force = new Vector2(aimDirection.x, aimDirection.y+0.35f) * fireMagnetuide; //finder kraften der skal tilføres til bananen
+                brb.bodyType = RigidbodyType2D.Dynamic; //ændre rigidbody typen fra static til dynamic så vi kan tilfører den krafter
+                brb.AddForce(new Vector2(Force.x + RB.velocity.x/10, Force.y), ForceMode2D.Impulse); // tilfører kraften samt en tiende-del af spilleren hastighed så bananen ikke er for meget langsommere end spilleren
+                ScoreManager.bananaScore--; //sænker mængden af bananer spilleren har
             }
         }
-        if (playerControls.Default.Throw.WasPressedThisFrame())
+        if (playerControls.Default.Throw.WasPressedThisFrame()) //Denne funktion fungere på samme måde som banan kastet bare med variablerne for kastepunkterne i stedet
         {
-            if (ScoreManager.grappleScore > 0)
+            if (ScoreManager.grappleScore > 0) 
             {
                 GameObject thrownPoint = Instantiate(throwingGrapple);
                 thrownPoint.transform.position = transform.position;
@@ -251,11 +250,11 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         }
     }
 
-    private Vector3 GetOrientationGrapple(Vector2 direction)
+    private Vector3 GetOrientationGrapple(Vector2 direction) //denne funktion er den der roterere spilleren når de grappeler
     {
-        if (!isFlipped)
+        if (!isFlipped) //sikre at det ser rigtigt ud om spilleren er flipped eller ikke
         {
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; //
             return new Vector3(0, 0, angle + 180 + grappleOffset);
         }
         else
@@ -265,14 +264,14 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
         }
     }
 
-    private void Grapple()
+    private void Grapple() //Funktionen ansvarlig for grapple
     {
-        if(canGrapple)
+        if(canGrapple) //tjekker om der er nogen punkter i nærheden
         {
-            if (playerControls.Default.Grapple.IsPressed())
+            if (playerControls.Default.Grapple.IsPressed()) //tjekker om grapple er blevet inputtet
             {
 
-                if (isGrappling == false)
+                if (isGrappling == false) //låser spilleren fast til det grapple point de grappler til
                 {
                     isGrappling = true;
                     animator.SetBool("Grappeling", true);
@@ -280,34 +279,34 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
                     grappleP = nearestGrapple;
                 }
 
-                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized;
-                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier);
-                Vector3 tailPoint = transform.GetChild(0).position;
-                lr.enabled = true;
-                lr.SetPosition(0, tailPoint);
+                Vector2 direction = new Vector2(gPosition.x - gameObject.transform.position.x, gPosition.y - gameObject.transform.position.y).normalized; //finder vektoren mellem spilleren og punktet
+                direction = new Vector2(direction.x * grappleMultipier, direction.y * grappleMultipier); //lægger grapple multiplieren til denne retning
+                Vector3 tailPoint = transform.GetChild(0).position; // finder halepunktet på spilleren (child af spilleren)
+                lr.enabled = true; //Enabler linerendereren
+                lr.SetPosition(0, tailPoint); //sætter dens position til at være imellem halepunktet og grapplepunktet
                 lr.SetPosition(1, grappleP.transform.position);
-                Vector3 angle = GetOrientationGrapple(direction);
-                player.transform.eulerAngles = angle;
-                RB.AddForce(direction * Time.deltaTime * 1000);
+                Vector3 angle = GetOrientationGrapple(direction); //finder rotationen spilleren skal vende ved at kalde GetOrientationGrapple
+                player.transform.eulerAngles = angle; //sætter rotationen
+                RB.AddForce(direction * Time.deltaTime * 1000); //skubber spilleren mod punktet
             }
             else
             {
-                lr.enabled = false;
+                lr.enabled = false; //disabler linerenderen
             }
         }
         else
         {
-            lr.enabled = false;
+            lr.enabled = false; //disabler linerenderen
         }
         
     }
-    private GameObject GetNearstGrapple()
+    private GameObject GetNearstGrapple() //funktionen til at finde det nærmeste grapple punkt
     {
-        if (nearGPoints.Count != 0 && nearGPoints[0].GetComponent<Grapplepoint>().isThrown == false)
+        if (nearGPoints.Count != 0 && nearGPoints[0].GetComponent<Grapplepoint>().isThrown == false)//tjekker om der er punkter i listen og at det punkt der er tættest på ikke er i gang med at flyve
         {
             canGrapple = true;
-            GameObject nearstPoint = nearGPoints[0];
-            for (int i = 1; i < nearGPoints.Count; i++)
+            GameObject nearstPoint = nearGPoints[0]; //sætter det nærmeste punkt til det første punkt i listen
+            for (int i = 1; i < nearGPoints.Count; i++) //for loop der går igennem hvert punkt i listen og finder det nærmeste punkt
             {
                 if (Vector2.Distance(nearGPoints[i].transform.position, gameObject.transform.position) < Vector2.Distance(nearstPoint.transform.position, gameObject.transform.position))
                 {
@@ -317,34 +316,35 @@ public class Player : MonoBehaviour //Dette script er ansvarlig for alt bevægels
                     }     
                 }
             }
-            return nearstPoint;
+            return nearstPoint; //returnere det fundne punkt
         }
-        if (playerControls.Default.Grapple.IsPressed() == false)
+        if (playerControls.Default.Grapple.IsPressed() == false) //hvis spilleren giver slip bliver cangrapple false
         {
             canGrapple = false;
         }
-        return null;
+        return null; //hvis ikke den overstående if-sætning er sand returneres NULL
     }
 
 
-    private bool IsGrounded() //Check if player is on ground
+    private bool IsGrounded() //Checker om spiller er grounded
     {
         
-        float extraHeightRaycast = 0.4f;
-        RaycastHit2D raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, extraHeightRaycast, platformLayerMask);
+        float extraHeightRaycast = 0.4f; //den ekstra dybde der skal tjekkes under spilleren
+        RaycastHit2D raycastHit = Physics2D.BoxCast(playerCollider.bounds.center, playerCollider.bounds.size - new Vector3(0.1f, 0f, 0f), 0f, Vector2.down, extraHeightRaycast, platformLayerMask); //Raycaster en kasse under spilleren
         Color rayColor;
-        if (raycastHit.collider != null)
+        if (raycastHit.collider != null) //hvis den er i kontakt med noget der er inde for den layermask defineret i kassen
         {
-            rayColor = Color.green;
-            lastGroundedTime = 0;
+            rayColor = Color.green; //sætter farven af kassen til grøn (Kan ikke ses i spillet, til debugging)
+            lastGroundedTime = 0; //genstarter last grounded timeren
 
         } else {
-            rayColor = Color.red;
+            rayColor = Color.red; //sætter farven af kassen til rød (Kan ikke ses i spillet, til debugging)
         }
+        //Tegner de 3 linje i debuggeren der udgør hvor kassen er:
         Debug.DrawRay(playerCollider.bounds.center + new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, 0), Vector2.down * (playerCollider.bounds.extents.y + extraHeightRaycast), rayColor);
         Debug.DrawRay(playerCollider.bounds.center - new Vector3(playerCollider.bounds.extents.x, playerCollider.bounds.extents.y + extraHeightRaycast), Vector2.right * (playerCollider.bounds.extents.x), rayColor);
-        return raycastHit.collider != null;
+        return raycastHit.collider != null; //retunerer om der var en colision
     }
 
     public void JumpFinished()
