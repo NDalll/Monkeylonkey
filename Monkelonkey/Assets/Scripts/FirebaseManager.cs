@@ -33,9 +33,6 @@ public class FirebaseManager : MonoBehaviour
     //User Data variables
     [Header("UserData")]
     public TMP_Text usernameField;
-    public TMP_InputField xpField;
-    public TMP_InputField killsField;
-    public TMP_InputField deathsField;
     public GameObject scoreScreen;
     public GameObject scoreElement;
     public Transform scoreboardContent;
@@ -64,6 +61,7 @@ public class FirebaseManager : MonoBehaviour
     {
         emailLoginField.text = "";
         passwordLoginField.text = "";
+        
     }
     public void ClearRegisterFeilds()
     {
@@ -98,6 +96,7 @@ public class FirebaseManager : MonoBehaviour
         }
         else
         {
+            DataManager.instance.DBreference = DBreference;
             LoginScreen();
         }
     }
@@ -126,24 +125,15 @@ public class FirebaseManager : MonoBehaviour
     {
         auth.SignOut();
         LoginScreen();
+        DataManager.instance.User = null;
+        DataManager.instance.DBreference = null;
         ClearRegisterFeilds();
         ClearLoginFeilds();
+        usernameField.text = "Not Logged in";
     }
-
-    
-    //Function for the save button
-    public void SaveDataButton()
-    {
-        StartCoroutine(UpdateUsernameAuth(usernameField.text));
-        StartCoroutine(UpdateUsernameDatabase(usernameField.text));
-
-        StartCoroutine(UpdateBestTime(DataManager.instance.bestTime));
-        StartCoroutine(UpdateHighscore(DataManager.instance.highScore));
-    }
-    //Function for the scoreboard button
     public void ScoreboardButton()
     {
-        StartCoroutine(LoadScoreboardData());
+        StartCoroutine(LoadScoreboardData("highScore"));
     }
 
     private IEnumerator Login(string _email, string _password)
@@ -190,6 +180,7 @@ public class FirebaseManager : MonoBehaviour
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
             StartCoroutine(LoadUserData());
+            
 
             yield return new WaitForSeconds(2);
 
@@ -271,10 +262,16 @@ public class FirebaseManager : MonoBehaviour
                     {
                         //Username is now set
                         //Now return to login screen
-                        LoginScreen();
+                        DataManager.instance.User = User;
+                        DataManager.instance.DBreference = DBreference;
+                        StartCoroutine(UpdateUsernameDatabase(User.DisplayName));
+                        StartCoroutine(DataManager.instance.UpdateBestTime(0));
+                        StartCoroutine(DataManager.instance.UpdateHighscore(0));
                         warningRegisterText.text = "";
                         ClearRegisterFeilds();
                         ClearLoginFeilds();
+                        CloseButton(registerScreen);
+                        StartCoroutine(Login(_email, _password));
                     }
                 }
             }
@@ -319,39 +316,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateHighscore(int _highscore)
-    {
-        //Set the currently logged in user xp
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_highscore);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Xp is now updated
-        }
-    }
-
-    private IEnumerator UpdateBestTime(float _bestTime)
-    {
-        //Set the currently logged in user kills
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_bestTime);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Kills are now updated
-        }
-    }
+   
 
     private IEnumerator LoadUserData()
     {
@@ -364,10 +329,11 @@ public class FirebaseManager : MonoBehaviour
         {
             Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
         }
-        else if (DBTask.Result.Value == null)
+        else if (DBTask.Result.Child("highScore").Value == null && DBTask.Result.Child("bestTime").Value == null)
         {
             //No data exists yet
             DataManager.instance.User = User;
+            DataManager.instance.DBreference = DBreference;
             DataManager.instance.highScore = 0;
             DataManager.instance.bestTime = 0;
         }
@@ -376,16 +342,17 @@ public class FirebaseManager : MonoBehaviour
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            xpField.text = snapshot.Child("xp").Value.ToString();
-            killsField.text = snapshot.Child("kills").Value.ToString();
-            deathsField.text = snapshot.Child("deaths").Value.ToString();
+            DataManager.instance.User = User;
+            DataManager.instance.DBreference = DBreference;
+            DataManager.instance.highScore = int.Parse(snapshot.Child("highScore").Value.ToString());
+            DataManager.instance.bestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
         }
     }
 
-    private IEnumerator LoadScoreboardData()
+    private IEnumerator LoadScoreboardData(string orderItem)
     {
         //Get all the users data ordered by kills amount
-        var DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
+        var DBTask = DBreference.Child("users").OrderByChild(orderItem).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -403,18 +370,18 @@ public class FirebaseManager : MonoBehaviour
             {
                 Destroy(child.gameObject);
             }
-
+            int rank = 0;
             //Loop through every users UID
             foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
             {
                 string username = childSnapshot.Child("username").Value.ToString();
-                int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
-                int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
+                float bestTime = float.Parse(childSnapshot.Child("bestTime").Value.ToString());
+                int highScore = int.Parse(childSnapshot.Child("highScore").Value.ToString());
+                rank++;
 
                 //Instantiate new scoreboard elements
                 GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, bestTime, highScore, rank);
             }
 
             //Go to scoareboard screen

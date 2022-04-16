@@ -35,8 +35,15 @@ public class Scenemanager : MonoBehaviour
         gamecontroller.bananasCollected = 0;
         gamecontroller.floorsBeaten = 0;
         SceneManager.LoadScene("Main");
-    } 
-
+    }
+    public void RestartGame()
+    {
+            gamecontroller.timePlayed = 0;
+            gamecontroller.enemiesDefeated = 0;
+            gamecontroller.bananas = 0;
+            gamecontroller.bananasCollected = 0;
+            gamecontroller.floorsBeaten = 0;
+    }
     public void ToHomeScreen()
     {
         SceneManager.LoadScene("Start");
