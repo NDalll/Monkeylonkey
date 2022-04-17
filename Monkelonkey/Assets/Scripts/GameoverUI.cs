@@ -38,15 +38,14 @@ public class GameoverUI : MonoBehaviour //Dette script er ansvarlig for at vise 
         }
         else
         {
-            string displayTime = "-- :--"; //viser tiden som blank
-            time.text = "Time: " + displayTime;
-            DataManager.instance.CheckScores(null, score);
+            string displayTime = "-- :--"; //sætter tiden som blank da de ikke klarede banen
+            time.text = "Time: " + displayTime; //viser tiden
+            DataManager.instance.CheckScores(null, score); //gemmer tiden som null og scoren
         }
         
-        string displayVaribles = gamecontroller.floorsBeaten.ToString();
-        floorText.text = gamecontroller.floorsBeaten.ToString();
-        enemyDefText.text = gamecontroller.enemiesDefeated.ToString();
-        bananaColText.text = gamecontroller.bananasCollected.ToString();
-        unusedBanText.text = gamecontroller.bananas.ToString();
+        floorText.text = gamecontroller.floorsBeaten.ToString(); //viser mængden af baner klaret
+        enemyDefText.text = gamecontroller.enemiesDefeated.ToString(); //viser mængden af fjender besejret
+        bananaColText.text = gamecontroller.bananasCollected.ToString(); //viser mængden af bananer samlet i alt
+        unusedBanText.text = gamecontroller.bananas.ToString(); //viser mængden af bananer samlet
     }
 }
