@@ -9,7 +9,7 @@ public class MeleeWeapon : MonoBehaviour
     public float damage;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")){
+        if (collision.CompareTag("Player")){//hvis at et våben collidere med en player, skal den skade spilleren iforhold til våbnets skade
             collision.GetComponent<Player>().dealDamage(damage);
         }
     }
