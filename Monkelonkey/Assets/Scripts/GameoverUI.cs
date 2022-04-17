@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using UnityEngine;
-using TMPro;
+using TMPro; //vigtigt da der benyttes TextMeshPro elementer
 
-public class GameoverUI : MonoBehaviour
+public class GameoverUI : MonoBehaviour //Dette script er ansvarlig for at vise dataen på gameover skærmen og også beregne scoren
 {
     [Header("Generel")]
     public TextMeshProUGUI header;
@@ -23,22 +23,22 @@ public class GameoverUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();
-        win = gamecontroller.gameWon;
-        score = gamecontroller.bananasCollected * 51 + gamecontroller.bananas * 250 + gamecontroller.enemiesDefeated * 1000 + gamecontroller.floorsBeaten * 10000;
-        scoreText.text = score.ToString();
-        if (win)
+        gamecontroller = GameObject.FindGameObjectWithTag("Gamecontroller").GetComponent<Gamecontroller>();//reference til gamecontrolleren
+        win = gamecontroller.gameWon; //tjekker om spilleren vandt
+        score = gamecontroller.bananasCollected * 51 + gamecontroller.bananas * 250 + gamecontroller.enemiesDefeated * 1242 + gamecontroller.floorsBeaten * 10000; //beregner scoren ud fra hvad spilleren gjorde
+        scoreText.text = score.ToString(); //viser scoren
+        if (win) //hvis spilleren vandt
         {
-            header.text = "YOU WON!";
-            float minutes = Mathf.FloorToInt(gamecontroller.timePlayed / 60);
-            float seconds = Mathf.FloorToInt(gamecontroller.timePlayed % 60);
-            string displayTime = string.Format("{0:0}:{1:00}", minutes, seconds);
-            time.text = "Time: " + displayTime;
-            DataManager.instance.CheckScores(gamecontroller.timePlayed, score);
+            header.text = "YOU WON!"; //fortæller at de vandt
+            float minutes = Mathf.FloorToInt(gamecontroller.timePlayed / 60); //beregner mængden af minutter spilleren spillede
+            float seconds = Mathf.FloorToInt(gamecontroller.timePlayed % 60); //beregner hvor mange sekunder der var til overs
+            string displayTime = string.Format("{0:0}:{1:00}", minutes, seconds); //sætter formatet af timeren
+            time.text = "Time: " + displayTime; //viser tiden
+            DataManager.instance.CheckScores(gamecontroller.timePlayed, score); //gemmer scoren og tiden
         }
         else
         {
-            string displayTime = "-- :--";
+            string displayTime = "-- :--"; //viser tiden som blank
             time.text = "Time: " + displayTime;
             DataManager.instance.CheckScores(null, score);
         }
