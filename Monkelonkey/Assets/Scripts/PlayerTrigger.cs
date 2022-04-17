@@ -2,24 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerTrigger : MonoBehaviour
+public class PlayerTrigger : MonoBehaviour //dette er scriptet på fjendens collider til at skade spilleren
 {
     [System.NonSerialized]
     public float damage;
     private Player entity;
 
-    private void Start()
+    private void Start() //kaldes på den første frame
     {
-        entity = GameObject.FindWithTag("Player").GetComponent<Player>();
+        entity = GameObject.FindWithTag("Player").GetComponent<Player>();//finder spilleren
     }
-    // Start is called before the first frame update
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) //kaldes når et objekt kommer ind i collideren
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player")) //hvis det er spilleren skaden de
         {
             entity.dealDamage(damage);
         }
     }
-
-    
 }

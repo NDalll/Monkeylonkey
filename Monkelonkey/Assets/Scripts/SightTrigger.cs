@@ -8,21 +8,21 @@ public class SightTrigger : MonoBehaviour
 
     private void Start()
     {
-        entity = transform.parent.GetComponent<Enemy>();
+        entity = transform.parent.GetComponent<Enemy>();//reference til fjenden
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)//kaldes ved collision
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player"))//hvis det er spilleren
         {
-            entity.PlayerEntered();
+            entity.PlayerEntered();//kalder playerEntered i enemy scriptet
         }
     }
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision) //kaldes når noget forlader collideren
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player"))//hvis det er spilleren
         {
-            entity.PlayerExited();
+            entity.PlayerExited();//kalder playerExited i enemy scriptet
         }
     }
 }
