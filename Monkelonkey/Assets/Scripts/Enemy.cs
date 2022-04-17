@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
             transform.position = startPos; //flytter fjenden til startpunktet
             currTarget = endPos; //sætter dens mål til slutpositionen
         }
-        playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>();
+        playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>(); //finder colideren på der tjekker for playeren
         playerTrigger.damage = bodyDamage;
         ogRunSpeed = runSpeed;
         ogWalkSpeed = walkSpeed;
