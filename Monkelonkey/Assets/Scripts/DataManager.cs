@@ -5,19 +5,19 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
 
-public class DataManager : MonoBehaviour
+public class DataManager : MonoBehaviour //denne klasse bliver brugt til at komunikere med databasen fra alle scener, og den bliver ikke ødlagt ved et nyt sceneload som alle andere gameobjekter
 {
     // Start is called before the first frame update
-    public static DataManager instance;
+    public static DataManager instance; //opretter et static instance af databasemanageren(Den er static da det betyder at alle værdigerne i statisk variable er gobale for alle klasser af klasse typen, og derfor ikke behøves en specik objekt refference)
 
-    public float? bestTime;
+    public float? bestTime;//obs! bestTime er blev sat til at være en nullable float, da jeg bruger null som tiden for at der ikke er blevet gennemført nogle runs på brugeren
     [System.NonSerialized] public int highScore;
     public FirebaseUser User;
     public DatabaseReference DBreference;
     private void Awake()
     {
-        DontDestroyOnLoad(this);
-        if (instance == null)
+        DontDestroyOnLoad(this);//gøre klassen til dontdestory on load
+        if (instance == null)// hvis instance ikke er blevet defineret endu så sætte der instance lig dem dette specifike objekt, ellers så sletter den bare dette object(Sikkre bare at der ikke ved en fejl kan blive oprettet instances af Datamanger) 
         {
             instance = this;
         }
@@ -27,18 +27,18 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public void CheckScores(float? time, int score)
+    public void CheckScores(float? time, int score)//tjekker scoresne, der bliver passed med funktionen og updatere den enkelste socre hvis den er bedre 
     {
-        if(bestTime != null && time < bestTime)
+        if(bestTime != null && time < bestTime)//Hvis han allerde har gennemførst et run før og det her var hurtigere
         {
-            bestTime = time;
-            StartCoroutine(UpdateBestTime(time));
-        }else if(bestTime == null)
+            bestTime = time;//opdatere besttime 
+            StartCoroutine(UpdateBestTime(time));//opdatere tiden i databasen
+        }else if(bestTime == null)//hvis han aldrig har gennemført et run før nu er det nok til at databasen skal opdateteres selv den nuværende tid også bare er null
         {
             bestTime = time;
             StartCoroutine(UpdateBestTime(time));
         }
-        if(score >= highScore)
+        if(score >= highScore)// hvis runnet har en bedre 
         {
             highScore = score;
             StartCoroutine(UpdateHighscore(score));
@@ -46,33 +46,31 @@ public class DataManager : MonoBehaviour
     }
     public IEnumerator UpdateHighscore(int _highscore)
     {
-        //Set the currently logged in user xp
+        //Sætter highscoren på den nyværnde bruger
         var DBTask = DBreference.Child("users").Child(User.UserId).Child("highScore").SetValueAsync(_highscore);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
-        if (DBTask.Exception != null)
+        if (DBTask.Exception != null)//fejltjek
         {
             Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
         }
         else
         {
-            //Xp is now updated
+            //Highscoren er nu opdateret
         }
     }
 
     public IEnumerator UpdateBestTime(float? _bestTime)
     {
-        float? time;
+        //tjekker om bestTime er null for så er runnet ikke gennemført, og derfor skal bestime bare være 0 i selve databasen
         if (_bestTime == null)
         {
-            time = 0;
+            _bestTime = 0;
         }
-        else
-            time = _bestTime;
 
-        //Set the currently logged in user kills
-        var DBTask = DBreference.Child("users").Child(User.UserId).Child("bestTime").SetValueAsync(time);
+        //Sætter bestTime på den nyværnde bruger
+        var DBTask = DBreference.Child("users").Child(User.UserId).Child("bestTime").SetValueAsync(_bestTime);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -82,7 +80,7 @@ public class DataManager : MonoBehaviour
         }
         else
         {
-            //Kills are now updated
+            //bestime er nu opdateret
         }
     }
 }

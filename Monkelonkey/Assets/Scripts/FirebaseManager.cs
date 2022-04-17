@@ -104,7 +104,7 @@ public class FirebaseManager : MonoBehaviour
             //hvis ikke vi er logget ind så gemmer den database refferencen i DataManagerne(Dette gør så vi kan bruge databasen fra vores datamanger)
             LoginScreen();//derud over viser vi skærmen til at logge ind
         }
-        DataManager.instance.DBreference = DBreference;
+        DataManager.instance.DBreference = DBreference;//Efter som database referencen bliver er den samme lige meget hvilken bruger der er logget ind sætter vi den til det samme ved hver start
         currentOrderItem = "highScore";//sætter standard soteringsværdig at Scoreboard tabel
     }
 
@@ -139,27 +139,34 @@ public class FirebaseManager : MonoBehaviour
         ClearLoginFeilds();
         usernameField.text = "Not Logged in";
     }
+    //Funktion for Scoreboard knappen
     public void ScoreboardButton()
     {
+        //Starter coroutinen for at load alt scoreboard data, og sender navnet den skal sotere scorboard iforhold til med
         StartCoroutine(LoadScoreboardData(currentOrderItem));
     }
 
+    //Ienumeratoren for vores Login Coroutine
     private IEnumerator Login(string _email, string _password)
     {
-        //Call the Firebase auth signin function passing the email and password
+        //Kalder firebase authenticatorens login funktion, vores vi passer email og password med, og gemmer den Tasken under LoginTask
         var LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
-        //Wait until the task completes
+
+        //Venter til at vores task er færdig
         yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
 
+        //Hvis der er nogle exeptions(fejl), henter vi der konkrete fejl og printer dem 
         if (LoginTask.Exception != null)
         {
             //If there are errors handle them
-            Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}");
+            Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}"); //printer fejlen 
+
+            //Henter den kontrete fejlkode
             FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
             AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
 
-            string message = "Login Failed!";
-            switch (errorCode)
+            string message = "Login Failed!";//sætter standard fejl medelelse
+            switch (errorCode)//switch statement der ser hvis det er fordi felterene ikke er udfyldt korrekt, og hvis de ikke er erstatter den besked med den fejl den er fundet
             {
                 case AuthError.MissingEmail:
                     message = "Missing Email";
@@ -177,51 +184,50 @@ public class FirebaseManager : MonoBehaviour
                     message = "Account does not exist";
                     break;
             }
-            warningLoginText.text = message;
+            warningLoginText.text = message;//sætter fejlteksten i UIen at være den funende fejl
         }
         else
         {
-            //User is now logged in
-            //Now get the result
+            //Nu er brugeren succesfuldt logget ind
+            //Henter resultatet fra tasken, og gemmen det under User 
             User = LoginTask.Result;
-            Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
+            DataManager.instance.User = User;
+            Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);//printer brugeren der logget ind i debugkonsollen
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
-            StartCoroutine(LoadUserData());
+            StartCoroutine(LoadUserData());//loader bruger data
             
 
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(2); //venter 2 sekunder, så brugeren kan nå at se confirmationtext efter de har logget ind
 
-            usernameField.text = User.DisplayName;
-            CloseButton(loginScreen); // Change to user data UI
+            usernameField.text = User.DisplayName;//sætter bruger navnet
+            CloseButton(loginScreen);
             confirmLoginText.text = "";
             ClearLoginFeilds();
             ClearRegisterFeilds();
         }
     }
-
+    //Ienumeratoren for vores Register Coroutine
     private IEnumerator Register(string _email, string _password, string _username)
     {
-        if (_username == "")
+        if (_username == "")//tjekker om der er indtastet bruger navn
         {
-            //If the username field is blank show a warning
             warningRegisterText.text = "Missing Username";
         }
-        else if (passwordRegisterField.text != passwordRegisterVerifyField.text)
+        else if (passwordRegisterField.text != passwordRegisterVerifyField.text)//tjekker om kodeordene matcher
         {
-            //If the password does not match show a warning
             warningRegisterText.text = "Password Does Not Match!";
         }
         else
         {
-            //Call the Firebase auth signin function passing the email and password
+            //Kalder firebase authenticatorens register funktion, hvor vi passer email og password med, og gemmer den Tasken under registerTask
             var RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
-            //Wait until the task completes
+
+            //Venter på tasken færdiggøre
             yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
 
-            if (RegisterTask.Exception != null)
+            if (RegisterTask.Exception != null)//fejbehandling bare for regitreing 
             {
-                //If there are errors handle them
                 Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
                 FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
                 AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
@@ -246,58 +252,59 @@ public class FirebaseManager : MonoBehaviour
             }
             else
             {
-                //User has now been created
-                //Now get the result
+                //Der er nu lavet en bruger, og gemmen unde User
                 User = RegisterTask.Result;
 
                 if (User != null)
                 {
-                    //Create a user profile and set the username
+                    //Laver en bruger profil med displayname der er vores username(dette er en klasse der er inkluderet i firebase)
                     UserProfile profile = new UserProfile { DisplayName = _username };
 
-                    //Call the Firebase auth update user profile function passing the profile with the username
+                    //Kalder Authenticatorens funktion for opdatering af bruger profil 
                     var ProfileTask = User.UpdateUserProfileAsync(profile);
                     //Wait until the task completes
-                    yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+                    yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);// Venter på at Tasken er færdig
 
                     if (ProfileTask.Exception != null)
                     {
-                        //If there are errors handle them
+                        //Hvis der er fejl, så print dem
                         Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
                         warningRegisterText.text = "Username Set Failed!";
                     }
                     else
                     {
-                        //Username is now set
-                        //Now return to login screen
-                        StartCoroutine(UpdateUsernameDatabase(User.DisplayName));
-                        StartCoroutine(DataManager.instance.UpdateBestTime(0));
-                        StartCoroutine(DataManager.instance.UpdateHighscore(0));
+                        //Brugernavnet er nu sat
+                        DataManager.instance.User = User;//opdatere useren i Datamangeren
+                        DataManager.instance.DBreference = DBreference;//Sikre der er DBreferencen er sat i Datamangeren
+                        StartCoroutine(SetUsernameDatabase(User.DisplayName));//sæt brugernavnet i databasen også
+                        StartCoroutine(DataManager.instance.UpdateBestTime(0));//sæt 0 som bedste tid(læg mærke til at UpdateBestTime routinen, lægger i DataManageren)
+                        StartCoroutine(DataManager.instance.UpdateHighscore(0));//søt 0 som highscored(læg mærke til at UpdateHighscore routinen, lægger i DataManageren)
                         warningRegisterText.text = "";
                         ClearRegisterFeilds();
                         ClearLoginFeilds();
                         CloseButton(registerScreen);
-                        StartCoroutine(Login(_email, _password));
+                        StartCoroutine(Login(_email, _password));//logger ind med den oprettet bruger
                     }
                 }
             }
         }
     }
 
-    private IEnumerator UpdateUsernameDatabase(string _username)
+    private IEnumerator SetUsernameDatabase(string _username)
     {
-        //Set the currently logged in user username in the database
+        //Opretter en Task der sætter bruger navnet i databasen, læg mærketil at der firebase allerede har lavet et bruger ID til vores bruger, under User.UserId.
         var DBTask = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
-
+        //venter på tasken er færdig
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
         {
+            //printer evt. fejl
             Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
         }
         else
         {
-            //Database username is now updated
+            //Bruger navnet er du sat i databasen
         }
     }
 
@@ -305,42 +312,40 @@ public class FirebaseManager : MonoBehaviour
 
     private IEnumerator LoadUserData()
     {
-        //Get the currently logged in user data
+        //Henter bruger brugeren fra databasen der pt er logget ind ud af brugeridet
         var DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
         {
+            //printer evt. fejl
             Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else if (DBTask.Result.Child("highScore").Value == null && DBTask.Result.Child("bestTime").Value == null)
-        {
-            //No data exists yet
-            DataManager.instance.User = User;
-            DataManager.instance.highScore = 0;
-            DataManager.instance.bestTime = null;
         }
         else
         {
-            //Data has been retrieved
-            DataSnapshot snapshot = DBTask.Result;
+            //Data blev modtager 
 
-            DataManager.instance.User = User;
-            DataManager.instance.highScore = int.Parse(snapshot.Child("highScore").Value.ToString());
-            if(float.Parse(snapshot.Child("bestTime").Value.ToString()) == 0)
+            DataSnapshot snapshot = DBTask.Result;//Gemmer det modtaget data i et snapshot 
+
+            
+            DataManager.instance.highScore = int.Parse(snapshot.Child("highScore").Value.ToString());//Sætter highscoren i Datamangeren til Highscoren fra Databasen
+            if(float.Parse(snapshot.Child("bestTime").Value.ToString()) == 0)//Her tjekker jeg om bestTime er 0 da det betyder at der ikke er færdig gjort et run endnu og bestTime derfor skal være null istedet
             {
                 DataManager.instance.bestTime = null;
             }
             else
             {
+                //Hvis der er en reel tid så set besttime til den
                 DataManager.instance.bestTime = float.Parse(snapshot.Child("bestTime").Value.ToString());
             }
             
         }
     }
+    //Funktion til at skifte sortings væriden
     public void SwitchSort()
     {
+        //Hvis sorterings værdigen er den ene så sæt den til den anden
         if(currentOrderItem == "highScore")
         {
             currentOrderItem = "bestTime";
@@ -349,11 +354,12 @@ public class FirebaseManager : MonoBehaviour
         {
             currentOrderItem = "highScore";
         }
+        //Reload Scoreboardet med den nu soterings værdig
         StartCoroutine(LoadScoreboardData(currentOrderItem));
     }
     private IEnumerator LoadScoreboardData(string orderItem)
     {
-        //Get all the users data ordered by kills amount
+        //Hetnter data fra alle brugere og sotere det efter soterings værdigen(lav til høj)
         var DBTask = DBreference.Child("users").OrderByChild(orderItem).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
@@ -364,40 +370,43 @@ public class FirebaseManager : MonoBehaviour
         }
         else
         {
-            //Data has been retrieved
-            DataSnapshot snapshot = DBTask.Result;
-            List<DataSnapshot> childData = snapshot.Children.ToList();
-            if(orderItem == "bestTime")
+            //Dataen er blevet modtager
+            DataSnapshot snapshot = DBTask.Result;//Gemmer dataen i et snapshot
+
+            List<DataSnapshot> childData = snapshot.Children.ToList();//Gemmer alle brugerne som en liste
+            if(orderItem == "bestTime")//Hvis listen skal soteres efter tid, ville den have alle dem der har tid som 0(ikke gennemført) først, vores de faktisk skal være allersidst, dette bliver rettet her.
             {
-                List<DataSnapshot> bData = childData.Where(i => i.Child("bestTime").Value.ToString() == "0").ToList();
-                childData.RemoveAll(i => i.Child("bestTime").Value.ToString() == "0");
-                childData.AddRange(bData);
+                List<DataSnapshot> bData = childData.Where(i => i.Child("bestTime").Value.ToString() == "0").ToList();//Starter med at finde at Brugerne de har en tid på 0 en en buffer data List(bData)
+                childData.RemoveAll(i => i.Child("bestTime").Value.ToString() == "0");//Derefter fjerne den alle brugerne fra listen der har en tid på 0
+                childData.AddRange(bData);//Så tilføjer den så buffer listen, til bruger listen igen, her dette har så gjort at den lægge til slut i listen
             }
             else
             {
+                //Hvis det bare er score sotering skal den bare reverse listen, så den har går fra høj til lav istedet
                 childData = childData.Reverse<DataSnapshot>().ToList();
             }
             
-            //Destroy any existing scoreboard elements
-            foreach (Transform child in scoreboardContent.transform)
+            //Fjern alle eksiterende scoreboard elementer
+            foreach (Transform child in scoreboardContent.transform)//køre igennem alle childs af vores scoreboard content
             {
-                Destroy(child.gameObject);
+                Destroy(child.gameObject);//destoryer gameobjektet der er ved
             }
-            int rank = 0;
-            //Loop through every users UID
-            foreach (DataSnapshot childSnapshot in childData)
+            int rank = 0;//Variable til at holde styr på rangen
+            foreach (DataSnapshot childSnapshot in childData) //køre igennm alle brugerne i listen
             {
+                //henter brugernavn, besttime og highscore fra brugeren
                 string username = childSnapshot.Child("username").Value.ToString();
                 float bestTime = float.Parse(childSnapshot.Child("bestTime").Value.ToString());
                 int highScore = int.Parse(childSnapshot.Child("highScore").Value.ToString());
-                rank++;
+                rank++;//pluser rangen med 1
 
-                //Instantiate new scoreboard elements
+                //Instantiere et scoreElement som child at scoreboardContent 
                 GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+                //Sætter vædigerne i scoreboard elementet
                 scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, bestTime, highScore, rank);
             }
 
-            //Go to scoareboard screen
+            //Viser Scoreboard skræmen
             ScoreBoardScreen();
         }
     }
