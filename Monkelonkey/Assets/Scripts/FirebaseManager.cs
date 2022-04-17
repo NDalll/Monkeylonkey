@@ -57,60 +57,63 @@ public class FirebaseManager : MonoBehaviour
     {
         scoreScreen.SetActive(true);
     }
-    public void CloseButton(GameObject window)//lukker specifiveret UI
+    public void CloseButton(GameObject window)//lukker specificiferet UI
     {
         window.SetActive(false);
     }
-    public void ClearLoginFeilds()//skifter til
+    public void ClearLoginFeilds()//rydder felterne for login UIen
     {
         emailLoginField.text = "";
         passwordLoginField.text = "";
         
     }
-    public void ClearRegisterFeilds()
+    public void ClearRegisterFeilds()//rydder felterene for register UIen
     {
         usernameRegisterField.text = "";
         emailRegisterField.text = "";
         passwordRegisterField.text = "";
         passwordRegisterVerifyField.text = "";
     }
-    void Awake()
+    void Awake()//Køre når objectet bliver instancieret
     {
-        //Check that all of the necessary dependencies for Firebase are present on the system
+        //Tjekker systemet for at alle de nødvendige resourser er til stedet for at køre firebase
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
-            dependencyStatus = task.Result;
-            if (dependencyStatus == DependencyStatus.Available)
+            dependencyStatus = task.Result;//gemmer resultatet
+            if (dependencyStatus == DependencyStatus.Available)// hvis at alt er godt
             {
-                //If they are avalible Initialize Firebase
-                InitializeFirebase();
+                InitializeFirebase();//start Firebase
             }
             else
             {
-                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);
+                Debug.LogError("Could not resolve all Firebase dependencies: " + dependencyStatus);//Print fejl besked plus status
             }
         });
     }
-    private void Start()
+    private void Start()//køre lige før det første frame update
     {
+        //Tjekker om DataManangeren har en defintion på en bruger(det vil sige at vi allerede er logget ind)
         if(DataManager.instance.User != null)
         {
+            //Hvis vi er logget ind så bruger vi henter vi brugeren for den bruger vi er logget ind med, og hvis login navnet
             User = DataManager.instance.User;
             usernameField.text = User.DisplayName;
         }
         else
         {
+            //hvis ikke vi er logget ind så gemmer den database refferencen i DataManagerne(Dette gør så vi kan bruge databasen fra vores datamanger)
             DataManager.instance.DBreference = DBreference;
-            LoginScreen();
+            LoginScreen();//derud over viser vi skærmen til at logge ind
         }
-        currentOrderItem = "bestTime";
+        currentOrderItem = "highScore";//sætter standard soteringsværdig at Scoreboard tabel
     }
-    private void InitializeFirebase()
+
+    private void InitializeFirebase()//
     {
         Debug.Log("Setting up Firebase Auth");
         //Set the authentication instance object
-        auth = FirebaseAuth.DefaultInstance;
-        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        auth = FirebaseAuth.DefaultInstance;//Sætter hvor authenticator(Den del af firebase er styre alt bruger realteret)
+        DBreference = FirebaseDatabase.DefaultInstance.RootReference;//Sætter vores databaserefference(Den del af firebase der styre at iforhold til lagering af data)
     }
 
     //Function for the login button
