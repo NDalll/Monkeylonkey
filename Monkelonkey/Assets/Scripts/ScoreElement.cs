@@ -14,10 +14,19 @@ public class ScoreElement : MonoBehaviour
     public void NewScoreElement (string _username, float _time, int _score, int _rank)
     {
         usernameText.text = _username;
-        float minutes = Mathf.FloorToInt(_time / 60);
-        float seconds = Mathf.FloorToInt(_time % 60);
-        string displayTime = string.Format("{0:0}:{1:00}", minutes, seconds);
-        timeText.text = displayTime;
+        if(_time != 0)
+        {
+            float minutes = Mathf.FloorToInt(_time / 60);
+            float seconds = Mathf.FloorToInt(_time % 60);
+            string displayTime = string.Format("{0:0}:{1:00}", minutes, seconds);
+            timeText.text = displayTime;
+        }
+        else
+        {
+            string displayTime = "--:--";
+            timeText.text = displayTime;
+        }
+        
         highscoreText.text = _score.ToString();
         rankText.text = _rank.ToString();
     }
