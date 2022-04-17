@@ -121,6 +121,7 @@ public class FirebaseManager : MonoBehaviour
     {
         //Call the login coroutine passing the email and password
         StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
+        
     }
     //Function for the register button
     public void RegisterButton()

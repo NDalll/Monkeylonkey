@@ -41,9 +41,6 @@ public class StageBuilder : MonoBehaviour
         BuildRooms();
         SetLootRooms();
         FillVoid();
-        
-        ;
-        
     }
 
     private string GenerateMainPath()
