@@ -102,9 +102,9 @@ public class FirebaseManager : MonoBehaviour
         else
         {
             //hvis ikke vi er logget ind så gemmer den database refferencen i DataManagerne(Dette gør så vi kan bruge databasen fra vores datamanger)
-            DataManager.instance.DBreference = DBreference;
             LoginScreen();//derud over viser vi skærmen til at logge ind
         }
+        DataManager.instance.DBreference = DBreference;
         currentOrderItem = "highScore";//sætter standard soteringsværdig at Scoreboard tabel
     }
 
@@ -116,26 +116,25 @@ public class FirebaseManager : MonoBehaviour
         DBreference = FirebaseDatabase.DefaultInstance.RootReference;//Sætter vores databaserefference(Den del af firebase der styre at iforhold til lagering af data)
     }
 
-    //Function for the login button
+    //Function for the login knappen
     public void LoginButton()
     {
-        //Call the login coroutine passing the email and password
+        //Starter coroutinen Login, hvor den passer email og password med
         StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
         
     }
     //Function for the register button
     public void RegisterButton()
     {
-        //Call the register coroutine passing the email, password, and username
+        //Starter coroutinen Register, hvor den passer email, username og password med
         StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
     }
-    //Function for the sign out button
+    //Function for the logud knappen
     public void SignOutButton()
     {
-        auth.SignOut();
-        LoginScreen();
-        DataManager.instance.User = null;
-        DataManager.instance.DBreference = null;
+        auth.SignOut();//kalder firebases logud funktion fra authenticatoren
+        LoginScreen();//viser login skræm
+        DataManager.instance.User = null;//sletter Useren fra vores DataManager
         ClearRegisterFeilds();
         ClearLoginFeilds();
         usernameField.text = "Not Logged in";
@@ -271,8 +270,6 @@ public class FirebaseManager : MonoBehaviour
                     {
                         //Username is now set
                         //Now return to login screen
-                        DataManager.instance.User = User;
-                        DataManager.instance.DBreference = DBreference;
                         StartCoroutine(UpdateUsernameDatabase(User.DisplayName));
                         StartCoroutine(DataManager.instance.UpdateBestTime(0));
                         StartCoroutine(DataManager.instance.UpdateHighscore(0));
@@ -284,27 +281,6 @@ public class FirebaseManager : MonoBehaviour
                     }
                 }
             }
-        }
-    }
-
-
-    private IEnumerator UpdateUsernameAuth(string _username)
-    {
-        //Create a user profile and set the username
-        UserProfile profile = new UserProfile { DisplayName = _username };
-
-        //Call the Firebase auth update user profile function passing the profile with the username
-        var ProfileTask = User.UpdateUserProfileAsync(profile);
-        //Wait until the task completes
-        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
-
-        if (ProfileTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
-        }
-        else
-        {
-            //Auth username is now updated
         }
     }
 
@@ -342,7 +318,6 @@ public class FirebaseManager : MonoBehaviour
         {
             //No data exists yet
             DataManager.instance.User = User;
-            DataManager.instance.DBreference = DBreference;
             DataManager.instance.highScore = 0;
             DataManager.instance.bestTime = null;
         }
@@ -352,7 +327,6 @@ public class FirebaseManager : MonoBehaviour
             DataSnapshot snapshot = DBTask.Result;
 
             DataManager.instance.User = User;
-            DataManager.instance.DBreference = DBreference;
             DataManager.instance.highScore = int.Parse(snapshot.Child("highScore").Value.ToString());
             if(float.Parse(snapshot.Child("bestTime").Value.ToString()) == 0)
             {

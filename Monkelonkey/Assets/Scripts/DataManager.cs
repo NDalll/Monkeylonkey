@@ -11,7 +11,7 @@ public class DataManager : MonoBehaviour
     public static DataManager instance;
 
     public float? bestTime;
-    public int highScore;
+    [System.NonSerialized] public int highScore;
     public FirebaseUser User;
     public DatabaseReference DBreference;
     private void Awake()
