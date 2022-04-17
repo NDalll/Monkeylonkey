@@ -89,27 +89,27 @@ public class Enemy : MonoBehaviour
             currTarget = endPos; //sætter dens mål til slutpositionen
         }
         playerTrigger = transform.GetChild(0).GetComponent<PlayerTrigger>(); //finder colideren på der tjekker for playeren
-        playerTrigger.damage = bodyDamage;
-        ogRunSpeed = runSpeed;
-        ogWalkSpeed = walkSpeed;
+        playerTrigger.damage = bodyDamage; //definere hvor meget skade kroppen gør til spilleren
+        ogRunSpeed = runSpeed; //gemmer den originale Runspeed
+        ogWalkSpeed = walkSpeed; //gemmer den originale Walkspeed
     }
-    private void Update()
+    private void Update() //kaldes hver frame
     {
-        if (isJumping)
+        if (isJumping) //tjekker om det er en hoppende fjende
         {
-            if (colTiming)
+            if (colTiming) //Timeren for hvor ofte den hopper
             {
-                if (Time.time - cooldownTimer >= jumpCooldown)
+                if (Time.time - cooldownTimer >= jumpCooldown) //tjekker om der er cooldownet bør være ovre
                 {
-                    colTiming = false;
-                    animator.SetTrigger("doneCooldown");
+                    colTiming = false; //stopper timeren
+                    animator.SetTrigger("doneCooldown"); //fortæller animatoren at ventetiden er ovre
                 }
             }
         }
 
-        if (seeingPlayer)
+        if (seeingPlayer) //tjekker om den kan se spilleren
         {
-            if (isRanged)
+            if (isRanged) //hvis den er ranged vil den skyde efter spilleren på en timer
             {
                 if (Time.time - fireTimer >= fireRate)
                 {
@@ -119,36 +119,36 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        if (isWalking)
+        if (isWalking) //hvis det er en gående fjende
         {
-            if (seeingPlayer && isFollowing)
+            if (seeingPlayer && isFollowing) //hvis den kan se spilleren og er en following fjende
             {
-                Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized;
-                transform.Translate(dir * Time.deltaTime * runSpeed);
-                SetLookDirection(dir);
+                Vector2 dir = new Vector2(player.transform.position.x - transform.position.x, 0).normalized; //finder retningen mod spilleren
+                transform.Translate(dir * Time.deltaTime * runSpeed); //flytte fjenden
+                SetLookDirection(dir); //kalder funktionen der vender fjenden
             }
-            else
+            else //Dette er sandt når den enten ikke kan se spilleren eller ikke er en following enemy
             {
-                Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized;
-                transform.Translate(dir * Time.deltaTime * walkSpeed);
-                SetLookDirection(dir);
+                Vector2 dir = new Vector2(currTarget.x - transform.position.x, 0).normalized; //finder retingen
+                transform.Translate(dir * Time.deltaTime * walkSpeed); //flytter fjenden
+                SetLookDirection(dir); //kalder funktionen der vender fjenden
             }
-            float distance = CalcXDistance();
-            if (distance < 0.5f)
+            float distance = CalcXDistance(); //kalder funktionen der finder afstanden mellem fjendens mål og fjenden
+            if (distance < 0.5f) //hvis afstanden er lav nok, vender den sig om
             {
                 switchTarget();
             }
         }
-        if (isMelee)
+        if (isMelee) //tjekker om det er en melee enemy
         {
-            if (melee)
+            if (melee) //tjekker om våbenet er aktivt
             {
-                MeleeAttack();
+                MeleeAttack(); //kalder angrebet
             }
         }
-        if (alert)
+        if (alert) //hvis den ser spilleren vil den fortsætte i et stykke tid selvom spilleren er ude af dens syn
         {
-            if (Time.time - alertTimer >= alertTime)
+            if (Time.time - alertTimer >= alertTime) 
             {
                 alert = false;
                 seeingPlayer = false;
@@ -156,40 +156,40 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    float CalcXDistance()
+    float CalcXDistance()//finder afstanden mellem fjenden og dens mål
     {
         float distance;
         distance = Mathf.Abs(transform.position.x - currTarget.x);
         return distance;
     }
-    private void SetLookDirection(Vector2 dir)
+    private void SetLookDirection(Vector2 dir) //finder retningen mod målet
     {
         if (dir.x > 0)
         {
-            transform.localScale = new Vector3(scale.x, scale.y, scale.z);
+            transform.localScale = new Vector3(scale.x, scale.y, scale.z); //vender fjender
             lookDirection = "right";
         }
         else
         {
-            transform.localScale = new Vector3(scale.x * -1, scale.y, scale.y);
+            transform.localScale = new Vector3(scale.x * -1, scale.y, scale.y);//vender fjender
             lookDirection = "left";
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) //kaldes når et objekt går ind i dens collider
     {
-        if (isJumping)
+        if (isJumping) //hvis det er en hoppende fjende
         {
-            if (collision.CompareTag("Ground"))
+            if (collision.CompareTag("Ground")) //tjekker om det var jorden den colliderede med
             {
-                if (RB.velocity.y <= 0 && firstSpawn != true)
+                if (RB.velocity.y <= 0 && firstSpawn != true) //tjekker om den falder og det ikke er det første hop
                 {
                     Debug.Log("groundHit");
-                    animator.SetTrigger("groundHit");
+                    animator.SetTrigger("groundHit"); //fotæller animatoren at den ramte jorden
                 }
                 else
                 {
-                    firstSpawn = false;
+                    firstSpawn = false;//ellers
                 }
             }
         }
