@@ -27,7 +27,7 @@ public class ScoreManager : MonoBehaviour//til forskel fra gamecontroller og dat
     // Update is called once per frame
     void Update()
     {
-        //opadtere uien cært frame
+        //opdatere uien hvert frame
         bananaScoreUI.text = bananaScore.ToString();
         grappleScoreUI.text = grappleScore.ToString();
     }
